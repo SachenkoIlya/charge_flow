@@ -1,0 +1,11 @@
+server-command.md
+test.py
+.env
+__pycache__/
+
+logs/
+venv/
+docs
+
+*.pyc
+
