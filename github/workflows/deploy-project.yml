@@ -19,7 +19,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            cd /home/opt/project
+            cd /home/opt/chargeflow
             git fetch --all
             git reset --hard origin/main
             docker compose up -d --build
