@@ -187,7 +187,7 @@ class Base:
                         logger.exception(
                             f"{msg_prefix or ''} 💥 НЕ RETRY ошибка ({type(e).__name__}): {e}"
                         )
-                    raise
+                        raise
                 
             return wrapper
         return decorator
