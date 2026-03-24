@@ -121,10 +121,20 @@ class Base:
         )
     
     def __init__(self, dsn:str = None):
-        self.dsn = dsn or (
-            f"postgresql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}"
-            f"@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
-        )
+        self.host = os.getenv("DB_HOST")
+        self.port = os.getenv("DB_PORT")
+        self.user = os.getenv("DB_USER")
+        self.password = os.getenv("DB_PASSWORD")
+        self.db = os.getenv("DB_NAME")
+        
+        if self.host.startswith('/'):
+            self.dsn = f"postgresql://{self.user}:{self.password}@/{self.db}?host={self.host}"
+        else:
+            self.dsn = f"postgresql://{self.user}:{self.password}@{self.host}:{self.port}/{self.db}"
+        # self.dsn = dsn or (
+        #     f"postgresql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}"
+        #     f"@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
+        # )
         self.pool: asyncpg.Pool | None = None
 
 
