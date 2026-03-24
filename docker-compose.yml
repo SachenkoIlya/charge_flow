@@ -10,5 +10,3 @@ services:
       - .env
     environment:
       - TZ=Europe/Moscow
-    extra_hosts:
-      - "host.docker.internal:172.18.0.1"
