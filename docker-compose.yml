@@ -6,6 +6,7 @@ services:
       dockerfile: backend/Dockerfile
     container_name: charge_flow_backend
     command: sleep infinity
+    network_mode: host
     env_file:
       - .env
     environment:
