@@ -11,3 +11,5 @@ services:
       - .env
     environment:
       - TZ=Europe/Moscow
+    volumes:
+      - /var/run/postgresql:/var/run/postgresql
