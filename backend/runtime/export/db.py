@@ -14,15 +14,25 @@ class RunExport:
     async def get_s3_key(self, user_id:int, type_method:str, run_mode:'str', run_id: str):
 
         q = """
-            SELECT meta FROM run_pipelines
-            WHERE status = 'success'
+            UPDATE bi_exports
+            SET status = 'processing'
+            WHERE id IN (
+                SELECT id
+                FROM bi_exports
+                 WHERE status = 'pending'
                 AND user_id = $1
                 AND type_method = $2
                 AND run_mode = $3 
                 AND run_id = $4
+            ORDER BY created_at 
+            limit 100
+            FOR UPDATE SKIP LOCKED
+            )
+            RETURNING id, s3_key;
             """
+        
         async with self.db.pool.acquire() as conn:
-            row = await conn.fetchrow(
+            rows = await conn.fetch(
                 q, 
                 user_id, 
                 type_method, 
@@ -30,8 +40,7 @@ class RunExport:
                 run_id
             )
         
-        meta = json.loads(row['meta'])
-        return meta['storage_meta']['key']
+        return rows
 
 
 
@@ -76,3 +85,56 @@ class RunExport:
         ]
         async with self.db.pool.acquire() as conn:
             await conn.executemany(q, records)
+
+
+    @Base.with_retries(retries=5, delay=1.5, msg_prefix='insert_bi_export_task')
+    async def insert_bi_export_task(
+        self, 
+        user_id: int, 
+        operator: str, 
+        run_mode: str,
+        type_method: str, 
+        run_id:str, 
+        s3_key:str
+    ):
+        q = """
+            INSERT INTO bi_exports(
+                user_id, 
+                operator, 
+                run_mode,
+                type_method, 
+                run_id, 
+                s3_key
+            ) 
+            VALUES(
+                $1, $2, $3, $4, $5, $6
+            )
+            """
+        async with self.db.pool.acquire() as conn:
+            await conn.execute(
+                q, 
+                user_id, 
+                operator, 
+                run_mode,
+                type_method, 
+                run_id, 
+                s3_key
+            )
+    
+    
+    @Base.with_retries(retries=5, delay=1.5, msg_prefix='update_bi_exports')
+    async def update_bi_exports(self, tasks_id: int, status: 'str'):
+        q = """
+            UPDATE bi_exports
+            SET status = $1
+            WHERE id = $2
+            """
+
+        async with self.db.pool.acquire() as conn:
+            result = await conn.execute(
+                q,
+                status,
+                tasks_id
+            )
+
+            logger.info(result)

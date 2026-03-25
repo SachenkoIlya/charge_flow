@@ -106,4 +106,4 @@ class S3Client:
                 return df
         except Exception as e:
             self.logger.error(f"❌ Ошибка при чтении parquet из S3 по ключу {key}: {e}")
-            return pd.DataFrame()
+            return None

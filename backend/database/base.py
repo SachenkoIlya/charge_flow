@@ -131,10 +131,7 @@ class Base:
             self.dsn = f"postgresql://{self.user}:{self.password}@/{self.db}?host={self.host}"
         else:
             self.dsn = f"postgresql://{self.user}:{self.password}@{self.host}:{self.port}/{self.db}"
-        # self.dsn = dsn or (
-        #     f"postgresql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}"
-        #     f"@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
-        # )
+       
         self.pool: asyncpg.Pool | None = None
 
 

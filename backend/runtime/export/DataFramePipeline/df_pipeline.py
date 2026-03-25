@@ -15,28 +15,51 @@ class DataFramePipeline:
         self.ctx.logger.info(f"Run DataFramePipeline.run")
         
         self.ctx.logger.debug(f"Получею s3 key")
-        s3_key = await self.ctx.db.run_export.get_s3_key(
+        rows = await self.ctx.db.run_export.get_s3_key(
             user_id=user_id,
             type_method=self.ctx.type_method,
             run_mode=self.ctx.run_mode,
             run_id=self.ctx.run_id,
         )
 
-        df = await self.ctx.s3.download_parquet_s3_from_key(
-            bucket='chargeflow', 
-            key=s3_key
-        )
+        res = {}
+        for row in rows:
+            task_id = row['id']
+            s3_key = row['s3_key']
+            
+            df = await self.ctx.s3.download_parquet_s3_from_key(
+                bucket='chargeflow', 
+                key=s3_key
+            )
 
-        if df.empty:
-            return df
+            if df is not None:
+                try:
+                    df = DataFramePipeline.normalize_df(
+                        df=df, 
+                        operator=self.ctx.operator, 
+                        user_id=user_id
+                    )
+                except Exception as e:
+                    self.ctx.logger.error(f"Normalize error {s3_key}: {e}")
+                    df = None
+            
+            res[task_id] = {
+                'df': df,
+                's3_key': s3_key,
+                'is_error': df is None
+            }
+        return res
+           
+
         
-        df = DataFramePipeline.normalize_df(df, self.ctx.operator, user_id)
-        return df
-    
+
 
     @staticmethod
     def normalize_df(df: pd.DataFrame, operator: str, user_id: int) -> pd.DataFrame:
-    
+        
+        if df.empty:
+            return pd.DataFrame()
+        
         df['operator'] = operator
         df['user_id'] = user_id
 

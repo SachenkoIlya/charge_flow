@@ -7,7 +7,6 @@ if TYPE_CHECKING:
 from backend.clients.volt.regstry import RegstryVolt
 from backend.runtime.export.export import ExportFromBi
 
-from datetime import datetime, timezone
 import traceback
 import asyncio
 import aiohttp
@@ -94,12 +93,16 @@ class Connect:
         result = await asyncio.gather(*tasks, return_exceptions=True)
         
         for run_ctx, all_meta in zip(run_contexts, result):
+            if isinstance(all_meta, Exception):
+                ctx.logger.exception(f"❌ Ошибка в задаче {run_ctx}: {all_meta}")
+                status = 'error'
             if all_meta['error']:
                 status = 'error'
             elif all_meta['api_meta'].get('status') == 'empty':
                 status = 'empty'
             else:
                 status = 'success'
+               
 
             try:
                 await ctx.db.run_piplines.insert(
@@ -112,23 +115,46 @@ class Connect:
                     last_success_at=run_ctx.now,
                     meta=all_meta
                 )
+                ctx.logger.info(f"Данные записаны в бд run_piplines".upper())
+                
             except Exception as e:
                 ctx.logger.warning(run_ctx.user.full_name)
                 ctx.logger.warning(f"Ощибка записи meta в ctx.db.run_piplines.insert".upper())
                 ctx.logger.error(f"{str(e)}\n\n")
                 ctx.logger.error(traceback.format_exc())
 
-            ctx.logger.debug(f"Данные записаны в бд run_piplines")
-            # scenario_exp =  Connect.map_scenario_export.get('bi', {})\
-            #     .get(ctx.operator, {})\
-            #     .get(ctx.type_method)
+            if ctx.type_method == 'chargepoints':
+                ctx.logger.warning(f"временный пропуск")
+                continue
             
-            # if not scenario_exp:
-            #     raise ValueError(
-            #         f"Нет сценария для {ctx.operator}:{ctx.type_method}"
-            #     )
+            if status == 'success':
+                s3_key = all_meta['storage_meta']['key']
+                try:
+                    await ctx.db.run_export.insert_bi_export_task(
+                        user_id=run_ctx.user.id,
+                        operator=run_ctx.user.operator,
+                        run_mode=ctx.run_mode,
+                        type_method=ctx.type_method,
+                        run_id=ctx.run_id,
+                        s3_key=s3_key
+                    )
+                    ctx.logger.info(f"Данные записаны в бд bi_export".upper())
+                except Exception as e:
+                    ctx.logger.warning(run_ctx.user.full_name)
+                    ctx.logger.warning(f"Ощибка записи meta в insert_bi_export_task".upper())
+                    ctx.logger.error(f"{str(e)}\n\n")
+                    ctx.logger.error(traceback.format_exc())
+        
+            scenario_exp =  Connect.map_scenario_export.get('bi', {})\
+                .get(ctx.operator, {})\
+                .get(ctx.type_method)
             
-            # await scenario_exp(ctx=ctx, run_contexts=run_contexts)
+            if not scenario_exp:
+                ctx.logger.warning(f"Нет сценария для {ctx.operator}:{ctx.type_method}")
+                return
+            
+            ctx.logger.info(f"Запускаю scenario_exp для {ctx.type_method}".upper())
+        await scenario_exp(ctx=ctx, run_contexts=run_contexts)
 
 
 
@@ -136,7 +162,6 @@ class Connect:
 
 
       
-        # выгружаю в таблицу готовый df под bi
         
 
 

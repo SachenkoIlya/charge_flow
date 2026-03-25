@@ -7,7 +7,7 @@ class ReportConfig:
     # "chargepoints" charging_sessions
     # chargepoints
     TYPE_METHODS = {
-        'volt': ['charging_sessions'],
+        'volt': ['chargepoints', 'charging_sessions'],
         'sictronics': ['default']
     }
 

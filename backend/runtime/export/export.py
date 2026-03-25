@@ -37,18 +37,23 @@ class ExportFromBi:
 
     @staticmethod
     async def _run_export(user:"Users", ctx:"Ctx"):
-        
         ctx.logger.info(f"{user.full_name}: запуск df_flow.run")
         try:
-            df = await ctx.df_flow.run(
+            tasks_ids = await ctx.df_flow.run(
                 user_id=user.id,
             )
-
-            if df.empty:
-                ctx.logger.debug(f"Пустой df выходим из _run_export")
-                return
-            
-            await ctx.db.run_export.insert_df(df, ctx.run_mode)
+            for task_id, data in tasks_ids.items():
+                if data['is_error']:
+                    await ctx.db.run_export.update_bi_exports(task_id, 'error')
+                    continue
+                
+                df = data['df']
+                if df.empty:
+                    await ctx.db.run_export.update_bi_exports(task_id, 'skipped')
+                    continue
+                
+                await ctx.db.run_export.insert_df(df, ctx.run_mode)
+                await ctx.db.run_export.update_bi_exports(task_id, 'success')
         except Exception as e:
             ctx.logger.exception(f"{user.full_name}: ошибка в _run_export")
             raise e

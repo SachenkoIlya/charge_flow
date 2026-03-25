@@ -67,6 +67,7 @@ class Universal:
                     if datetime.fromisoformat(r["startTs"].replace("Z", "+00:00")) > run_ctx.last_success
                 ]
                 ctx.logger.debug(
+                    f"user: {run_ctx.user.full_name}\n"
                     f"new_data: {len(new_data)}\n"
                     f"page={cnt} newest={response[0]['startTs']} oldest={response[-1]['startTs']}"
                 )
@@ -75,12 +76,9 @@ class Universal:
                     break
                 
                 result.extend(new_data)
-                ctx.logger.debug(f"len result: {len(result)}")
+                ctx.logger.debug(f"[{run_ctx.user.full_name}]len result: {len(result)}")
             else:
                 result.extend(response)
-
-            
-
 
         api_meta = {
             'start_run': start_run.strftime("%Y-%m-%dT%H:%M:%SZ"),
