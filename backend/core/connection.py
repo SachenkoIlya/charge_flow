@@ -96,6 +96,7 @@ class Connect:
             if isinstance(all_meta, Exception):
                 ctx.logger.exception(f"❌ Ошибка в задаче {run_ctx}: {all_meta}")
                 status = 'error'
+            
             if all_meta['error']:
                 status = 'error'
             elif all_meta['api_meta'].get('status') == 'empty':
