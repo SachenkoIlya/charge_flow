@@ -146,15 +146,15 @@ class Connect:
                     ctx.logger.error(f"{str(e)}\n\n")
                     ctx.logger.error(traceback.format_exc())
         
-            scenario_exp =  Connect.map_scenario_export.get('bi', {})\
-                .get(ctx.operator, {})\
-                .get(ctx.type_method)
+        scenario_exp =  Connect.map_scenario_export.get('bi', {})\
+            .get(ctx.operator, {})\
+            .get(ctx.type_method)
+        
+        if not scenario_exp:
+            ctx.logger.warning(f"Нет сценария для {ctx.operator}:{ctx.type_method}")
+            return
             
-            if not scenario_exp:
-                ctx.logger.warning(f"Нет сценария для {ctx.operator}:{ctx.type_method}")
-                return
-            
-            ctx.logger.info(f"Запускаю scenario_exp для {ctx.type_method}".upper())
+        ctx.logger.info(f"Запускаю scenario_exp для {ctx.type_method}".upper())
         await scenario_exp(ctx=ctx, run_contexts=run_contexts)
 
 
