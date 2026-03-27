@@ -64,7 +64,7 @@ async def main(type_method: str, run_mode: str, operator: str, base_db: "Base"):
             now=now
         )
         if not ready_last_success:
-            ctx.logger.debug(f"skip {user.full_name} | Нет ready_last_success.".upper())
+            ctx.logger.debug(f"skip {user.full_name} |{type_method}| Нет ready_last_success.".upper())
             continue
         
         combat_users.append(RunContext(
