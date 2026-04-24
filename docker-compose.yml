@@ -3,8 +3,7 @@ services:
   nginx:
     image: nginx:latest
     container_name: chargeflow_nginx
-    ports:
-      - "80:80"
+    network_mode: host
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
     depends_on:
