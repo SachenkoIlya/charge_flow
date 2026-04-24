@@ -1,4 +1,5 @@
 from nicegui import ui
+from nicegui import app
 
 import frontend.pages.login
 import frontend.pages.register
@@ -8,6 +9,9 @@ import frontend.pages.connect_operator
 from dotenv import load_dotenv
 import os
 load_dotenv()
+
+
+app.add_static_files('/media', 'frontend/components/media')
 
 @ui.page('/')
 def root():
