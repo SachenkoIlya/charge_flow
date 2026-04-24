@@ -27,7 +27,7 @@ class LoginForm:
         with container:
             ui.label('Вход').classes('text-xl font-bold')
             with ui.element('form').props(
-               f'method=post action={backend_url}/auth/login'
+               f'method=post action=/api/auth/login'
             ).classes('w-full'):
                 
                 ui.input('Email').props('name=email').classes('w-full')
