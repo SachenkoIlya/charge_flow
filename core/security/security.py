@@ -6,6 +6,7 @@ from passlib.context import CryptContext
 from jose import JWTError, ExpiredSignatureError
 from core.security.config import settings
 from jose import jwt
+import hashlib
 import os
 from dotenv import load_dotenv
 load_dotenv()
@@ -20,14 +21,21 @@ class Security:
     
     pwd_context = CryptContext(
         schemes=['bcrypt'],
+        
     )
 
+    @staticmethod
+    def _normalize_password(password: str) -> bytes:
+        return hashlib.sha256(password.encode('utf-8')).digest()
+    
     def hashed_password(self, password: str):
         """Хэширование пароля"""
+        password = self._normalize_password(password)
         return self.pwd_context.hash(password)
 
     def very_password(self, password: str, hashed: str):
         """Проверка пароля"""
+        password = self._normalize_password(password)
         return self.pwd_context.verify(password, hashed)
     
 
@@ -38,7 +46,9 @@ class Security:
             expire = datetime.now(timezone.utc) + expires_delta
         else:
             expire = datetime.now(timezone.utc) + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
-        to_encode.update({"exp": expire})
+        to_encode.update({
+            "exp": expire,  "iat": datetime.now(timezone.utc)
+        })
         encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
         return encoded_jwt
     
