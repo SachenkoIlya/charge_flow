@@ -3,7 +3,12 @@ from fastapi import Request
 from frontend.utils.utils import utils
 from frontend.features.control_panel.panel import Panel
 from frontend.utils.config import screen_background
+from dotenv import load_dotenv
 import traceback
+import os
+load_dotenv()
+
+
 
 @ui.page('/control_panel')
 async def control_panel_page(request: Request):
@@ -18,6 +23,8 @@ async def control_panel_page(request: Request):
   - drawer содержит навигационные элементы (например, "Аналитика")
   :return: None
   """
+  mode = os.getenv('ETL_MODE')
+  ui.page_title('📈 Dashboard')
   try:
     data_dict = utils.current_user.get_current_user(request=request)
     user = data_dict['payload']
@@ -25,9 +32,11 @@ async def control_panel_page(request: Request):
     utils.logger.debug(f"data_dict: {data_dict}")
 
   except Exception as e:
-    utils.logger.error(f"----control panel----".upper())
+    if mode in {'test', 'dev'}:
+      utils.logger.error(f"----control panel----".upper())
+      utils.logger.error(traceback.format_exc())
+    
     utils.logger.error(str(e))
-    utils.logger.error(traceback.format_exc())
     app.storage.user.clear()
     app.storage.browser.clear() 
     ui.navigate.to('/login')

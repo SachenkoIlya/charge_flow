@@ -2,7 +2,9 @@ from nicegui import  ui
 from frontend.components.layouts.login_form import LoginForm
 from frontend.utils.utils import utils
 from fastapi import Request 
-
+from dotenv import load_dotenv
+import os
+load_dotenv()
 
 async def login(request: Request):
     utils.logger.debug('--- REQUEST DEBUG ---')
@@ -32,7 +34,12 @@ async def login_page(request: Request):
 
     :return: None
     """
-    await login(request=request)
+
+    ui.page_title('Login')
+    mode = os.getenv('ETL_MODE')
+    if mode in {'test', 'dev'}:
+        await login(request=request)
+    
     errors = {
         'missing_fields': 'Заполните все поля',
         'invalid_email': 'Некорректный e-mail',
@@ -43,13 +50,6 @@ async def login_page(request: Request):
     utils.logger.debug(f"query_params: {ui.context.client.request.query_params}")
     utils.logger.debug(error)
     
-    # for client in Client.instances.values():
-    #     try:
-    #         utils.logger.debug(f"CLIENT: {client}")
-    #         utils.logger.debug(f"SESSION:, {getattr(client.request, 'session', None)}")
-    #     except Exception as e:
-    #         utils.logger.warning(f"ERROR: {e}")
-
     if error:
         ui.notify(f"{errors.get(error)}", color='red')
         # ui.run_javascript('history.replaceState(null, "", "/login")')
