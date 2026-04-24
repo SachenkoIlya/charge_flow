@@ -1,7 +1,7 @@
 services:
 
   nginx:
-    image: nginx:lasted
+    image: nginx:latest
     container_name: chargeflow_nginx
     ports:
       - "80:80"
