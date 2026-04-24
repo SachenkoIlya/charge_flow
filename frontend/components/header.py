@@ -1,10 +1,9 @@
 from nicegui import ui, app
 from fastapi import Request
 from frontend.features.dashboard.charts import (
-    get_calendar_card, 
     get_filtered_company_from_admin, 
-    get_investor_choice
 )
+
 
 def logout():
     app.storage.user.clear()
@@ -21,7 +20,7 @@ async def get_header(request: Request, drawer, role: str, on_company_change=None
             
             # 🔹 ЛЕВАЯ ЧАСТЬ
             with ui.row().classes('items-center gap-4'):
-                ui.image('frontend\components\media\opower_no_backgraunds.png')\
+                ui.image('/media/opower_no_backgraunds.png')\
                     .classes('w-15 h-15 cursor-pointer')\
                         .on('click', lambda: ui.navigate.to('/control_panel'))
                 
