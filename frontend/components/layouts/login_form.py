@@ -1,4 +1,7 @@
+from dotenv import load_dotenv
 from nicegui import ui
+import os 
+load_dotenv()
 
 
 
@@ -19,12 +22,12 @@ class LoginForm:
 
         :return: None
         """
-      
+        backend_url = os.getenv('BACKEND_URL')
         container = ui.column().classes('w-full max-w-sm mx-auto')
         with container:
             ui.label('Вход').classes('text-xl font-bold')
             with ui.element('form').props(
-               'method=post action=http://localhost:8000/auth/login'
+               f'method=post action={backend_url}/auth/login'
             ).classes('w-full'):
                 
                 ui.input('Email').props('name=email').classes('w-full')
