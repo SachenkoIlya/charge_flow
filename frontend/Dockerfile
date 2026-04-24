@@ -9,9 +9,8 @@ WORKDIR /app
 COPY requirements.txt requirements.txt
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
-COPY backend ./backend
+COPY frontend ./frontend
 COPY core ./core
 
-
+CMD ["python", "-m", "frontend.main"]
 # значение CMD переопределяется в docker-compose
-CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000"]
