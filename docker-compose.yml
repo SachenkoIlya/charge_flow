@@ -28,7 +28,7 @@ services:
   frontend:
     build:
       context: .
-      dockerfile: dockerfilefrontend/Dockerfile
+      dockerfile: frontend/Dockerfile
     container_name: chargeflow_frontend
     command: python -m frontend.main
     ports:

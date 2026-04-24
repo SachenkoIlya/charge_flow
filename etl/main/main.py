@@ -15,9 +15,9 @@ load_dotenv()
 
     
     
-async def run_all_endpoints(operator: str):
+async def run_all_endpoints(run_mode: str, operator: str):
     base_db = Base()
-    run_mode = os.getenv('RUN_MODE', 'test')
+   
     await base_db.connect()
     try:
         for type_method in ReportConfig.TYPE_METHODS.get(operator):
@@ -98,10 +98,10 @@ if __name__ == '__main__':
     # py -m etl.main.main scheduled volt
     import sys
 
-    if len(sys.argv) < 2:
-        raise RuntimeError("run mode is required")
+    if len(sys.argv) < 1:
+        raise RuntimeError("operator is required")
+    run_mode = os.getenv('RUN_MODE', 'test')
+    operator = sys.argv[1]
     
-    run_mode = sys.argv[1]
-    operator = sys.argv[2]
-    asyncio.run(run_all_endpoints(run_mode, operator))   
+    asyncio.run(run_all_endpoints(operator))   
     
