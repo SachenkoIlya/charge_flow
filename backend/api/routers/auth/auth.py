@@ -3,7 +3,7 @@ from backend.schemas.users import UserCreate
 from backend.database.manager import Manager
 
 from core.logger.logger import make_logger
-from core.security import security
+from core.security.security import security
 
 from fastapi import APIRouter, HTTPException, status
 from fastapi import Depends
