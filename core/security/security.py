@@ -26,7 +26,7 @@ class Security:
 
     @staticmethod
     def _normalize_password(password: str) -> bytes:
-        return hashlib.sha256(password.encode('utf-8')).digest()
+        return hashlib.sha256(password.encode('utf-8')).hexdigest()
     
     def hashed_password(self, password: str):
         """Хэширование пароля"""
