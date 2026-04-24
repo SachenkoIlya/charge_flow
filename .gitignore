@@ -5,8 +5,10 @@ __pycache__/
 
 logs/
 venv/
+test/
 docs
 
 *.pyc
 
 db.md
+.nicegui
