@@ -1,18 +1,27 @@
-from backend.database.base import Base
-from backend.utils.logger.logger import make_logger
-import json
+from core.logger.logger import make_logger
+from core.base_db import Base
 import pandas as pd
-logger = make_logger(__name__, use_telegram=False)
 
+logger = make_logger(__name__, use_telegram=False)
 
 class RunExport:
     def __init__(self, base_db: Base):
         self.db = base_db
+        self.tables = {
+            'info_station': {
+                "dev": "info_station_test",
+                "test": "info_station_test",
+                "prod": "info_station",
+            },
 
-    
+            'charging_sessions': {
+                "dev": "charging_sessions_fact_test",
+                "test": "charging_sessions_fact_test",
+                "prod": "charging_sessions_fact",
+            },
+        }
     @Base.with_retries(retries=5, delay=1.5, msg_prefix='RunExport.get_s3_key')
     async def get_s3_key(self, user_id:int, type_method:str, run_mode:'str', run_id: str):
-
         q = """
             WITH cte AS (
                 SELECT id 
@@ -50,9 +59,8 @@ class RunExport:
 
     @Base.with_retries(retries=5, delay=1.5, msg_prefix='RunExport.insert_chargepoints_df')
     async def insert_chargepoints_df(self, df:pd.DataFrame, run_mode: str):
-        table = 'info_station'
-        if run_mode:
-            table = 'info_station_test'
+        table = self.tables['info_station'].get(run_mode)
+        
         columns = [
             'user_id', 'operator',
             "station_id", "key", "name", "serialNumber",
@@ -108,11 +116,7 @@ class RunExport:
 
     @Base.with_retries(retries=5, delay=1.5, msg_prefix='RunExport.insert_charging_sessions_df')
     async def insert_charging_sessions_df(self, df:pd.DataFrame, run_mode: str):
-        
-        table = 'charging_sessions_fact'
-
-        if run_mode == 'test':
-            table = 'charging_sessions_fact_test'
+        table = self.tables['charging_sessions_fact'].get(run_mode)
         
         columns = [
             'session_id','contract','subscriber_id','user_id','operator',

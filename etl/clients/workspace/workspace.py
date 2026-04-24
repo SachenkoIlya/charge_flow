@@ -1,14 +1,16 @@
+from etl.clients.volt.universal.parser import Parser as volt_parser
+
 from typing import Optional, TYPE_CHECKING
 if TYPE_CHECKING:
-    from backend.utils.context.ctx import Ctx   
-import json
-import aiohttp
+    from etl.utils.context.ctx import Ctx   
 
-import traceback
-import pandas as pd
-from backend.clients.volt.universal.parser import Parser as volt_parser
-from backend.users.users import Users
+from etl.users.users import Users
 from datetime import datetime
+import pandas as pd
+import traceback
+import aiohttp
+import json
+
 
 class WorkSpase:
     PARSER = {

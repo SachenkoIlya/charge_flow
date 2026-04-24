@@ -1,5 +1,5 @@
-from backend.database.base import Base
-from backend.utils.logger.logger import make_logger
+from core.base_db import Base
+from core.logger.logger import make_logger
 from datetime import datetime
 import json
 

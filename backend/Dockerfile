@@ -10,9 +10,9 @@ COPY requirements.txt requirements.txt
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
 # весь код проекта
-COPY etl ./etl
+COPY frontend ./frontend
 COPY core ./core
 
 
 # значение CMD переопределяется в docker-compose
-CMD ["python", "main.py"]
+CMD ["python", "-m", "frontend.main"]

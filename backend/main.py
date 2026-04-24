@@ -12,7 +12,7 @@ from backend.api.router import api_router
 load_dotenv()
 
 logger = make_logger(__name__, use_telegram=False)
-base_url = os.getenv('BASE_URL', 'http://localhost:8000')
+base_url = os.getenv('BACKEND_URL')
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):

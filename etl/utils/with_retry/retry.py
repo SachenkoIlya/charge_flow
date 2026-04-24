@@ -1,11 +1,11 @@
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from backend.users.users import Users
+    from etl.users.users import Users
 
+from core.logger.logger import make_logger
 from collections import defaultdict
 import asyncio
 import random
-from backend.utils.logger.logger import make_logger
 import aiohttp
 
 

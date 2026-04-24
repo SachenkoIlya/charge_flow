@@ -16,8 +16,8 @@ def root():
 ui.run(
     language='ru',
     storage_secret=os.getenv('SECRET_KEY_FROM_UI'),
-    host='0.0.0.0', 
-    port=8080
+    host=os.getenv('FRONTEND_HOST', '0.0.0.0'),
+    port=int(os.getenv('FRONTEND_PORT', 8080)),
 )
 # C:\Users\Ilya\Desktop\ChargeFlow\frontend\main.py
 

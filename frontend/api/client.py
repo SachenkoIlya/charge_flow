@@ -6,10 +6,6 @@ from fastapi import Request
 from frontend.utils.utils import utils
 load_dotenv()
 
-# client = httpx.AsyncClient(
-#     base_url=os.getenv("BASE_URL", base_url),
-#     timeout=10.0
-#     )
 
 def get_auth_headers(request: Request = None):
     if not request:
@@ -56,7 +52,7 @@ class Endpoints:
 
 
 client = httpx.AsyncClient(
-    base_url=os.getenv("BASE_URL"),
+    base_url=os.getenv("BACKEND_URL"),
     timeout=10.0,
     # cookies={}
 )

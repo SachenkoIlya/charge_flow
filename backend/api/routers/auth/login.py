@@ -22,7 +22,6 @@ async def check_login(
     email: Optional[str] = Form(None),
     password: Optional[str] = Form(None),
     db_manager: Manager = Depends(get_manager),
-    # base_url = os.getenv('BASE_URL'),
     frontend_url = os.getenv('FRONTEND_URL')
     ):
     """

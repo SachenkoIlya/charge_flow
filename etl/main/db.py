@@ -1,6 +1,6 @@
 
-from backend.database.base import Base
-from backend.utils.logger.logger import make_logger
+from core.base_db import Base
+from core.logger.logger import make_logger
 from zoneinfo import ZoneInfo
 
 logger = make_logger(__name__, use_telegram=False)

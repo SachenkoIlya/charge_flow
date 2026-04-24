@@ -1,14 +1,13 @@
-from dataclasses import dataclass
-from copy import deepcopy   
-import aiohttp
-from datetime import datetime, timezone
-import traceback
-import json
-
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from backend.utils.context.ctx import Ctx
-    from backend.utils.context.run_ctx import RunContext
+    from etl.utils.context.ctx import Ctx
+    from etl.utils.context.run_ctx import RunContext
+
+from datetime import datetime, timezone
+from dataclasses import dataclass
+from copy import deepcopy   
+import traceback
+import aiohttp
 
 
 @dataclass
@@ -18,8 +17,6 @@ class Universal:
     method: str
     type_method: str
     
-
-
     async def get_data(self, sess: aiohttp.ClientSession, run_ctx: "RunContext", ctx:"Ctx"):
         start_run = datetime.now(timezone.utc)
         body = deepcopy(self.body)

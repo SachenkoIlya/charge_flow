@@ -1,8 +1,7 @@
-from backend.database.base import Base
-
-from backend.main.db import RunRepository
-from backend.core.db import RunPiplines
-from backend.runtime.export.db import RunExport
+from etl.runtime.export.db import RunExport
+from etl.main.db import RunRepository
+from etl.core.db import RunPiplines
+from core.base_db import Base
 
 class Manager:
     def __init__(self, base_db: "Base"):

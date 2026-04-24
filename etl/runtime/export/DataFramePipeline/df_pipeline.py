@@ -1,7 +1,7 @@
 import pandas as pd
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from backend.utils.context.ctx import Ctx
+    from etl.utils.context.ctx import Ctx
 
 
 
