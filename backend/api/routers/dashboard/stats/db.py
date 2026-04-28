@@ -1,7 +1,9 @@
 from core.base_db import Base
 from datetime import datetime
 from core.config.config import get_table_name_map, CHARGEPOINTS, CHARGIN_SESSION
+from core.logger.logger import make_logger
 
+logger = make_logger(__name__, use_telegram=False)
 
 class StatsDB:
     def __init__(self, base_db: "Base"):
@@ -14,6 +16,7 @@ class StatsDB:
 
     async def get_metrics(self, user_id:int, date_from: datetime, date_to: datetime):
         table_name = self._get_table_name(point=CHARGIN_SESSION)
+        logger.debug(f"Запрос в таблицу: {table_name}")
         q = f"""
             SELECT 
                 total_revenue,
