@@ -72,16 +72,16 @@ def get_pie_charts_options_v2(data: list[dict]):
         'formatter': '{b}<br/>Оборот: {c} ₽ ({d}%)'
     },
 
-    'legend': {
-        'orient': 'vertical',
-        'left': 'right'
-    },
+    # 'legend': {
+    #     'orient': 'vertical',
+    #     'left': 'right'
+    # },
 
     'series': [
         {
             'name': 'Оборот',
             'type': 'pie',
-            'radius': '60%',
+            'radius': '70%',
 
             'data': data,
 
