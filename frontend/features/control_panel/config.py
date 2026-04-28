@@ -64,7 +64,8 @@ def get_pie_charts_options_v2(data: list[dict]):
     return {
     'title': {
         'text': 'Оборот по локациям',
-        'left': 'center'
+        'left': 'center',
+        'top': 20
     },
 
     'tooltip': {
