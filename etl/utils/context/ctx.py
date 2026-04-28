@@ -1,10 +1,10 @@
-from backend.utils.logger.logger import make_logger
-from backend.utils.with_retry.retry import with_retry
-from backend.database.manager import Manager
-from backend.database.base import Base
-from backend.storage.client  import S3Client
-from backend.clients.workspace.workspace import WorkSpase
-from backend.runtime.export.DataFramePipeline.df_pipeline import DataFramePipeline
+from core.logger.logger import make_logger
+from etl.utils.with_retry.retry import with_retry
+from etl.database.manager import Manager
+from core.base_db import Base
+from core.storage.client import S3Client
+from etl.clients.workspace.workspace import WorkSpase
+from etl.runtime.export.DataFramePipeline.df_pipeline import DataFramePipeline
 import os
 
 

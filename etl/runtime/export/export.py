@@ -25,7 +25,6 @@ class ExportFromBi:
         start = datetime.now(timezone.utc)
         result = await asyncio.gather(*tasks, return_exceptions=True)
         end = datetime.now(timezone.utc)
-        
         duration = (end - start).total_seconds()
         ctx.logger.info(f"run_export_task выполнен за {duration:.2f} сек")
         

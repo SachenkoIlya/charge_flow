@@ -1,4 +1,5 @@
 from core.logger.logger import make_logger
+from core.config.config import get_table_name_map, CHARGEPOINTS, CHARGIN_SESSION
 from core.base_db import Base
 import pandas as pd
 
@@ -20,6 +21,12 @@ class RunExport:
                 "prod": "charging_sessions_fact",
             },
         }
+
+    @staticmethod
+    def _get_table_name(point: str):
+        return get_table_name_map(point)
+
+
     @Base.with_retries(retries=5, delay=1.5, msg_prefix='RunExport.get_s3_key')
     async def get_s3_key(self, user_id:int, type_method:str, run_mode:'str', run_id: str):
         q = """
@@ -59,7 +66,7 @@ class RunExport:
 
     @Base.with_retries(retries=5, delay=1.5, msg_prefix='RunExport.insert_chargepoints_df')
     async def insert_chargepoints_df(self, df:pd.DataFrame, run_mode: str):
-        table = self.tables['info_station'].get(run_mode)
+        table = self._get_table_name(CHARGEPOINTS)
         
         columns = [
             'user_id', 'operator',
@@ -116,8 +123,7 @@ class RunExport:
 
     @Base.with_retries(retries=5, delay=1.5, msg_prefix='RunExport.insert_charging_sessions_df')
     async def insert_charging_sessions_df(self, df:pd.DataFrame, run_mode: str):
-        table = self.tables['charging_sessions_fact'].get(run_mode)
-        
+        table = self._get_table_name(CHARGIN_SESSION)
         columns = [
             'session_id','contract','subscriber_id','user_id','operator',
             'charger_name','evse_path','state','connector_type','evse_type','reason',

@@ -1,13 +1,20 @@
 from core.base_db import Base
 from datetime import datetime
+from core.config.config import get_table_name_map, CHARGEPOINTS, CHARGIN_SESSION
+
 
 class StatsDB:
     def __init__(self, base_db: "Base"):
         self.db = base_db
 
+    @staticmethod
+    def _get_table_name(point: str):
+        return get_table_name_map(point)
+
 
     async def get_metrics(self, user_id:int, date_from: datetime, date_to: datetime):
-        q = """
+        table_name = self._get_table_name(point=CHARGIN_SESSION)
+        q = f"""
             SELECT 
                 total_revenue,
                 operator_revenue,
@@ -56,7 +63,7 @@ class StatsDB:
                     FILTER (WHERE cs.state = 'COMPLETED') AS total_users,
 
                     COALESCE(AVG(cs.charge_duration_minutes), 0) AS avg_charge_time
-                FROM charging_sessions_fact cs
+                FROM {table_name} cs
                     WHERE cs.user_id = $1
                         AND cs.start_ts >= $2
                         AND cs.start_ts < $3
@@ -67,13 +74,15 @@ class StatsDB:
             return await conn.fetchrow(q, user_id, date_from, date_to)
     
     async def get_data_chart(self, user_id: int, date_from: datetime, date_to: datetime):
-        q = """
+        info_station = self._get_table_name(point=CHARGEPOINTS)
+        charging_sessions = self._get_table_name(point=CHARGIN_SESSION)
+        q = f"""
             SELECT 
                 s.location_name AS name,
                 COALESCE(SUM(cs.gross_revenue), 0) as value
-            FROM info_station_test s
+            FROM {info_station} s
             
-            LEFT JOIN charging_sessions_fact as cs
+            LEFT JOIN {charging_sessions} as cs
                 ON split_part(cs.evse_path, '/', 1) = s.key
                 AND cs.user_id = $1
                 AND cs.start_ts BETWEEN $2 AND $3
@@ -88,9 +97,10 @@ class StatsDB:
             return await conn.fetch(q, user_id, date_from, date_to)
         
     async def get_total_station(self, user_id):
-        q = """
+        info_station = self._get_table_name(point=CHARGEPOINTS)
+        q = f"""
             SELECT COUNT(DISTINCT  s.station_id) AS total_station
-            FROM info_station_test s
+            FROM {info_station} s
                 WHERE s.user_id = $1
             """
         async with self.db.pool.acquire() as conn:

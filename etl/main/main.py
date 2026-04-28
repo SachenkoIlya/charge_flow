@@ -17,7 +17,7 @@ load_dotenv()
     
 async def run_all_endpoints(run_mode: str, operator: str):
     base_db = Base()
-   
+    print(f"{run_mode}, {operator}")
     await base_db.connect()
     try:
         for type_method in ReportConfig.TYPE_METHODS.get(operator):
@@ -94,7 +94,7 @@ async def main(type_method: str, run_mode: str, operator: str, base_db: "Base", 
 
 
 if __name__ == '__main__':
-    # py -m etl.main.main test volt
+    # py -m etl.main.main volt
     # py -m etl.main.main scheduled volt
     import sys
 
@@ -103,5 +103,5 @@ if __name__ == '__main__':
     run_mode = os.getenv('RUN_MODE', 'test')
     operator = sys.argv[1]
     
-    asyncio.run(run_all_endpoints(operator))   
+    asyncio.run(run_all_endpoints(run_mode, operator))   
     

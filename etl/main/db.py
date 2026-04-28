@@ -10,7 +10,7 @@ class RunRepository:
     def __init__(self, base_db: "Base"):
         self.db = base_db
 
-    @Base.with_retries(retries=5, delay=1.5, msg_prefix='RunRepository.get_single_users')
+    @Base.with_retries(retries=5, delay=1.5, msg_prefix='RunRepository.get_schema_preview')
     async def get_schema_preview(self, limit: int = 1):
         q = f"""
             SELECT * FROM operator_credentials

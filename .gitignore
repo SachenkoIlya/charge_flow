@@ -7,7 +7,7 @@ logs/
 venv/
 test/
 docs
-
+http/
 *.pyc
 
 db.md

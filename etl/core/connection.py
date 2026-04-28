@@ -9,11 +9,15 @@ from etl.runtime.export.export import ExportFromBi
 import traceback
 import asyncio
 import aiohttp
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 class Connect:
     map_cls = {
         'volt': RegstryVolt
     }
+    mode = os.getenv('ETL_MODE')
 
     map_scenario_export = {
         'bi': {
@@ -77,10 +81,9 @@ class Connect:
 
 
 
-    @staticmethod
-    async def run_pipelines(sess:aiohttp.ClientSession, run_contexts: list["RunContext"], ctx:"Ctx"):
+    async def run_pipelines(self, sess:aiohttp.ClientSession, run_contexts: list["RunContext"], ctx:"Ctx"):
 
-        report = Connect.map_cls[ctx.operator].registry[ctx.type_method]
+        report = self.map_cls[ctx.operator].registry[ctx.type_method]
 
         tasks = [
             report.get_data(sess=sess, run_ctx=run_ctx, ctx=ctx)
@@ -120,9 +123,9 @@ class Connect:
                 
             except Exception as e:
                 ctx.logger.warning(run_ctx.user.full_name)
-                ctx.logger.warning(f"Ощибка записи meta в ctx.db.run_piplines.insert".upper())
-                ctx.logger.error(f"{str(e)}\n\n")
-                ctx.logger.error(traceback.format_exc())
+                ctx.logger.error(f"{run_ctx.full_name}: {str(e)}\n\n")
+                if self.mode in {'test', 'dev'}:
+                    ctx.logger.error(traceback.format_exc())
 
             # if ctx.type_method == 'chargepoints':
             #     ctx.logger.warning(f"временный пропуск: {ctx.type_method}")
@@ -141,12 +144,10 @@ class Connect:
                     )
                     ctx.logger.info(f"Данные записаны в бд bi_export".upper())
                 except Exception as e:
-                    ctx.logger.warning(run_ctx.user.full_name)
-                    ctx.logger.warning(f"Ощибка записи meta в insert_bi_export_task".upper())
-                    ctx.logger.error(f"{str(e)}\n\n")
-                    ctx.logger.error(traceback.format_exc())
+                    if self.mode in {}:
+                        ctx.logger.error(traceback.format_exc())
         
-        scenario_exp =  Connect.map_scenario_export.get('bi', {})\
+        scenario_exp =  self.map_scenario_export.get('bi', {})\
             .get(ctx.operator, {})\
             .get(ctx.type_method)
         

@@ -37,6 +37,8 @@ def date_insurance(data: DashboardFilterSchema) -> tuple[str, str]:
     date_to = date_to.replace(tzinfo=timezone.utc)
     return date_from, date_to
 
+
+
 @router.post('/stats', response_model=StatsResponseSchema)
 async def stats(
     data: DashboardFilterSchema, 
