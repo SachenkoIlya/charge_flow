@@ -61,8 +61,8 @@ def get_metrics(metrics) -> dict:
                     'color': 'from-orange-50 to-orange-100'
                 },
                 {
-                    'label': 'Завершённые сессии:',
-                    'value': f"{formater.format_int(int(m['success_sessions']))} / {formater.format_int(int(m['total_sessions']))}",
+                    'label': 'Количество сессий:',
+                    'value': f"{formater.format_int(int(m['total_sessions']))}",
                     'color': 'from-indigo-50 to-indigo-100'
                 },
               

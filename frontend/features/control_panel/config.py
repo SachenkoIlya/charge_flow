@@ -59,3 +59,39 @@ def get_pie_charts_options(data:list[dict]):
             }
         ]
     }
+
+def get_pie_charts_options_v2(data: list[dict]):
+    option = {
+    'title': {
+        'text': 'Оборот по локациям',
+        'left': 'center'
+    },
+
+    'tooltip': {
+        'trigger': 'item',
+        'formatter': '{b}<br/>Оборот: {c} ₽ ({d}%)'
+    },
+
+    'legend': {
+        'orient': 'vertical',
+        'left': 'left'
+    },
+
+    'series': [
+        {
+            'name': 'Оборот',
+            'type': 'pie',
+            'radius': '60%',
+
+            'data': data,
+
+            'emphasis': {
+                'itemStyle': {
+                    'shadowBlur': 10,
+                    'shadowOffsetX': 0,
+                    'shadowColor': 'rgba(0, 0, 0, 0.3)'
+                }
+            }
+        }
+    ]
+}
