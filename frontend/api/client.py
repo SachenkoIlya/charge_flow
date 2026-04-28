@@ -66,8 +66,6 @@ async def universal_api(
     ):
     
     headers = get_auth_headers(request=request)
-    cookies = dict(request.cookies) if request else None
-    utils.logger.debug(f"cookies: {cookies}")
     url, method = Endpoints.get_data_endpoints(endpoint_name)
   
     try:

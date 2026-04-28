@@ -146,7 +146,7 @@ class Panel:
             payloads=payload,
             request=self.request
         )
-        utils.logger.debug(data)
+        
         if not data or data.get('error'):
             ui.notify('Сервер недоступен', color='red')
             return
