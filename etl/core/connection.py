@@ -41,8 +41,7 @@ class Connect:
 
 
 
-    @staticmethod
-    async def pie_in_chunck(combat_users:list["RunContext"], ctx: "Ctx"):
+    async def pie_in_chunck(self, combat_users:list["RunContext"], ctx: "Ctx"):
         # region DOC:
         """
         Запускает обработку отчётов по магазинам батчами (чанками),
@@ -70,8 +69,8 @@ class Connect:
         chunck = 20
         for i in range(0, len(combat_users), chunck):
             chunck_size = combat_users[i:i+chunck]
-            await Connect._connect_aiohttp(
-                Connect.run_pipelines,
+            await self._connect_aiohttp(
+                self.run_pipelines,
                 run_contexts=chunck_size,
                 ctx=ctx,
             )
