@@ -61,7 +61,7 @@ def get_pie_charts_options(data:list[dict]):
     }
 
 def get_pie_charts_options_v2(data: list[dict]):
-    option = {
+    return {
     'title': {
         'text': 'Оборот по локациям',
         'left': 'center'
