@@ -10,11 +10,11 @@ CHARGEPOINTS = 'chargepoints'
 
 TABLE_NAME_MAP = {
         'dev': {
-            'charging_sessions': 'charging_sessions_test',
+            'charging_sessions': 'charging_sessions_fact_test',
             'chargepoints': 'info_station_test',
         },
         'test':  {
-            'charging_sessions': 'charging_sessions_test',
+            'charging_sessions': 'charging_sessions_fact_test',
             'chargepoints': 'info_station_test',
         },
         'prod':  {
