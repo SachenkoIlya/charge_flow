@@ -74,7 +74,7 @@ def get_pie_charts_options_v2(data: list[dict]):
 
     'legend': {
         'orient': 'vertical',
-        'left': 'left'
+        'left': 'right'
     },
 
     'series': [
