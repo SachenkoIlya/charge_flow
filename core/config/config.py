@@ -1,6 +1,9 @@
 from dotenv import load_dotenv
+from core.logger.logger import make_logger
 import os
 load_dotenv()
+
+logger = make_logger(__name__, use_telegram=False)
 
 CHARGIN_SESSION = 'charging_sessions'
 CHARGEPOINTS = 'chargepoints'
@@ -30,5 +33,7 @@ def get_table_name_map(type_method: str) -> str:
             test = charging_sessions_fact_test
     """
     mode = os.getenv('ETL_MODE')
-    return TABLE_NAME_MAP.get(mode).get(type_method)
+    table_name = TABLE_NAME_MAP.get(mode).get(type_method)
+    logger.debug(f"ETL_MODE: {mode}, возвращаю имя таблицы: {table_name}".upper())
+    return table_name 
     

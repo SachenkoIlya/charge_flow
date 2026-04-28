@@ -16,7 +16,6 @@ class StatsDB:
 
     async def get_metrics(self, user_id:int, date_from: datetime, date_to: datetime):
         table_name = self._get_table_name(point=CHARGIN_SESSION)
-        logger.debug(f"Запрос в таблицу: {table_name}")
         q = f"""
             SELECT 
                 total_revenue,
