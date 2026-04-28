@@ -35,7 +35,7 @@ class Connect:
         timeout = aiohttp.ClientTimeout(total=None, connect=40, sock_connect=30, sock_read=120)
 
         async with aiohttp.ClientSession(connector=connector, timeout=timeout) as sess:
-            await func(sess, *args, **kwargs)
+            await func(sess=sess, *args, **kwargs)
 
 
 
