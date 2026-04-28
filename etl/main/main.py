@@ -36,6 +36,8 @@ async def run_all_endpoints(run_mode: str, operator: str):
 
 async def main(type_method: str, run_mode: str, operator: str, base_db: "Base", user_id: int = None):
     combat_users = []
+    connect = Connect()
+    
     now = datetime.now(timezone.utc)
     run_id = uuid4().hex
     
@@ -84,12 +86,11 @@ async def main(type_method: str, run_mode: str, operator: str, base_db: "Base", 
         ))
     if not combat_users:
         return
-    await Connect.pie_in_chunck(
-            combat_users=combat_users,
-            ctx=ctx,
-        )
-  
-
+    await connect.pie_in_chunck(
+        combat_users=combat_users,
+        ctx=ctx,
+    )
+   
 
 
 
