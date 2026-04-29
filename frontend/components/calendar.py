@@ -83,7 +83,7 @@ async def get_calendar(page_key:str, on_change_date=None):
                 
                 page_state['date_from'] = date_from
                 page_state['date_to'] = date_to
-                app.storage.user['page'][page_key] = page_state
+                app.storage.user['pages'][page_key] = page_state
 
                 logger.debug(f"Применили даты, пишем в storage".upper())
                 logger.debug(app.storage.user)
