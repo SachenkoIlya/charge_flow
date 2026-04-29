@@ -54,7 +54,11 @@ class Panel:
     def apply_filters(self):
         page = app.storage.user.get('pages', {})
         page_state = page.get(self.page_key)
-        company_id = app.storage.user.get('company_id')
+
+        context = app.storage.user.get('context')
+        utils.logger.debug(f"context: {context}")
+        company_id = context.get('company_id')
+        
         utils.logger.debug(f"page_stae: {page_state}, company_id: {company_id}".upper())
 
         today = datetime.now().strftime('%d.%m.%Y')
@@ -150,7 +154,7 @@ class Panel:
             payload['company_id'] = self.company_id
         
         utils.logger.debug(payload)
-        
+
         data = await universal_api(
             endpoint_name=self.endpoints_name,
             payloads=self.payload,
