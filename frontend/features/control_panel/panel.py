@@ -24,7 +24,6 @@ class Panel:
     def __post_init__(self):
         self.data = None
 
-        # filters = app.storage.user.get('filters', {})
         
         context = app.storage.user.get('context', {})
        
@@ -33,14 +32,7 @@ class Panel:
 
         pages = app.storage.user.get('pages', {})
         today = datetime.now().strftime('%d.%m.%Y')
-        # if not filters:
-        #     today = datetime.now().strftime("%d.%m.%Y")
-        #     filters = {
-        #         'date_from': today,
-        #         'date_to': today,
-        #         'company_id': None
-        #     }
-        #     app.storage.user['filters'] = filters
+        
         pages.setdefault('control_panel', {
             'date_from': today,
             'date_to': today,
@@ -60,11 +52,16 @@ class Panel:
             await self.render_content()
 
     def apply_filters(self):
-        filters = app.storage.user.get('filters', {})
+        page = app.storage.user.get('pages', {})
+        page_state = page.get(self.page_key)
+        company_id = app.storage.user.get('company_id')
+        utils.logger.debug(f"page_stae: {page_state}, company_id: {company_id}".upper())
+
         today = datetime.now().strftime('%d.%m.%Y')
-        self.date_from = filters.get('date_from') or today
-        self.date_to = filters.get('date_to') or self.date_from
-        self.company_id = filters.get('company_id')
+        
+        self.date_from = page_state.get('date_from') or today
+        self.date_to = page_state.get('date_to') or self.date_from
+        self.company_id = page_state.get('company_id')
     
     
   
@@ -75,8 +72,6 @@ class Panel:
 
     async def render(self):
         self.apply_filters()
-        # with ui.element('div') as self.container:
-        #     ui.label("Загрузка...") 
         await self.load_data()
         
         role = self.user.get('role')
@@ -153,6 +148,8 @@ class Panel:
         
         if self.company_id:
             payload['company_id'] = self.company_id
+        
+        utils.logger.debug(payload)
         
         data = await universal_api(
             endpoint_name=self.endpoints_name,
