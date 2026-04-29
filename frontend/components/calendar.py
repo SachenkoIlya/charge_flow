@@ -5,12 +5,12 @@ from core.logger.logger import make_logger
 logger = make_logger(__name__, use_telegram=False)
 
 
-async def get_calendar(on_change_date=None):
+async def get_calendar(page_key:str, on_change_date=None):
     today = datetime.now().strftime('%d.%m.%Y')
     with ui.row().classes('items-center gap-3 justify-center'):
-        filters = app.storage.user.get('filters', {})
-        date_from = filters.get('date_from')
-        date_to = filters.get('date_to')
+        page_state = app.storage.user.get('pages', {}).get(page_key)
+        date_from = page_state.get('date_from')
+        date_to = page_state.get('date_to')
 
         value = (
             f'{date_from} - {date_to}' 
@@ -24,10 +24,12 @@ async def get_calendar(on_change_date=None):
          .classes('w-56 bg-white rounded-md px-3 text-gray-800')
         
         async def reset_dates_local():
-            filters = app.storage.user.get('filters', {})
-            filters['date_from'] = today
-            filters['date_to'] = today
-            app.storage.user['filters'] = filters
+            page = app.storage.user.get('page')
+            logger.debug(page)
+            page_state = app.storage.user.get('page', {}).get(page_key)
+            page_state['date_from'] = today
+            page_state['date_to'] = today
+            app.storage.user['page'][page_key] = page_state
 
             if on_change_date:
                 await on_change_date()
@@ -70,10 +72,10 @@ async def get_calendar(on_change_date=None):
                 if not date_to:
                     date_to = today
                 
-                filters = app.storage.user.get('filters', {})
-                filters['date_from'] = date_from
-                filters['date_to'] = date_to
-                app.storage.user['filters'] = filters
+                page_state = app.storage.user.get('page', {}).get(page_state)
+                page_state['date_from'] = date_from
+                page_state['date_to'] = date_to
+                app.storage.user['page'][page_key] = page_state
 
                 if on_change_date:
                     await on_change_date()

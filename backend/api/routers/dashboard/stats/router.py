@@ -43,7 +43,6 @@ def date_insurance(data: DashboardFilterSchema) -> tuple[str, str]:
 async def stats(
     data: DashboardFilterSchema, 
     payload = Depends(get_current_token),
-    db_manager: Manager=Depends(get_manager),
     metrics:  ManagerMetrics=Depends(get_merics)
 ):
    

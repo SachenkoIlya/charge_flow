@@ -16,12 +16,12 @@ def get_drawer(role: str) -> ui.left_drawer:
 
         drawer.value = False
         
-
+        nav_item('trending_up', 'Тренды', '/trends')
         if role == 'admin':
             with ui.column().classes('gap-1 pg-4'):
                 nav_item('groups', 'Инвесторы', '/investors')
-                nav_item('link', 'Подключить оператора', '/operator')
                 ui.separator()
+                nav_item('link', 'Подключить оператора', '/operator')
                 nav_item('link', 'Мониторинг системы', '/system_monitoring')
                 
 

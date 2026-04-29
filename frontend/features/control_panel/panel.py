@@ -6,7 +6,7 @@ from frontend.components.drawer import get_drawer
 from frontend.api.client import universal_api
 from frontend.components.stat_card import stat_card
 from frontend.utils.utils import utils
-
+from copy import deepcopy
 from dataclasses import dataclass
 from datetime import datetime
 
@@ -20,22 +20,39 @@ class Panel:
     user: dict
     request: Request
     endpoints_name: str = 'dashboard_stats'
-
+    page_key = 'control_panel'
     def __post_init__(self):
         self.data = None
-        filters = app.storage.user.get('filters', {})
-        if not filters:
-            today = datetime.now().strftime("%d.%m.%Y")
-            filters = {
-                'date_from': today,
-                'date_to': today,
-                'company_id': None
-            }
-            app.storage.user['filters'] = filters
 
-        self.date_from = filters.get('date_from')
-        self.date_to = filters.get('date_to')
-        self.company_id = filters.get('company_id')
+        # filters = app.storage.user.get('filters', {})
+        
+        context = app.storage.user.get('context', {})
+        utils.logger.debug(context)
+        context.setdefault('company_id', None)
+        app.storage.user['context'] = context
+
+        pages = app.storage.user.get('pages', {})
+        today = datetime.now().strftime('%d.%m.%Y')
+        # if not filters:
+        #     today = datetime.now().strftime("%d.%m.%Y")
+        #     filters = {
+        #         'date_from': today,
+        #         'date_to': today,
+        #         'company_id': None
+        #     }
+        #     app.storage.user['filters'] = filters
+        pages.setdefault('control_panel', {
+            'date_from': today,
+            'date_to': today,
+        })
+        
+        app.storage.user['pages'] = pages
+
+        self.company_id = context.get('company_id')
+        self.payload = pages['control_panel']
+        # self.date_from = filters.get('date_from')
+        # self.date_to = filters.get('date_to')
+        # self.company_id = filters.get('company_id')
 
     async def refresh(self):
         self.container.clear()
@@ -94,7 +111,7 @@ class Panel:
                 
             # правая часть
             with ui.column().classes('items-end'):
-                await get_calendar(on_change_date=self.on_date_change)
+                await get_calendar(on_change_date=self.on_date_change, page_key=self.page_key)
 
     async def render_left(self, metrics: dict, chart: list[dict]):
         # p-6 w-full animate-[fadeInUp_0.5s_ease-out]
@@ -132,18 +149,14 @@ class Panel:
 
 
     async def load_data(self):
-        
-        payload = {
-            'date_from': self.date_from,
-            'date_to': self.date_to,
-        }
+        payload = deepcopy(self.payload)
         
         if self.company_id:
             payload['company_id'] = self.company_id
         
         data = await universal_api(
             endpoint_name=self.endpoints_name,
-            payloads=payload,
+            payloads=self.payload,
             request=self.request
         )
         
