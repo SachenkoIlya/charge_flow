@@ -32,6 +32,7 @@ class Panel:
 
         page = app.storage.user.get('pages', {})
         page_state = page.get(self.page_key)
+        utils.logger.debug(page)
         utils.logger.debug(f"Есть ли сейчас ключ {self.page_key} в pages storage ?".upper())
         utils.logger.debug(f"{page}".upper())
         
