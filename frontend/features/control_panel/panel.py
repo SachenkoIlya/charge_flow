@@ -31,6 +31,7 @@ class Panel:
         app.storage.user['context'] = context
 
         pages = app.storage.user.get('pages', {})
+        utils.logger.debug(f"Есть ли сейчас ключ {self.page_key} в pages storage ?".upper())
         today = datetime.now().strftime('%d.%m.%Y')
         
         pages.setdefault('control_panel', {
@@ -41,7 +42,8 @@ class Panel:
         app.storage.user['pages'] = pages
 
         self.company_id = context.get('company_id')
-        self.payload = pages['control_panel']
+        self.payload = pages[self.page_key]
+
         # self.date_from = filters.get('date_from')
         # self.date_to = filters.get('date_to')
         # self.company_id = filters.get('company_id')
