@@ -28,8 +28,6 @@ async def control_panel_page(request: Request):
   try:
     data_dict = utils.current_user.get_current_user(request=request)
     user = data_dict['payload']
-    utils.logger.debug(f"Зашли в conttrol panel".upper())
-    utils.logger.debug(f"data_dict: {data_dict}")
 
   except Exception as e:
     if mode in {'test', 'dev'}:

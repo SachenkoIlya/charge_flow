@@ -58,14 +58,14 @@ class Panel:
         context = app.storage.user.get('context')
         utils.logger.debug(f"context: {context}")
         company_id = context.get('company_id')
-        
+
         utils.logger.debug(f"page_stae: {page_state}, company_id: {company_id}".upper())
 
         today = datetime.now().strftime('%d.%m.%Y')
         
         self.date_from = page_state.get('date_from') or today
         self.date_to = page_state.get('date_to') or self.date_from
-        self.company_id = page_state.get('company_id')
+        self.company_id = company_id
     
     
   
@@ -95,7 +95,6 @@ class Panel:
         metrics = get_metrics(self.data)
         chart = self.data['chart']
         
-        utils.logger.debug(self.data)
         with ui.element('div').style('display: flex; gap: 15px; width: 100%; align-items: stretch; min-height: 650px'):
             await self.render_left(metrics, chart)
             await self.render_right(metrics)
