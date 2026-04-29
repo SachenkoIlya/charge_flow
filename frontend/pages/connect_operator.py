@@ -6,12 +6,15 @@ from frontend.utils.config import screen_background
 
 @ui.page('/operator')
 async def connect_operator_page(request: Request):
-    data_dict = utils.current_user.get_current_user(request=request)
-    user = data_dict['payload']
-    if not user:
+    try:
+        data_dict = utils.current_user.get_current_user(request=request)
+        user = data_dict['payload']
+    except Exception as e:
+        utils.logger.error(str(e))
+        app.storage.user.clear()
+        app.storage.browser.clear() 
         ui.navigate.to('/login')
         return
-    
     ui.query('body').classes(screen_background)
     print(ui.context.client.request.query_params)
     await ConnectOperatorForm(user=user, request=request).render()
