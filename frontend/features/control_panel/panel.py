@@ -25,32 +25,23 @@ class Panel:
     
     def __post_init__(self):
         self.data = None
+        today = datetime.now().strftime("%d.%m.%Y")
         
-        context = app.storage.user.get('context', {})
+        pages = app.storage.user.setdefault('pages', {})
+        page_state = pages.setdefault(self.page_key, {
+            'date_from': today,
+            'date_to': today,
+        })
+
+        context = app.storage.user.setdefault('context', {})
         context.setdefault('company_id', None)
+
+        app.storage.user['pages'] = pages
         app.storage.user['context'] = context
 
-        
-        today = datetime.now().strftime("%d.%m.%Y")
-        pages = app.storage.user.get('pages', {})
-        pages.setdefault('pages', None)
-        
-        page_state = pages.get(self.page_key, {})
-        
-        utils.logger.debug(f"page_state: {page_state}")
-        
-        page_state.setdefault(self.page_key)
-        
-        if not page_state[self.page_key]:
-            page_state[self.page_key] = {
-                'date_from': today,
-                'date_to': today,
-            }
-
-
-        app.storage.user['pages'] = page_state
+        self.payload = page_state
+        self.company_id = context.get('company_id')
         utils.logger.debug(app.storage.user)
-
 
     async def refresh(self):
         self.container.clear()
