@@ -64,9 +64,9 @@ async def get_filtered_company_from_admin(
     
     async def apply_filters():
         company_id = company_select.value
-        filters = app.storage.user.get('filters', {})
-        filters['company_id'] = company_id
-        app.storage.user['filters'] = filters
+        context = app.storage.user.get('context', {})
+        context['company_id'] = company_id
+        app.storage.user['context'] = context
 
         if on_change:
             await on_change()
