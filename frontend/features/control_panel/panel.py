@@ -31,17 +31,20 @@ class Panel:
         app.storage.user['context'] = context
 
         pages = app.storage.user.get('pages', {})
+        page_state = pages.get(self.page_key)
         utils.logger.debug(f"Есть ли сейчас ключ {self.page_key} в pages storage ?".upper())
         utils.logger.debug(f"{pages}".upper())
         
-        today = datetime.now().strftime('%d.%m.%Y')
+        if not page_state:
+            utils.logger.debug(f"page_state: {page_state} = None".upper())
+            today = datetime.now().strftime('%d.%m.%Y')
         
-        pages.setdefault('control_panel', {
-            'date_from': today,
-            'date_to': today,
-        })
+            page_state.setdefault('control_panel', {
+                'date_from': today,
+                'date_to': today,
+            })
         
-        app.storage.user['pages'] = pages
+        app.storage.user['pages'] = page_state
 
         self.company_id = context.get('company_id')
         self.payload = pages[self.page_key]
