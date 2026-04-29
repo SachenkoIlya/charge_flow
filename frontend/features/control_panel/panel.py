@@ -31,7 +31,7 @@ class Panel:
         app.storage.user['context'] = context
 
         
-        today = datetime.now().strftime("%Y-%m-%d")
+        today = datetime.now().strftime("%d.%m.%Y")
         pages = app.storage.user.get('pages', {})
         pages.setdefault('pages', None)
         
