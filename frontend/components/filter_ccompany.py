@@ -47,8 +47,8 @@ async def get_filtered_company_from_admin(
     if not companies:
         companies = await fetch_companies(request=request)
 
-    filters = app.storage.user.get('filters', {})
-    selected_company = filters.get('company_id')
+    context = app.storage.user.get('context', {})
+    selected_company = context.get('company_id')
     
     if selected_company not in companies:
         selected_company = None
