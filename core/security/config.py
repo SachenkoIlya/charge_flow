@@ -7,7 +7,7 @@ load_dotenv()
 class Settings(BaseSettings):
     SECRET_KEY: str = os.getenv('JWT_SECRET')
     ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 90
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = os.getenv('ACCESS_TOKEN_EXPIRE_MINUTES')
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7
 
     # class Config:
