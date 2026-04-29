@@ -32,6 +32,8 @@ class Panel:
 
         pages = app.storage.user.get('pages', {})
         utils.logger.debug(f"Есть ли сейчас ключ {self.page_key} в pages storage ?".upper())
+        utils.logger.debug(f"{pages}".upper())
+        
         today = datetime.now().strftime('%d.%m.%Y')
         
         pages.setdefault('control_panel', {
