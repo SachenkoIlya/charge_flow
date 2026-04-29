@@ -41,7 +41,7 @@ class Panel:
         
         page_state.setdefault(self.page_key)
         
-        app.storage.user['pages'][self.page_key] = page_state
+        app.storage.user['pages'] = pages
         utils.logger.debug(app.storage.user)
 
 
