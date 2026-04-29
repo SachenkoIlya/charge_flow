@@ -30,6 +30,12 @@ class Panel:
         context.setdefault('company_id', None)
         app.storage.user['context'] = context
 
+        
+        today = datetime.now().strftime("$Y-$m-$d")
+        page = app.storage.user.get('pages', {})
+        page.setdefault(self.page_key)
+        
+        app.storage.user['pages'][self.page_key] = page
         utils.logger.debug(app.storage.user)
 
 
