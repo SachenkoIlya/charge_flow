@@ -156,7 +156,7 @@ class Panel:
 
         data = await universal_api(
             endpoint_name=self.endpoints_name,
-            payloads=self.payload,
+            payloads=payload,
             request=self.request
         )
         
