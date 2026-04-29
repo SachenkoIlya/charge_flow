@@ -67,7 +67,7 @@ class Panel:
 
         utils.logger.debug(f"page_stae: {page_state}, company_id: {company_id}".upper())
 
-        today = datetime.now().strftime('%d.%m.%Y')
+        # today = datetime.now().strftime('%d.%m.%Y')
         
         # self.date_from = page_state.get('date_from') or today
         # self.date_to = page_state.get('date_to') or self.date_from
