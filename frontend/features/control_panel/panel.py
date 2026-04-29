@@ -41,6 +41,13 @@ class Panel:
         
         page_state.setdefault(self.page_key)
         
+        if not page_state[self.page_key]:
+            page_state[self.page_key] = {
+                'date_from': today,
+                'date_to': today,
+            }
+
+            
         app.storage.user['pages'] = page_state
         utils.logger.debug(app.storage.user)
 
