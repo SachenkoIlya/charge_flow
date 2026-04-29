@@ -8,7 +8,8 @@ logger = make_logger(__name__, use_telegram=False)
 async def get_calendar(page_key:str, on_change_date=None):
     today = datetime.now().strftime('%d.%m.%Y')
     with ui.row().classes('items-center gap-3 justify-center'):
-        page_state = app.storage.user.get('pages', {}).get(page_key)
+        page_state = app.storage.user.get('page', {}).get(page_key)
+        logger.debug(page_state)
         date_from = page_state.get('date_from')
         date_to = page_state.get('date_to')
 
