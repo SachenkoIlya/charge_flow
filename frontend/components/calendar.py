@@ -14,11 +14,13 @@ async def get_calendar(page_key:str, on_change_date=None):
         date_from = page_state.get('date_from')
         date_to = page_state.get('date_to')
         logger.debug(page_state)
+        
         value = (
             f'{date_from} - {date_to}' 
             if date_from and date_to 
             else f'{today} - {today}'
         )
+        
         date_input = ui.input(
             label='Выберите диапазон',
             value=value
@@ -26,9 +28,11 @@ async def get_calendar(page_key:str, on_change_date=None):
          .classes('w-56 bg-white rounded-md px-3 text-gray-800')
         
         async def reset_dates_local():
-            page = app.storage.user.get('page')
+            page = app.storage.user.get('pages')
             logger.debug(page)
-            page_state = app.storage.user.get('page', {}).get(page_key)
+            
+            page_state = app.storage.user.get('pages', {}).get(page_key)
+            
             page_state['date_from'] = today
             page_state['date_to'] = today
             app.storage.user['page'][page_key] = page_state
@@ -74,13 +78,15 @@ async def get_calendar(page_key:str, on_change_date=None):
                 if not date_to:
                     date_to = today
                 
-                page_state = app.storage.user.get('page', {}).get(page_key)
-                logger.debug(app.storage.user)
-                logger.debug(page_state)
+                page = app.storage.user.get('pages', {})
+                page_state = page.get(page_key)
+                
                 page_state['date_from'] = date_from
                 page_state['date_to'] = date_to
                 app.storage.user['page'][page_key] = page_state
 
+                logger.debug(f"Применили даты, пишем в storage".upper())
+                logger.debug(app.storage.user)
                 if on_change_date:
                     await on_change_date()
                 print('Применили:', date_from, date_to)
