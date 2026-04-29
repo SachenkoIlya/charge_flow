@@ -14,22 +14,23 @@ async def fetch_companies(request:Request, endpoint_name ='dashboard_companies')
 
     )
     if not data or data.get('error'):
-        ui.notify('Сервер недоступен', color='red')
         return 
             
     status_code = data['status_code']
     answer = data['data']
+    
 
-    if status_code == 401:
-        ui.notify(answer.get('detail'), color='red')
-        ui.navigate.to('/login')
-        return 
+    # token_expired = answer.get('detail')
+    # if status_code == 401 or token_expired == 'Token expired':
+    #     ui.notify(answer.get('detail'), color='red')
+    #     ui.navigate.to('/login')
+    #     return 
 
     if status_code == 403:
         ui.notify(answer.get('detail'), color='red')
         return 
 
-    if status_code >= 400:
+    if status_code >= 402:
         ui.notify(f'Ошибка: {status_code}', color='red')
         return 
 

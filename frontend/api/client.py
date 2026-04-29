@@ -89,6 +89,11 @@ async def universal_api(
     except Exception:
         data = None
     
+    if response.status_code == 401:
+        app.storage.user.clear()
+        ui.notify('Сессия истекла', color='red')
+        ui.navigate.to('/login')
+        return {'error': 'unauthorized'}
     return {
         'status_code': response.status_code,
         'data': data
