@@ -35,7 +35,7 @@ async def get_calendar(page_key:str, on_change_date=None):
             
             page_state['date_from'] = today
             page_state['date_to'] = today
-            app.storage.user['page'][page_key] = page_state
+            app.storage.user['pages'][page_key] = page_state
 
             if on_change_date:
                 await on_change_date()
