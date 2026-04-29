@@ -21,38 +21,17 @@ class Panel:
     request: Request
     endpoints_name: str = 'dashboard_stats'
     page_key = 'control_panel'
+    
+    
     def __post_init__(self):
         self.data = None
-
         
         context = app.storage.user.get('context', {})
-       
         context.setdefault('company_id', None)
         app.storage.user['context'] = context
 
-        page = app.storage.user.get('pages', {})
-        page_state = page.get(self.page_key)
-        utils.logger.debug(page)
-        utils.logger.debug(f"Есть ли сейчас ключ {self.page_key} в pages storage ?".upper())
-        utils.logger.debug(f"{page}".upper())
-        
-        if not page_state:
-            utils.logger.debug(f"page_state: {page_state} = None".upper())
-            today = datetime.now().strftime('%d.%m.%Y')
-        
-            page.setdefault('control_panel', {
-                'date_from': today,
-                'date_to': today,
-            })
-        
-        app.storage.user['pages'] = page_state
+        utils.logger.debug(app.storage.user)
 
-        self.company_id = context.get('company_id')
-        self.payload = page[self.page_key]
-        utils.logger.debug(self.payload)
-        # self.date_from = filters.get('date_from')
-        # self.date_to = filters.get('date_to')
-        # self.company_id = filters.get('company_id')
 
     async def refresh(self):
         self.container.clear()
