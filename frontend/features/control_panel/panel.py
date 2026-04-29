@@ -32,8 +32,10 @@ class Panel:
 
         
         today = datetime.now().strftime("$Y-$m-$d")
-        page = app.storage.user.get('pages', {})
-        page_state = page.get(self.page_key, {})
+        pages = app.storage.user.get('pages', {})
+        pages.setdefault('pages', None)
+        
+        page_state = pages.get(self.page_key, {})
         
         utils.logger.debug(f"page_state: {page_state}")
         
