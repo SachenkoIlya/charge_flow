@@ -31,7 +31,7 @@ class Panel:
         app.storage.user['context'] = context
 
         
-        today = datetime.now().strftime("$Y-$m-$d")
+        today = datetime.now().strftime("%Y-%m-%d")
         pages = app.storage.user.get('pages', {})
         pages.setdefault('pages', None)
         
@@ -47,7 +47,7 @@ class Panel:
                 'date_to': today,
             }
 
-            
+
         app.storage.user['pages'] = page_state
         utils.logger.debug(app.storage.user)
 
