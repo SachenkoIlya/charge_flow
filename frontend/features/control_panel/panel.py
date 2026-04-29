@@ -27,7 +27,7 @@ class Panel:
         # filters = app.storage.user.get('filters', {})
         
         context = app.storage.user.get('context', {})
-        utils.logger.debug(context)
+       
         context.setdefault('company_id', None)
         app.storage.user['context'] = context
 
