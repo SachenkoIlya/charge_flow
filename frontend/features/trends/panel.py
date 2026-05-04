@@ -88,7 +88,7 @@ class Panel:
                 ):
                     # ui.label('METRICS 1/4')
 
-                    with ui.column().classes('w-full gap-2 mt-3'):
+                    with ui.column().classes('flex-[1] gap-3 h-full justify-between'):
                         with ui.element('div').classes(
                             'w-full bg-white rounded-lg shadow-sm border border-gray-200 p-3'
                         ):
