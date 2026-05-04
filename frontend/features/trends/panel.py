@@ -154,12 +154,12 @@ class Panel:
                 options = render_daily_dynamics_chart()
                 ui.echart(options).classes('w-full h-[240px]')
         
-        
     async def render_low_block(self):
         with ui.row().classes('w-full gap-3 items-stretch'):
 
+            # 1. СРЕДНЕЕ ПО ДНЮ
             with ui.element('div').classes(
-                'flex-1 min-h-[100px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
+                'flex-1 min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-4'
             ):
                 ui.label('СРЕДНЕЕ ПО ДНЮ').classes('text-sm font-semibold mb-3')
 
@@ -170,15 +170,16 @@ class Panel:
                         ('-2 период', '87', ''),
                     ]:
                         with ui.element('div').classes(
-                            'flex-1 bg-white rounded-lg shadow-sm border border-gray-200 p-3'
+                            'flex-none w-[110px] bg-gray-50 rounded-lg border border-gray-200 p-2'
                         ):
-                            ui.label(title).classes('text-xs text-gray-500')
-                            ui.label(value).classes('text-xl font-bold')
+                            ui.label(title).classes('text-[10px] text-gray-500')
+                            ui.label(value).classes('text-base font-bold')
                             if delta:
-                                ui.label(delta).classes('text-xs text-green-500')
+                                ui.label(delta).classes('text-[10px] text-green-500')
 
+            # 2. СЕССИИ
             with ui.element('div').classes(
-                'flex-1 min-h-[100px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
+                'flex-1 min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-4'
             ):
                 ui.label('СЕССИИ').classes('text-sm font-semibold mb-2')
 
@@ -188,14 +189,16 @@ class Panel:
                     'yAxis': {'type': 'value'},
                     'series': [{
                         'type': 'bar',
-                        'barWidth': 35,
+                        'barWidth': 25,
                         'data': [2000, 1200, 800],
                     }],
                 }
-                ui.echart(options).classes('w-full h-[155px]')
 
+                ui.echart(options).classes('w-full h-[150px]')
+
+            # 3. ТИПЫ КОННЕКТОРОВ
             with ui.element('div').classes(
-                'flex-1 min-h-[100px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
+                'flex-1 min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-4'
             ):
                 ui.label('ТИПЫ КОННЕКТОРОВ').classes('text-sm font-semibold mb-2')
 
@@ -212,4 +215,5 @@ class Panel:
                         ],
                     }],
                 }
-                ui.echart(options).classes('w-full h-[90px]')
+
+                ui.echart(options).classes('w-full h-[150px]')
