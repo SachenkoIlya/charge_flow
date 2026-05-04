@@ -48,7 +48,7 @@ def render_daily_dynamics_chart():
             'data': ['Текущий месяц', 'Прошлый месяц', 'Позапрошлый месяц'],
         },
         'grid': {
-            'left': 45,
+            'left': 5,
             'right': 20,
             'top': 30,
             'bottom': 45,
