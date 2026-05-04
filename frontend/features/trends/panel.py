@@ -150,7 +150,7 @@ class Panel:
             ):
                 ui.label('ДИНАМИКА ПО ДНЯМ')
                 options = render_daily_dynamics_chart()
-                ui.echart(options).classes('w-full h-[220px]')
+                ui.echart(options).classes('w-full h-[2330px]')
     
     
     async def render_low_block(self):
