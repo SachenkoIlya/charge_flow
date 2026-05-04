@@ -125,7 +125,7 @@ class Panel:
                         ui.echart(options).classes('w-full h-[220px]')
 
                     # метрики справа
-                    with ui.column().classes('flex-[1] gap-2'):
+                    with ui.column().classes('flex-[1] gap-3 h-full justify-between'):
                         with ui.element('div').classes(
                             'w-full bg-white rounded-lg shadow-sm border border-gray-200 p-3'
                         ):
