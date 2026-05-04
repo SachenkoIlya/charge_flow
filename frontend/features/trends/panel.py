@@ -159,7 +159,7 @@ class Panel:
         with ui.row().classes('w-full gap-3 items-stretch'):
 
             with ui.element('div').classes(
-                'flex-1 min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
+                'flex-1 min-h-[100px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
             ):
                 ui.label('СРЕДНЕЕ ПО ДНЮ').classes('text-sm font-semibold mb-3')
 
@@ -178,7 +178,7 @@ class Panel:
                                 ui.label(delta).classes('text-xs text-green-500')
 
             with ui.element('div').classes(
-                'flex-1 min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
+                'flex-1 min-h-[100px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
             ):
                 ui.label('СЕССИИ').classes('text-sm font-semibold mb-2')
 
@@ -195,7 +195,7 @@ class Panel:
                 ui.echart(options).classes('w-full h-[155px]')
 
             with ui.element('div').classes(
-                'flex-1 min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
+                'flex-1 min-h-[100px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
             ):
                 ui.label('ТИПЫ КОННЕКТОРОВ').classes('text-sm font-semibold mb-2')
 
@@ -212,4 +212,4 @@ class Panel:
                         ],
                     }],
                 }
-                ui.echart(options).classes('w-full h-[155px]')
+                ui.echart(options).classes('w-full h-[90px]')
