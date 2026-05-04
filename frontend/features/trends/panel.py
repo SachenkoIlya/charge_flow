@@ -57,7 +57,8 @@ class Panel:
             await self.render_content()
 
     async def render_content(self):
-        with ui.element('div').style('display: flex; gap: 15px; width: 100%; align-items: stretch; min-height: 650px'):
+        # min-height: 650px
+        with ui.element('div').style('display: flex; gap: 15px; width: 100%; align-items: stretch;'):
             await self.render_revenue()
 
     async def render_revenue(self):
@@ -68,8 +69,8 @@ class Panel:
             ui.label('REVENUE BLOCK')
             # внутреннее деление
             with ui.element('div').classes(
-                'flex w-full gap-4 mt-4'
-            ).style('min-height: 350px'):
+                'flex w-full gap-4 mt-1'
+            ).style('min-height: 220px'):
 
                 # левый — 3/4 (график)
                 with ui.element('div').classes(
