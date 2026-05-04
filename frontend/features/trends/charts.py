@@ -1,4 +1,4 @@
-def render_revenue_chart(self):
+def render_revenue_chart():
     options = {
         'tooltip': {'trigger': 'axis'},
         'legend': {
