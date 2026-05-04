@@ -78,7 +78,7 @@ def render_revenue_chart():
 
 
 def render_daily_dynamics_chart():
-    options = {
+    return {
         'tooltip': {'trigger': 'axis'},
         'legend': {
             'bottom': 0,
