@@ -5,7 +5,7 @@ from frontend.components.drawer import get_drawer
 from nicegui import ui, app
 from datetime import datetime
 from frontend.utils.utils import utils
-
+from frontend.features.trends.charts import render_revenue_chart
 
 
 @dataclass
@@ -75,10 +75,11 @@ class Panel:
             with ui.element('div').classes(
                 'flex w-full gap-4 mt-1 items-start'
             ):
-
+                options = render_revenue_chart()
+                ui.echart(options).classes('w-full h-[220px]')
                 # левый — 3/4
                 with ui.element('div').classes(
-                    'flex-[3] min-w-0 h-[220px] border-2 border-blue-400 rounded-lg p-4'
+                      'flex-[3] min-w-0 border-2 border-blue-400 rounded-lg p-4'
                 ):
                     ui.label('CHART 3/4')
 
