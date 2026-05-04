@@ -115,7 +115,7 @@ class Panel:
             ):
                 ui.label('ЭНЕРГИЯ').classes('text-sm font-semibold mb-1')
 
-                with ui.row().classes('w-full gap-4 mt-3 items-start'):
+                with ui.row().classes('w-full gap-4 items-start'):
 
                 # график слева
                     with ui.element('div').classes(
@@ -149,10 +149,10 @@ class Panel:
                 'flex-1  min-h-[220px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
             ):
                 ui.label('ДИНАМИКА ПО ДНЯМ')
-
-
                 options = render_daily_dynamics_chart()
                 ui.echart(options).classes('w-full h-[220px]')
+    
+    
     async def render_low_block(self):
         with ui.row().classes('w-full gap-3 items-stretch'):
             with ui.element('div').classes(
