@@ -90,7 +90,7 @@ class Panel:
                     ui.label('METRICS 1/4')
     
     async def render_middle_block(self):
-        with ui.row().classes('w-full gap-4 items-stretch'):
+        with ui.row().classes('w-full gap-3 items-stretch'):
             with ui.element('div').classes(
                 'flex-1  min-h-[220px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
             ):
@@ -101,7 +101,7 @@ class Panel:
                 ui.label('ДИНАМИКА ПО ДНЯМ')
     
     async def render_low_block(self):
-        with ui.row().classes('w-full gap-4 items-stretch'):
+        with ui.row().classes('w-full gap-3 items-stretch'):
             with ui.element('div').classes(
                 'flex-1  min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
             ):
