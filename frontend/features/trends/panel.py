@@ -157,39 +157,39 @@ class Panel:
 
                 options = render_daily_dynamics_chart()
                 ui.echart(options).classes('w-full h-[240px]')
-        
-async def render_low_block(self):
-    with ui.row().classes('w-full gap-3 items-stretch flex-wrap'):
+            
+    async def render_low_block(self):
+        with ui.row().classes('w-full gap-3 items-stretch flex-wrap'):
 
-        with ui.element('div').classes(
-            'flex-1 min-w-[300px] min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-4'
-        ):
-            ui.label('СРЕДНЕЕ ПО ДНЮ').classes('text-sm font-semibold mb-3')
+            with ui.element('div').classes(
+                'flex-1 min-w-[300px] min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-4'
+            ):
+                ui.label('СРЕДНЕЕ ПО ДНЮ').classes('text-sm font-semibold mb-3')
 
-            with ui.row().classes('w-full gap-2'):
-                for title, value, delta in [
-                    ('Текущий', '120', '+8%'),
-                    ('-1 период', '98', '+12%'),
-                    ('-2 период', '87', ''),
-                ]:
-                    with ui.element('div').classes(
-                        'flex-1 min-w-0 bg-white rounded-lg shadow-sm border border-gray-200 p-3'
-                    ):
-                        ui.label(title).classes('text-xs text-gray-500')
-                        ui.label(value).classes('text-lg font-bold')
-                        if delta:
-                            ui.label(delta).classes('text-xs text-green-500')
+                with ui.row().classes('w-full gap-2'):
+                    for title, value, delta in [
+                        ('Текущий', '120', '+8%'),
+                        ('-1 период', '98', '+12%'),
+                        ('-2 период', '87', ''),
+                    ]:
+                        with ui.element('div').classes(
+                            'flex-1 min-w-0 bg-white rounded-lg shadow-sm border border-gray-200 p-3'
+                        ):
+                            ui.label(title).classes('text-xs text-gray-500')
+                            ui.label(value).classes('text-lg font-bold')
+                            if delta:
+                                ui.label(delta).classes('text-xs text-green-500')
 
-        with ui.element('div').classes(
-            'flex-1 min-w-[300px] min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-4'
-        ):
-            ui.label('СЕССИИ').classes('text-sm font-semibold mb-2')
-            options = render_sessions_chart()
-            ui.echart(options).classes('w-full h-[150px]')
+            with ui.element('div').classes(
+                'flex-1 min-w-[300px] min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-4'
+            ):
+                ui.label('СЕССИИ').classes('text-sm font-semibold mb-2')
+                options = render_sessions_chart()
+                ui.echart(options).classes('w-full h-[150px]')
 
-        with ui.element('div').classes(
-            'flex-1 min-w-[300px] min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-4'
-        ):
-            ui.label('ТИПЫ КОННЕКТОРОВ').classes('text-sm font-semibold mb-2')
-            options = render_connector_types_chart()
-            ui.echart(options).classes('w-full h-[150px]')
+            with ui.element('div').classes(
+                'flex-1 min-w-[300px] min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-4'
+            ):
+                ui.label('ТИПЫ КОННЕКТОРОВ').classes('text-sm font-semibold mb-2')
+                options = render_connector_types_chart()
+                ui.echart(options).classes('w-full h-[150px]')
