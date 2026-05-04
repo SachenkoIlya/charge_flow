@@ -5,8 +5,12 @@ from frontend.components.drawer import get_drawer
 from nicegui import ui, app
 from datetime import datetime
 from frontend.utils.utils import utils
-from frontend.features.trends.charts import render_revenue_chart, render_daily_dynamics_chart
-
+from frontend.features.trends.charts import (
+    render_connector_types_chart, 
+    render_revenue_chart, 
+    render_daily_dynamics_chart, 
+    render_sessions_chart
+)
 
 @dataclass
 class Panel:
@@ -154,66 +158,38 @@ class Panel:
                 options = render_daily_dynamics_chart()
                 ui.echart(options).classes('w-full h-[240px]')
         
-    async def render_low_block(self):
-        with ui.row().classes('w-full gap-3 items-stretch'):
+async def render_low_block(self):
+    with ui.row().classes('w-full gap-3 items-stretch flex-wrap'):
 
-            # 1. СРЕДНЕЕ ПО ДНЮ
-            with ui.element('div').classes(
-                'flex-1 min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-4'
-            ):
-                ui.label('СРЕДНЕЕ ПО ДНЮ').classes('text-sm font-semibold mb-3')
+        with ui.element('div').classes(
+            'flex-1 min-w-[300px] min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-4'
+        ):
+            ui.label('СРЕДНЕЕ ПО ДНЮ').classes('text-sm font-semibold mb-3')
 
-                with ui.row().classes('w-full gap-2'):
-                    for title, value, delta in [
-                        ('Текущий', '120', '+8%'),
-                        ('-1 период', '98', '+12%'),
-                        ('-2 период', '87', ''),
-                    ]:
-                        with ui.element('div').classes(
-                            'flex-none w-[110px] bg-gray-50 rounded-lg border border-gray-200 p-2'
-                        ):
-                            ui.label(title).classes('text-[10px] text-gray-500')
-                            ui.label(value).classes('text-base font-bold')
-                            if delta:
-                                ui.label(delta).classes('text-[10px] text-green-500')
+            with ui.row().classes('w-full gap-2'):
+                for title, value, delta in [
+                    ('Текущий', '120', '+8%'),
+                    ('-1 период', '98', '+12%'),
+                    ('-2 период', '87', ''),
+                ]:
+                    with ui.element('div').classes(
+                        'flex-1 min-w-0 bg-white rounded-lg shadow-sm border border-gray-200 p-3'
+                    ):
+                        ui.label(title).classes('text-xs text-gray-500')
+                        ui.label(value).classes('text-lg font-bold')
+                        if delta:
+                            ui.label(delta).classes('text-xs text-green-500')
 
-            # 2. СЕССИИ
-            with ui.element('div').classes(
-                'flex-1 min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-4'
-            ):
-                ui.label('СЕССИИ').classes('text-sm font-semibold mb-2')
+        with ui.element('div').classes(
+            'flex-1 min-w-[300px] min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-4'
+        ):
+            ui.label('СЕССИИ').classes('text-sm font-semibold mb-2')
+            options = render_sessions_chart()
+            ui.echart(options).classes('w-full h-[150px]')
 
-                options = {
-                    'grid': {'left': 35, 'right': 10, 'top': 20, 'bottom': 25},
-                    'xAxis': {'type': 'category', 'data': ['Всего', 'VOLT', 'Yandex']},
-                    'yAxis': {'type': 'value'},
-                    'series': [{
-                        'type': 'bar',
-                        'barWidth': 25,
-                        'data': [2000, 1200, 800],
-                    }],
-                }
-
-                ui.echart(options).classes('w-full h-[150px]')
-
-            # 3. ТИПЫ КОННЕКТОРОВ
-            with ui.element('div').classes(
-                'flex-1 min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-4'
-            ):
-                ui.label('ТИПЫ КОННЕКТОРОВ').classes('text-sm font-semibold mb-2')
-
-                options = {
-                    'tooltip': {'trigger': 'item'},
-                    'legend': {'bottom': 0},
-                    'series': [{
-                        'type': 'pie',
-                        'radius': ['45%', '70%'],
-                        'center': ['50%', '45%'],
-                        'data': [
-                            {'value': 65, 'name': 'GBT'},
-                            {'value': 35, 'name': 'CCS2'},
-                        ],
-                    }],
-                }
-
-                ui.echart(options).classes('w-full h-[150px]')
+        with ui.element('div').classes(
+            'flex-1 min-w-[300px] min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-4'
+        ):
+            ui.label('ТИПЫ КОННЕКТОРОВ').classes('text-sm font-semibold mb-2')
+            options = render_connector_types_chart()
+            ui.echart(options).classes('w-full h-[150px]')

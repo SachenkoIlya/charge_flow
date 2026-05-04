@@ -82,5 +82,40 @@ def render_daily_dynamics_chart():
             },
         ],
     }
-
+def render_sessions_chart():
+    return {
+        'grid': {'left': 35, 'right': 10, 'top': 20, 'bottom': 25},
+        'xAxis': {
+            'type': 'category',
+            'data': ['Всего', 'VOLT', 'Yandex'],
+        },
+        'yAxis': {'type': 'value'},
+        'series': [{
+            'type': 'bar',
+            'barWidth': 25,
+            'data': [2000, 1200, 800],
+        }],
+    }
     
+def render_connector_types_chart():
+    return {
+        'tooltip': {'trigger': 'item'},
+        'legend': {
+            'bottom': 0,
+            'textStyle': {'fontSize': 10},
+        },
+        'series': [{
+            'type': 'pie',
+            'radius': ['45%', '70%'],
+            'center': ['50%', '45%'],
+            'data': [
+                {'value': 65, 'name': 'GBT'},
+                {'value': 35, 'name': 'CCS2'},
+            ],
+            'label': {
+                'show': True,
+                'formatter': '{b}',
+                'fontSize': 10,
+            },
+        }],
+    }
