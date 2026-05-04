@@ -161,12 +161,53 @@ class Panel:
                 'flex-1  min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
             ):
                 ui.label('СРЕДНЕЕ ПО ДНЮ')
-            
+                for title, value, delta in [
+                    ('Текущий', '120', '+8%'),
+                    ('-1 период', '98', '+12%'),
+                    ('-2 период', '87', ''),
+                ]:
+                    with ui.element('div').classes(
+                        'flex-1 bg-gray-50 rounded-lg border p-3'
+                    ):
+                        ui.label(title).classes('text-xs text-gray-500')
+                        ui.label(value).classes('text-lg font-bold')
+                        if delta:
+                            ui.label(delta).classes('text-xs text-green-500')
+
+
             with ui.element('div').classes(
-                'flex-1  min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
+                'flex-1 min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
             ):
-                ui.label('СЕССИИ')
-            with ui.element('div').classes(
-                'flex-1  min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
-            ):
-                ui.label('ТИПЫ КОННЕКТОРОВ')
+                ui.label('СЕССИИ').classes('text-sm font-semibold mb-2')
+
+                options = {
+                    'xAxis': {
+                        'type': 'category',
+                        'data': ['Всего', 'VOLT', 'Yandex'],
+                    },
+                    'yAxis': {'type': 'value'},
+                    'series': [{
+                        'type': 'bar',
+                        'data': [2000, 1200, 800],
+                    }]
+                }
+
+                ui.echart(options).classes('w-full h-[140px]')
+        with ui.element('div').classes(
+            'flex-1 min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
+        ):
+            ui.label('ТИПЫ КОННЕКТОРОВ').classes('text-sm font-semibold mb-2')
+
+            options = {
+                'series': [{
+                    'type': 'pie',
+                    'radius': ['50%', '70%'],
+                    'data': [
+                        {'value': 65, 'name': 'GBT'},
+                        {'value': 35, 'name': 'CCS2'},
+                    ],
+                }],
+                'legend': {'bottom': 0}
+            }
+
+            ui.echart(options).classes('w-full h-[140px]')
