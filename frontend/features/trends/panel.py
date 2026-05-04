@@ -61,18 +61,24 @@ class Panel:
             await self.render_revenue()
 
     async def render_revenue(self):
-        # контейнер
+      # главный контейнер (весь блок revenue)
         with ui.element('div').classes(
-            'w-full flex gap-4'
-        ).style('min-height: 350px'):
-            # левый блок под графие
+            'w-full border-2 border-red-400 rounded-xl p-4'
+        ):
+            ui.label('REVENUE BLOCK')
+            # внутреннее деление
             with ui.element('div').classes(
-                'flex-[3] min-w-0 border-2 border-blue-400 rounded-lg p-4'
-            ):
-                ui.label('LEFT (chart 3/4)')
-            
-            # правый блок 
-            with ui.element('div').classes(
-               'flex-[1] border-2 border-green-400 rounded-lg p-4'
-            ):
-                ui.label('LEFT (chart 1/4)')
+                'flex w-full gap-4 mt-4'
+            ).style('min-height: 350px'):
+
+                # левый — 3/4 (график)
+                with ui.element('div').classes(
+                    'flex-[3] min-w-0 border-2 border-blue-400 rounded-lg p-4'
+                ):
+                    ui.label('CHART 3/4')
+
+                # правый — 1/4 (метрики)
+                with ui.element('div').classes(
+                    'flex-[1] border-2 border-green-400 rounded-lg p-4'
+                ):
+                    ui.label('METRICS 1/4')
