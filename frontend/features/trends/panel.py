@@ -199,7 +199,7 @@ class Panel:
             ):
                 ui.label('ЭКСПЛУАТАЦИЯ').classes('text-sm font-semibold mb-3')
 
-                with ui.column().classes('w-full gap-2'):
+                with ui.row().classes('w-full gap-2'):
                     for title, value, color in [
                         ('Доступность', '98%', 'text-green-500'),
                         ('Простой', '2%', 'text-red-500'),
