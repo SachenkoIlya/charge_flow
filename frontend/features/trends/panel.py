@@ -65,6 +65,7 @@ class Panel:
             await self.render_middle_block()
             await self.render_low_block()
             
+
     async def render_revenue(self):
       # главный контейнер (весь блок revenue)
         with ui.element('div').classes(
