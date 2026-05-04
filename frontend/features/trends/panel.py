@@ -77,7 +77,7 @@ class Panel:
             ):
                 # левый — 3/4
                 with ui.element('div').classes(
-                      'flex-[3] min-w-0 border-2 border-blue-400 rounded-lg p-4'
+                      'flex-[4] min-w-0 border-2 border-blue-400 rounded-lg p-4'
                 ):
                     # ui.label('CHART 3/4')
                     options = render_revenue_chart()
