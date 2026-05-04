@@ -75,7 +75,7 @@ class Panel:
             # внутреннее деление
             with ui.element('div').classes(
                 'flex w-full gap-4 mt-1'
-            ).style('min-height: 240px'):
+            ).style('min-height: 220px'):
 
                 # левый — 3/4 (график)
                 with ui.element('div').classes(
