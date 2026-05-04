@@ -79,14 +79,14 @@ class Panel:
                 with ui.element('div').classes(
                       'flex-[3] min-w-0 border-2 border-blue-400 rounded-lg p-4'
                 ):
-                    ui.label('CHART 3/4')
+                    # ui.label('CHART 3/4')
                     options = render_revenue_chart()
                     ui.echart(options).classes('w-full h-[240px]')
                 # правый — 1/4
                 with ui.element('div').classes(
                     'flex-[1] border-2 border-green-400 rounded-lg p-4'
                 ):
-                    ui.label('METRICS 1/4')
+                    # ui.label('METRICS 1/4')
 
                     with ui.column().classes('w-full gap-2 mt-3'):
                         with ui.element('div').classes(
