@@ -113,7 +113,7 @@ class Panel:
             with ui.element('div').classes(
                 'flex-1 min-h-[220px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
             ):
-                ui.label('ЭНЕРГИЯ').classes('text-sm font-semibold mb-1')
+                ui.label('ЭНЕРГИЯ')
 
                 with ui.row().classes('w-full gap-4 items-start'):
 
