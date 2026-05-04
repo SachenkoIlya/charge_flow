@@ -58,9 +58,12 @@ class Panel:
 
     async def render_content(self):
         # min-height: 650px
-        with ui.element('div').style('display: flex; gap: 15px; width: 100%; align-items: stretch;'):
+        with ui.element('div').style(
+            'display: flex; flex-direction: column; gap: 15px; width: 100%;'
+        ):
             await self.render_revenue()
             await self.render_middle_block()
+    
     async def render_revenue(self):
       # главный контейнер (весь блок revenue)
         with ui.element('div').classes(
