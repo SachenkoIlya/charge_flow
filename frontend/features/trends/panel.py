@@ -67,46 +67,45 @@ class Panel:
 
 
     async def render_revenue(self):
-      # главный контейнер (весь блок revenue)
         with ui.element('div').classes(
-              'w-full bg-white rounded-xl shadow-sm border border-gray-200 p-5'
+            'w-full bg-white rounded-xl shadow-sm border border-gray-200 p-5'
         ):
             ui.label('REVENUE BLOCK')
-            # внутреннее деление
-            with ui.element('div').classes(
-                'flex w-full gap-4 mt-1'
-            ).style('min-height: 220px'):
 
-                # левый — 3/4 (график)
+            with ui.element('div').classes(
+                'flex w-full gap-4 mt-1 items-start'
+            ):
+
+                # левый — 3/4
                 with ui.element('div').classes(
-                    'flex-[3] min-w-0 border-2 border-blue-400 rounded-lg p-4'
+                    'flex-[3] min-w-0 h-[220px] border-2 border-blue-400 rounded-lg p-4'
                 ):
                     ui.label('CHART 3/4')
 
-                # правый — 1/4 (метрики)
+                # правый — 1/4
                 with ui.element('div').classes(
                     'flex-[1] border-2 border-green-400 rounded-lg p-4'
                 ):
                     ui.label('METRICS 1/4')
-                    # вложенные визуальные контейнеры
-                    with ui.column().classes('w-full gap-3 mt-3'):
+
+                    with ui.column().classes('w-full gap-2 mt-3'):
                         with ui.element('div').classes(
-                            'w-full bg-white rounded-lg shadow-sm border border-gray-200 p-4'
+                            'w-full bg-white rounded-lg shadow-sm border border-gray-200 p-3'
                         ):
                             ui.label('Текущий год').classes('text-xs text-gray-500')
-                            ui.label('1 863 000 ₽').classes('text-xl font-bold')
+                            ui.label('1 863 000 ₽').classes('text-lg font-bold')
 
                         with ui.element('div').classes(
-                            'w-full bg-white rounded-lg shadow-sm border border-gray-200 p-4'
+                            'w-full bg-white rounded-lg shadow-sm border border-gray-200 p-3'
                         ):
                             ui.label('Прошлый год').classes('text-xs text-gray-500')
-                            ui.label('1 540 000 ₽').classes('text-xl font-bold')
+                            ui.label('1 540 000 ₽').classes('text-lg font-bold')
 
                         with ui.element('div').classes(
-                            'w-full bg-white rounded-lg shadow-sm border border-gray-200 p-4'
+                            'w-full bg-white rounded-lg shadow-sm border border-gray-200 p-3'
                         ):
                             ui.label('Рост (YoY)').classes('text-xs text-gray-500')
-                            ui.label('+12% ↗').classes('text-xl font-bold text-green-500')
+                            ui.label('+12% ↗').classes('text-lg font-bold text-green-500')
 
     async def render_middle_block(self):
         with ui.row().classes('w-full gap-3 items-stretch'):
