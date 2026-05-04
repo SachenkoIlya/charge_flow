@@ -123,25 +123,25 @@ class Panel:
                     ):
                         ui.label('ENERGY CHART')
 
-                # метрики справа
-                with ui.column().classes('flex-[1] gap-2'):
-                    with ui.element('div').classes(
-                        'w-full bg-white rounded-lg shadow-sm border border-gray-200 p-3'
-                    ):
-                        ui.label('Текущий год').classes('text-xs text-gray-500')
-                        ui.label('93 000 кВт⋅ч').classes('text-lg font-bold')
+                    # метрики справа
+                    with ui.column().classes('flex-[1] gap-2'):
+                        with ui.element('div').classes(
+                            'w-full bg-white rounded-lg shadow-sm border border-gray-200 p-3'
+                        ):
+                            ui.label('Текущий год').classes('text-xs text-gray-500')
+                            ui.label('93 000 кВт⋅ч').classes('text-lg font-bold')
 
-                    with ui.element('div').classes(
-                        'w-full bg-white rounded-lg shadow-sm border border-gray-200 p-3'
-                    ):
-                        ui.label('Прошлый год').classes('text-xs text-gray-500')
-                        ui.label('80 000 кВт⋅ч').classes('text-lg font-bold')
+                        with ui.element('div').classes(
+                            'w-full bg-white rounded-lg shadow-sm border border-gray-200 p-3'
+                        ):
+                            ui.label('Прошлый год').classes('text-xs text-gray-500')
+                            ui.label('80 000 кВт⋅ч').classes('text-lg font-bold')
 
-                    with ui.element('div').classes(
-                        'w-full bg-white rounded-lg shadow-sm border border-gray-200 p-3'
-                    ):
-                        ui.label('Рост (YoY)').classes('text-xs text-gray-500')
-                        ui.label('+16% ↗').classes('text-lg font-bold text-green-500')
+                        with ui.element('div').classes(
+                            'w-full bg-white rounded-lg shadow-sm border border-gray-200 p-3'
+                        ):
+                            ui.label('Рост (YoY)').classes('text-xs text-gray-500')
+                            ui.label('+16% ↗').classes('text-lg font-bold text-green-500')
                         
             # второй визуальный контейнер
             with ui.element('div').classes(
