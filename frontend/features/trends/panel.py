@@ -193,3 +193,20 @@ class Panel:
                 ui.label('ТИПЫ КОННЕКТОРОВ').classes('text-sm font-semibold mb-2')
                 options = render_connector_types_chart()
                 ui.echart(options).classes('w-full h-[150px]')
+            # 4. ЭКСПЛУАТАЦИЯ
+            with ui.element('div').classes(
+                'flex-1 min-w-[300px] min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-4'
+            ):
+                ui.label('ЭКСПЛУАТАЦИЯ').classes('text-sm font-semibold mb-3')
+
+                with ui.column().classes('w-full gap-2'):
+                    for title, value, color in [
+                        ('Доступность', '98%', 'text-green-500'),
+                        ('Простой', '2%', 'text-red-500'),
+                        ('Утилизация', '67%', 'text-gray-700'),
+                    ]:
+                        with ui.element('div').classes(
+                            'w-full bg-white rounded-lg shadow-sm border border-gray-200 p-3'
+                        ):
+                            ui.label(title).classes('text-xs text-gray-500')
+                            ui.label(value).classes(f'text-lg font-bold {color}')
