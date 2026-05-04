@@ -5,7 +5,7 @@ from frontend.components.drawer import get_drawer
 from nicegui import ui, app
 from datetime import datetime
 from frontend.utils.utils import utils
-from frontend.features.trends.charts import render_revenue_chart
+from frontend.features.trends.charts import render_revenue_chart, render_daily_dynamics_chart
 
 
 @dataclass
@@ -113,7 +113,7 @@ class Panel:
             with ui.element('div').classes(
                 'flex-1 min-h-[220px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
             ):
-                ui.label('ЭНЕРГИЯ').classes('font-semibold')
+                ui.label('ЭНЕРГИЯ').classes('text-sm font-semibold mb-1')
 
                 with ui.row().classes('w-full gap-4 mt-3 items-start'):
 
@@ -122,7 +122,7 @@ class Panel:
                         'flex-[2] min-w-0 border-2 border-blue-400 rounded-lg p-3'
                     ):
                         options = render_revenue_chart()
-                        ui.echart(options).classes('w-full h-[240px]')
+                        ui.echart(options).classes('w-full h-[220px]')
 
                     # метрики справа
                     with ui.column().classes('flex-[1] gap-2'):
@@ -149,7 +149,10 @@ class Panel:
                 'flex-1  min-h-[220px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
             ):
                 ui.label('ДИНАМИКА ПО ДНЯМ')
-    
+
+
+                options = render_daily_dynamics_chart()
+                ui.echart(options).classes('w-full h-[220px]')
     async def render_low_block(self):
         with ui.row().classes('w-full gap-3 items-stretch'):
             with ui.element('div').classes(
