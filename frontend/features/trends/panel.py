@@ -63,7 +63,8 @@ class Panel:
         ):
             await self.render_revenue()
             await self.render_middle_block()
-    
+            await self.render_low_block()
+            
     async def render_revenue(self):
       # главный контейнер (весь блок revenue)
         with ui.element('div').classes(
@@ -97,3 +98,19 @@ class Panel:
                 'flex-1  min-h-[220px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
             ):
                 ui.label('ДИНАМИКА ПО ДНЯМ')
+    
+    async def render_low_block(self):
+        with ui.row().classes('w-full gap-4 items-stretch'):
+            with ui.element('div').classes(
+                'flex-1  min-h-[220px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
+            ):
+                ui.label('СРЕДНЕЕ ПО ДНЮ')
+            
+            with ui.element('div').classes(
+                'flex-1  min-h-[220px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
+            ):
+                ui.label('СЕССИИ')
+            with ui.element('div').classes(
+                'flex-1  min-h-[220px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
+            ):
+                ui.label('ТИПЫ КОННЕКТОРОВ')
