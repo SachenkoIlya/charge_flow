@@ -83,3 +83,14 @@ class Panel:
                     'flex-[1] border-2 border-green-400 rounded-lg p-4'
                 ):
                     ui.label('METRICS 1/4')
+    
+    async def render_middle_block(self):
+        with ui.row('w-full gap-4 items-stretch'):
+            with ui.element('div').classes(
+                'flex-1  min-h-[220px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
+            ):
+                ui.label('ЭНЕРГИЯ')
+            with ui.element('div').classes(
+                'flex-1  min-h-[220px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
+            ):
+                ui.label('ДИНАМИКА ПО ДНЯМ')
