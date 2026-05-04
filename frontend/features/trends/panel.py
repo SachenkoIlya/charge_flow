@@ -63,7 +63,7 @@ class Panel:
     async def render_revenue(self):
       # главный контейнер (весь блок revenue)
         with ui.element('div').classes(
-            'w-full border-2 border-red-400 rounded-xl p-4'
+              'w-full bg-white rounded-xl shadow-sm border border-gray-200 p-5'
         ):
             ui.label('REVENUE BLOCK')
             # внутреннее деление
