@@ -75,14 +75,13 @@ class Panel:
             with ui.element('div').classes(
                 'flex w-full gap-4 mt-1 items-start'
             ):
-                options = render_revenue_chart()
-                ui.echart(options).classes('w-full h-[220px]')
                 # левый — 3/4
                 with ui.element('div').classes(
                       'flex-[3] min-w-0 border-2 border-blue-400 rounded-lg p-4'
                 ):
                     ui.label('CHART 3/4')
-
+                    options = render_revenue_chart()
+                    ui.echart(options).classes('w-full h-[220px]')
                 # правый — 1/4
                 with ui.element('div').classes(
                     'flex-[1] border-2 border-green-400 rounded-lg p-4'
