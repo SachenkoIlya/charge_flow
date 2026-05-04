@@ -95,7 +95,7 @@ class Panel:
                         ):
                             ui.label('Текущий год').classes('text-xs text-gray-500')
                             ui.label('1 863 000 ₽').classes('text-xl font-bold')
-                        
+
                         with ui.element('div').classes(
                             'w-full bg-white rounded-lg shadow-sm border border-gray-200 p-4'
                         ):
