@@ -121,7 +121,8 @@ class Panel:
                     with ui.element('div').classes(
                         'flex-[2] min-w-0 border-2 border-blue-400 rounded-lg p-3'
                     ):
-                        ui.label('ENERGY CHART')
+                        options = render_revenue_chart()
+                        ui.echart(options).classes('w-full h-[240px]')
 
                     # метрики справа
                     with ui.column().classes('flex-[1] gap-2'):
