@@ -95,7 +95,18 @@ class Panel:
                         ):
                             ui.label('Текущий год').classes('text-xs text-gray-500')
                             ui.label('1 863 000 ₽').classes('text-2xl font-bold')
+                        
+                        with ui.element('div').classes(
+                            'w-full bg-white rounded-lg shadow-sm border border-gray-200 p-4'
+                        ):
+                            ui.label('Прошлый год').classes('text-xs text-gray-500')
+                            ui.label('1 540 000 ₽').classes('text-2xl font-bold')
 
+                        with ui.element('div').classes(
+                            'w-full bg-white rounded-lg shadow-sm border border-gray-200 p-4'
+                        ):
+                            ui.label('Рост (YoY)').classes('text-xs text-gray-500')
+                            ui.label('+12% ↗').classes('text-2xl font-bold text-green-500')
 
     async def render_middle_block(self):
         with ui.row().classes('w-full gap-3 items-stretch'):
