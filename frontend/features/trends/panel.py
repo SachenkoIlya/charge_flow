@@ -53,7 +53,7 @@ class Panel:
         role = self.user.get('role')
         drawer = get_drawer(role=role)
         await get_header(drawer=drawer, role=role, request=self.request)
-        with ui.element('div').classes('w-full max-w-[2000px] mx-auto px-7 mt-5') as self.container:
+        with ui.element('div').classes('w-full max-w-[2000px] mx-auto px-7 mt-3') as self.container:
             await self.render_content()
 
     async def render_content(self):
@@ -112,6 +112,6 @@ class Panel:
             ):
                 ui.label('СЕССИИ')
             with ui.element('div').classes(
-                'flex-1  min-h-[220px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
+                'flex-1  min-h-[160px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
             ):
                 ui.label('ТИПЫ КОННЕКТОРОВ')
