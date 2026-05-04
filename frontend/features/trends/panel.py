@@ -75,7 +75,7 @@ class Panel:
             # внутреннее деление
             with ui.element('div').classes(
                 'flex w-full gap-4 mt-1'
-            ).style('min-height: 280px'):
+            ).style('min-height: 260px'):
 
                 # левый — 3/4 (график)
                 with ui.element('div').classes(
@@ -92,26 +92,26 @@ class Panel:
     async def render_middle_block(self):
         with ui.row().classes('w-full gap-4 items-stretch'):
             with ui.element('div').classes(
-                'flex-1  min-h-[200px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
+                'flex-1  min-h-[220px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
             ):
                 ui.label('ЭНЕРГИЯ')
             with ui.element('div').classes(
-                'flex-1  min-h-[200px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
+                'flex-1  min-h-[220px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
             ):
                 ui.label('ДИНАМИКА ПО ДНЯМ')
     
     async def render_low_block(self):
         with ui.row().classes('w-full gap-4 items-stretch'):
             with ui.element('div').classes(
-                'flex-1  min-h-[160px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
+                'flex-1  min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
             ):
                 ui.label('СРЕДНЕЕ ПО ДНЮ')
             
             with ui.element('div').classes(
-                'flex-1  min-h-[160px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
+                'flex-1  min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
             ):
                 ui.label('СЕССИИ')
             with ui.element('div').classes(
-                'flex-1  min-h-[160px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
+                'flex-1  min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
             ):
                 ui.label('ТИПЫ КОННЕКТОРОВ')
