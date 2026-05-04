@@ -148,7 +148,9 @@ class Panel:
             with ui.element('div').classes(
                 'flex-1  min-h-[220px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
             ):
-                ui.label('ДИНАМИКА ПО ДНЯМ')
+                with ui.row().classes('w-full items-center justify-between mb-2'):
+                    ui.label('ДИНАМИКА ПО ДНЯМ').classes('text-sm font-semibold')
+
                 options = render_daily_dynamics_chart()
                 ui.echart(options).classes('w-full h-[240px]')
     
