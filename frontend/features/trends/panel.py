@@ -88,7 +88,15 @@ class Panel:
                     'flex-[1] border-2 border-green-400 rounded-lg p-4'
                 ):
                     ui.label('METRICS 1/4')
-    
+                    # вложенные визуальные контейнеры
+                    with ui.column().classes('w-full gap-3 mt-3'):
+                        with ui.element('div').classes(
+                            'w-full bg-white rounded-lg shadow-sm border border-gray-200 p-4'
+                        ):
+                            ui.label('Текущий год').classes('text-xs text-gray-500')
+                            ui.label('1 863 000 ₽').classes('text-2xl font-bold')
+
+
     async def render_middle_block(self):
         with ui.row().classes('w-full gap-3 items-stretch'):
             with ui.element('div').classes(
