@@ -193,21 +193,21 @@ class Panel:
                 }
 
                 ui.echart(options).classes('w-full h-[140px]')
-        with ui.element('div').classes(
-            'flex-1 min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
-        ):
-            ui.label('ТИПЫ КОННЕКТОРОВ').classes('text-sm font-semibold mb-2')
+            with ui.element('div').classes(
+                'flex-1 min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
+            ):
+                ui.label('ТИПЫ КОННЕКТОРОВ').classes('text-sm font-semibold mb-2')
 
-            options = {
-                'series': [{
-                    'type': 'pie',
-                    'radius': ['50%', '70%'],
-                    'data': [
-                        {'value': 65, 'name': 'GBT'},
-                        {'value': 35, 'name': 'CCS2'},
-                    ],
-                }],
-                'legend': {'bottom': 0}
-            }
+                options = {
+                    'series': [{
+                        'type': 'pie',
+                        'radius': ['50%', '70%'],
+                        'data': [
+                            {'value': 65, 'name': 'GBT'},
+                            {'value': 35, 'name': 'CCS2'},
+                        ],
+                    }],
+                    'legend': {'bottom': 0}
+                }
 
-            ui.echart(options).classes('w-full h-[140px]')
+                ui.echart(options).classes('w-full h-[140px]')
