@@ -81,7 +81,7 @@ class Panel:
                 ):
                     ui.label('CHART 3/4')
                     options = render_revenue_chart()
-                    ui.echart(options).classes('w-full h-[220px]')
+                    ui.echart(options).classes('w-full h-[240px]')
                 # правый — 1/4
                 with ui.element('div').classes(
                     'flex-[1] border-2 border-green-400 rounded-lg p-4'
