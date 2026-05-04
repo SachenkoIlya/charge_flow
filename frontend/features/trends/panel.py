@@ -109,10 +109,41 @@ class Panel:
 
     async def render_middle_block(self):
         with ui.row().classes('w-full gap-3 items-stretch'):
+            # левый визуальный контейнер
             with ui.element('div').classes(
-                'flex-1  min-h-[220px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
+                'flex-1 min-h-[220px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
             ):
-                ui.label('ЭНЕРГИЯ')
+                ui.label('ЭНЕРГИЯ').classes('font-semibold')
+
+                with ui.row().classes('w-full gap-4 mt-3 items-start'):
+
+                # график слева
+                    with ui.element('div').classes(
+                        'flex-[2] min-w-0 border-2 border-blue-400 rounded-lg p-3'
+                    ):
+                        ui.label('ENERGY CHART')
+
+                # метрики справа
+                with ui.column().classes('flex-[1] gap-2'):
+                    with ui.element('div').classes(
+                        'w-full bg-white rounded-lg shadow-sm border border-gray-200 p-3'
+                    ):
+                        ui.label('Текущий год').classes('text-xs text-gray-500')
+                        ui.label('93 000 кВт⋅ч').classes('text-lg font-bold')
+
+                    with ui.element('div').classes(
+                        'w-full bg-white rounded-lg shadow-sm border border-gray-200 p-3'
+                    ):
+                        ui.label('Прошлый год').classes('text-xs text-gray-500')
+                        ui.label('80 000 кВт⋅ч').classes('text-lg font-bold')
+
+                    with ui.element('div').classes(
+                        'w-full bg-white rounded-lg shadow-sm border border-gray-200 p-3'
+                    ):
+                        ui.label('Рост (YoY)').classes('text-xs text-gray-500')
+                        ui.label('+16% ↗').classes('text-lg font-bold text-green-500')
+                        
+            # второй визуальный контейнер
             with ui.element('div').classes(
                 'flex-1  min-h-[220px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
             ):
