@@ -206,7 +206,7 @@ class Panel:
                         ('Утилизация', '67%', 'text-gray-700'),
                     ]:
                         with ui.element('div').classes(
-                            'w-full bg-white rounded-lg shadow-sm border border-gray-200 p-3'
+                            'flex-1 bg-white rounded-lg shadow-sm border border-gray-200 p-3'
                         ):
                             ui.label(title).classes('text-xs text-gray-500')
                             ui.label(value).classes(f'text-lg font-bold {color}')
