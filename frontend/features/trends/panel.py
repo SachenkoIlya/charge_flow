@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from fastapi import Request
 from frontend.components.header import  get_header
 from frontend.components.drawer import get_drawer
+from frontend.components.calendar import get_calendar
 from nicegui import ui, app
 from datetime import datetime
 from frontend.utils.utils import utils
@@ -60,10 +61,45 @@ class Panel:
         self.company_id = company_id
         self.payload = page_state
     
+    
+    async def on_date_change(self):
+        self.apply_filters()
+        await self.load_data()
+        await self.refresh()
+
+    async def render_filters(self):
+        with ui.element('div').classes(
+            'w-full max-w-[2000px] mx-auto px-5 mt-3'
+        ):
+            with ui.row().classes(
+                'w-full bg-white rounded-xl shadow-sm border border-gray-200 '
+                'p-2 items-center gap-3'
+            ):
+                ui.select(
+                    ['Все станции', 'Станция 1', 'Станция 2'],
+                    value='Все станции',
+                    label='Станция',
+                ).props('dense outlined').classes('w-[220px]')
+
+                await get_calendar(
+                    page_key='trends',
+                    on_change_date=None,
+                )
+
+                ui.button('Применить')\
+                    .props('dense unelevated')\
+                    .classes('ml-auto')
+
+
+
     async def render(self):
         role = self.user.get('role')
         drawer = get_drawer(role=role)
         await get_header(drawer=drawer, role=role, request=self.request)
+
+        await self.render_filters()
+
+        
         with ui.element('div').classes('w-full max-w-[2000px] mx-auto px-7 mt-3') as self.container:
             await self.render_content()
 
