@@ -114,58 +114,33 @@ class Panel:
                     
             
     async def render_low(self):
-        with ui.row().classes('w-full gap-3 items-stretch flex-wrap'):
-            render_visual_container(label='ЭКСПЛУАТАЦИЯ')
+        CARD = 'flex-1 min-w-0 h-full bg-white rounded-xl shadow-sm border border-gray-200 p-3 overflow-hidden'
+
+        STYLE_LABEL = 'text-sm font-semibold mb-1'
+        STYLE_ELEMENT = 'w-full h-[170px]'
+        PARAMS_ECHARTS = 'w-full h-full'
+        DIV = 'div'
+        with ui.row().classes(CARD):
             render_visual_container(
-                label='СРЕДНЕЕ',
+                label='СРЕДНЕЕ', 
+                CARD=CARD, 
+                STYLE_LABEL=STYLE_LABEL
             )
-            # with ui.element('div').classes(
-            #     'flex-1 min-w-[300px] min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-4'
-            # ):
-            #     ui.label('СРЕДНЕЕ ПО ДНЮ').classes('text-sm font-semibold mb-3')
-
-            #     with ui.row().classes('w-full gap-2'):
-            #         for title, value, delta in [
-            #             ('Текущий', '120', '+8%'),
-            #             ('-1 период', '98', '+12%'),
-            #             ('-2 период', '87', ''),
-            #         ]:
-            #             with ui.element('div').classes(
-            #                 'flex-1 min-w-0 bg-white rounded-lg shadow-sm border border-gray-200 p-3'
-            #             ):
-            #                 ui.label(title).classes('text-xs text-gray-500')
-            #                 ui.label(value).classes('text-lg font-bold')
-            #                 if delta:
-            #                     ui.label(delta).classes('text-xs text-green-500')
-
-            with ui.element('div').classes(
-                'flex-1 min-w-[300px] min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-4'
-            ):
-                ui.label('СЕССИИ').classes('text-sm font-semibold mb-2')
-                options = render_sessions_chart()
-                ui.echart(options).classes('w-full h-[150px]')
-
-            with ui.element('div').classes(
-                'flex-1 min-w-[300px] min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-4'
-            ):
-                ui.label('ТИПЫ КОННЕКТОРОВ').classes('text-sm font-semibold mb-2')
-                options = render_connector_types_chart()
-                ui.echart(options).classes('w-full h-[150px]')
-            # 4. ЭКСПЛУАТАЦИЯ
             
-            # with ui.element('div').classes(
-            #     'flex-1 min-w-[300px] min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-4'
-            # ):
-            #     ui.label('ЭКСПЛУАТАЦИЯ').classes('text-sm font-semibold mb-3')
-
-            #     with ui.row().classes('w-full gap-2'):
-            #         for title, value, color in [
-            #             ('Доступность', '98%', 'text-green-500'),
-            #             ('Простой', '2%', 'text-red-500'),
-            #             ('Утилизация', '67%', 'text-gray-700'),
-            #         ]:
-            #             with ui.element('div').classes(
-            #                 ' bg-white rounded-lg shadow-sm border border-gray-200 p-3'
-            #             ):
-            #                 ui.label(title).classes('text-xs text-gray-500')
-            #                 ui.label(value).classes(f'text-lg font-bold {color}')
+            with ui.element(DIV).classes(CARD):
+                ui.label('СЕССИИ').classes(STYLE_LABEL)
+                with ui.element(DIV).classes(STYLE_ELEMENT):
+                    options = render_sessions_chart()
+                    ui.echart(options).classes(PARAMS_ECHARTS)
+            
+            with ui.element(DIV).classes(CARD):
+                ui.label('ТИПЫ КОННЕКТОРОВ').classes(STYLE_LABEL)
+                with ui.element(DIV).classes(STYLE_ELEMENT):
+                    options = render_connector_types_chart()
+                    ui.echart(options).classes(PARAMS_ECHARTS)
+            
+            render_visual_container(
+                label='ЭКСПЛУАТАЦИЯ', 
+                CARD=CARD, 
+                STYLE_LABEL=STYLE_LABEL
+            )

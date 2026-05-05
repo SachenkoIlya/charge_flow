@@ -159,7 +159,7 @@ mock_4 = [
     },
 ] 
 
-def render_visual_container(label: str, metrics: list[dict[str, str]]=None) -> None:
+def render_visual_container(label: str, metrics: list[dict[str, str]]=None, CARD:str=None, STYLE_LABEL:str=None) -> None:
 
     if not metrics:
         if label == 'СРЕДНЕЕ':
@@ -167,10 +167,8 @@ def render_visual_container(label: str, metrics: list[dict[str, str]]=None) -> N
         if label == 'ЭКСПЛУАТАЦИЯ':
             metrics = mock_3
    
-    with ui.element('div').classes(
-        'flex-1 min-w-[150px] min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-4'
-    ):
-        ui.label(label).classes('text-sm font-semibold mb-3')
+    with ui.element('div').classes(CARD):
+        ui.label(label).classes(STYLE_LABEL)
         with ui.row().classes('w-full gap-2'):
             for m in metrics:
                 render_small_metric(
@@ -179,31 +177,18 @@ def render_visual_container(label: str, metrics: list[dict[str, str]]=None) -> N
                     delta=m.get('delta'),
                     color=m.get('color'),
                 )
+
+
 METRIC_CARD_CLASSES = (
-    'flex-1 min-w-0 h-[80px] '
-    'bg-white rounded-lg shadow-sm border border-gray-200 p-3'
+    'flex-1 min-w-0 h-full '
+    'bg-white rounded-lg shadow-sm border border-gray-200 p-2 overflow-hidden'
 )
 
-METRIC_TITLE_CLASSES = 'text-xs text-gray-500'
-METRIC_VALUE_CLASSES = 'text-lg font-bold'
-
-def render_small_metric(title:str, value:str, delta:str='', color:str=''):
+def render_small_metric(title, value, delta='', color=''):
     with ui.element('div').classes(METRIC_CARD_CLASSES):
-        ui.label(title).classes(METRIC_TITLE_CLASSES)
-        ui.label(value).classes(f'{METRIC_VALUE_CLASSES} {color}')
+        ui.label(title).classes('text-xs text-gray-500 leading-tight')
+        ui.label(value).classes(f'text-base font-bold leading-tight {color}')
         if delta:
             ui.label(delta).classes('text-xs text-green-500')
     
-
-
-    # params = 'text-lg font-bold'
-    # if color:
-    #     params = f"{params} {color}"
-    # with ui.element('div').classes(
-    #     'flex-1 min-w-0 bg-white rounded-lg shadow-sm border border-gray-200 p-3'
-    # ):
-    #     ui.label(title).classes('text-xs text-gray-500')
-    #     ui.label(value).classes(params)
-    #     if delta:
-    #         ui.label(delta).classes('text-xs text-green-500')
 
