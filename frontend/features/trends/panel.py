@@ -5,6 +5,8 @@ from frontend.components.drawer import get_drawer
 from nicegui import ui, app
 from datetime import datetime
 from frontend.utils.utils import utils
+
+from frontend.features.trends.components import render_high_block, render_midle_block, dynamics_by_day_from_middle_render
 from frontend.features.trends.charts import (
     render_connector_types_chart, 
     render_revenue_chart, 
@@ -65,12 +67,12 @@ class Panel:
         with ui.element('div').style(
             'display: flex; flex-direction: column; gap: 10px; width: 100%;'
         ):
-            await self.render_revenue()
-            await self.render_middle_block()
-            await self.render_low_block()
+            await self.render_high()
+            await self.render_middle()
+            await self.render_low()
 
 
-    async def render_revenue(self):
+    async def render_high(self):
         with ui.element('div').classes(
             'w-full bg-white rounded-xl shadow-sm border border-gray-200 p-5'
         ):
@@ -79,86 +81,28 @@ class Panel:
             with ui.element('div').classes(
                 'flex w-full gap-4 mt-1 items-start'
             ):
-                # левый — 3/4
-                with ui.element('div').classes(
-                      'flex-[4] min-w-0 border-2 border-blue-400 rounded-lg p-4'
-                ):
-                    # ui.label('CHART 3/4')
-                    options = render_revenue_chart()
-                    ui.echart(options).classes('w-full h-[240px]')
-                # правый — 1/4
-                with ui.element('div').classes(
-                    'flex-[1] border-2 border-green-400 rounded-lg p-4'
-                ):
-                    # ui.label('METRICS 1/4')
+                render_high_block()
 
-                    with ui.column().classes('flex-[1] gap-3 h-full justify-between'):
-                        with ui.element('div').classes(
-                            'w-full bg-white rounded-lg shadow-sm border border-gray-200 p-3'
-                        ):
-                            ui.label('Текущий год').classes('text-xs text-gray-500')
-                            ui.label('1 863 000 ₽').classes('text-lg font-bold')
 
-                        with ui.element('div').classes(
-                            'w-full bg-white rounded-lg shadow-sm border border-gray-200 p-3'
-                        ):
-                            ui.label('Прошлый год').classes('text-xs text-gray-500')
-                            ui.label('1 540 000 ₽').classes('text-lg font-bold')
 
-                        with ui.element('div').classes(
-                            'w-full bg-white rounded-lg shadow-sm border border-gray-200 p-3'
-                        ):
-                            ui.label('Рост (YoY)').classes('text-xs text-gray-500')
-                            ui.label('+12% ↗').classes('text-lg font-bold text-green-500')
-
-    async def render_middle_block(self):
+    async def render_middle(self):
         with ui.row().classes('w-full gap-3 items-stretch'):
             # левый визуальный контейнер
             with ui.element('div').classes(
                 'flex-1 min-h-[220px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
             ):
                 ui.label('ЭНЕРГИЯ')
-
                 with ui.row().classes('w-full gap-4 items-start'):
-
-                # график слева
-                    with ui.element('div').classes(
-                        'flex-[2] min-w-0 border-2 border-blue-400 rounded-lg p-3'
-                    ):
-                        options = render_revenue_chart()
-                        ui.echart(options).classes('w-full h-[220px]')
-
-                    # метрики справа
-                    with ui.column().classes('flex-[1] gap-3 h-full justify-between'):
-                        with ui.element('div').classes(
-                            'w-full bg-white rounded-lg shadow-sm border border-gray-200 p-3'
-                        ):
-                            ui.label('Текущий год').classes('text-xs text-gray-500')
-                            ui.label('93 000 кВт⋅ч').classes('text-lg font-bold')
-
-                        with ui.element('div').classes(
-                            'w-full bg-white rounded-lg shadow-sm border border-gray-200 p-3'
-                        ):
-                            ui.label('Прошлый год').classes('text-xs text-gray-500')
-                            ui.label('80 000 кВт⋅ч').classes('text-lg font-bold')
-
-                        with ui.element('div').classes(
-                            'w-full bg-white rounded-lg shadow-sm border border-gray-200 p-3'
-                        ):
-                            ui.label('Рост (YoY)').classes('text-xs text-gray-500')
-                            ui.label('+16% ↗').classes('text-lg font-bold text-green-500')
-                        
-            # второй визуальный контейнер
+                    render_midle_block()
             with ui.element('div').classes(
                 'flex-1  min-h-[220px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
             ):
                 with ui.row().classes('w-full items-center justify-between mb-2'):
                     ui.label('ДИНАМИКА ПО ДНЯМ').classes('text-sm font-semibold')
-
-                options = render_daily_dynamics_chart()
-                ui.echart(options).classes('w-full h-[240px]')
+                dynamics_by_day_from_middle_render()
+                
             
-    async def render_low_block(self):
+    async def render_low(self):
         with ui.row().classes('w-full gap-3 items-stretch flex-wrap'):
 
             with ui.element('div').classes(
@@ -206,7 +150,7 @@ class Panel:
                         ('Утилизация', '67%', 'text-gray-700'),
                     ]:
                         with ui.element('div').classes(
-                            'flex-1 bg-white rounded-lg shadow-sm border border-gray-200 p-3'
+                            ' bg-white rounded-lg shadow-sm border border-gray-200 p-3'
                         ):
                             ui.label(title).classes('text-xs text-gray-500')
                             ui.label(value).classes(f'text-lg font-bold {color}')
