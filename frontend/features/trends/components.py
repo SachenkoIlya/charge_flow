@@ -157,13 +157,12 @@ mock_4 = [
 
 def render_visual_container(label: str, metrics: list[dict[str, str]]=None) -> None:
 
-    
     if not metrics:
         if label == 'СРЕДНЕЕ':
             metrics = mock_4
         if label == 'ЭКСПЛУАТАЦИЯ':
             metrics = mock_3
-
+    print(metrics)
     with ui.element('div').classes(
         'flex-1 min-w-[300px] min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-4'
     ):
