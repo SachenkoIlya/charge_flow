@@ -120,7 +120,9 @@ class Panel:
         STYLE_LABEL = 'text-sm font-semibold mb-1'
         STYLE_ELEMENT = 'w-full h-[170px]'
         PARAMS_ECHARTS = 'w-full h-full'
-
+        CHART_CARD = 'min-w-0 h-full bg-white rounded-xl shadow-sm border border-gray-200 p-3 overflow-hidden flex flex-col'
+        CHART_BOX = 'w-full flex-1 min-h-0'
+        CHART_STYLE_LABEL = 'text-sm font-semibold mb-0'
         with ui.element('div').classes(ROW):
             render_visual_container(
                 label='СРЕДНЕЕ',
@@ -128,17 +130,17 @@ class Panel:
                 STYLE_LABEL=STYLE_LABEL,
             )
 
-            with ui.element('div').classes(CARD):
-                ui.label('СЕССИИ').classes(STYLE_LABEL)
-                with ui.element('div').classes(STYLE_ELEMENT):
+            with ui.element('div').classes(CHART_CARD):
+                ui.label('СЕССИИ').classes(CHART_STYLE_LABEL)
+                with ui.element('div').classes(CHART_BOX):
                     options = render_sessions_chart()
-                    ui.echart(options).classes(PARAMS_ECHARTS)
-
-            with ui.element('div').classes(CARD):
-                ui.label('ТИПЫ КОННЕКТОРОВ').classes(STYLE_LABEL)
-                with ui.element('div').classes(STYLE_ELEMENT):
+                    ui.echart(options).classes('w-full h-full')
+            
+            with ui.element('div').classes(CHART_CARD):
+                ui.label('ТИПЫ КОННЕКТОРОВ').classes(CHART_STYLE_LABEL)
+                with ui.element('div').classes(CHART_BOX):
                     options = render_connector_types_chart()
-                    ui.echart(options).classes(PARAMS_ECHARTS)
+                    ui.echart(options).classes('w-full h-full')
 
             render_visual_container(
                 label='ЭКСПЛУАТАЦИЯ',
