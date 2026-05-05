@@ -68,39 +68,36 @@ class Panel:
         await self.refresh()
    
     async def render_filters(self):
-        with ui.row().classes(
-            'w-full max-w-[2000px] mx-auto px-5 mt-1 justify-end'
-        ):
-            with ui.menu():
-                # кнопка
-                with ui.button('Фильтры', icon='tune')\
-                    .props('outline dense'):
-                    pass
+        with ui.button('Фильтры', icon='tune').props('flat color=white'):
+            with ui.menu().props('anchor=bottom right self=top right'):
+                with ui.column().classes('p-3 w-[320px] gap-3 bg-white'):
+                    ui.label('Фильтры').classes('text-base font-semibold')
 
-                # выпадающая панель
-                with ui.column().classes(
-                    'p-3 w-[300px] gap-3 bg-white'
-                ):
                     ui.select(
                         ['Все станции', 'Станция 1', 'Станция 2'],
-                        label='Станция'
-                    ).classes('w-full')
+                        value='Все станции',
+                        label='Станция',
+                    ).props('dense outlined').classes('w-full')
 
-                    await get_calendar(page_key='trends')
+                    await get_calendar(
+                        page_key='trends',
+                        on_change_date=None,
+                    )
 
-                    ui.button(
-                        'Применить',
-                        on_click=self.on_date_change
-                    ).classes('w-full')
+                    ui.button('Применить')\
+                        .props('dense unelevated')\
+                        .classes('w-full')
+                    
                     
     async def render(self):
         role = self.user.get('role')
         drawer = get_drawer(role=role)
-        await get_header(drawer=drawer, role=role, request=self.request)
-
-        await self.render_filters()
-
-
+        await get_header(
+            drawer=drawer, 
+            role=role, 
+            request=self.request, 
+            render_filters=self.render_filters
+        )
         with ui.element('div').classes('w-full max-w-[2000px] mx-auto px-7 mt-3') as self.container:
             await self.render_content()
 

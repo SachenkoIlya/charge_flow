@@ -10,7 +10,7 @@ def logout():
     app.storage.user.pop('token', None)
     ui.navigate.to('/login')
 
-async def get_header(request: Request, drawer, role: str, on_company_change=None):
+async def get_header(request: Request, drawer, role: str, on_company_change=None, render_filters=None):
     with ui.header().classes(
                'h-20 z-[100] bg-gradient-to-r from-blue-200 to-blue-800 border-b border-blue-500 flex items-center'
     ):
@@ -34,6 +34,8 @@ async def get_header(request: Request, drawer, role: str, on_company_change=None
             # Правая часть
             with ui.row().classes('items-center gap-4'):
             #     ui.label('Компания').classes('text-blue-900')
+                if render_filters:
+                    await render_filters()
                 ui.label('Контакты')\
                     .classes('text-white text-lg cursor-pointer hover:text-blue-100')\
                     .on('click', lambda: ui.navigate.to('/contacts'))
