@@ -76,15 +76,15 @@ class Panel:
             await self.render_middle()
             await self.render_low()
 
-
+    # тест
     async def render_high(self):
         with ui.element('div').classes(
-            'w-full bg-white rounded-xl shadow-sm border border-gray-200 p-5'
+            'w-full h-[300px] bg-white rounded-xl shadow-sm border border-gray-200 p-3 overflow-hidden'
         ):
-            ui.label('REVENUE BLOCK')
+            ui.label('REVENUE BLOCK').classes('text-sm')
 
             with ui.element('div').classes(
-                'flex w-full gap-4 mt-1 items-start'
+                'flex w-full h-[250px] gap-2 mt-1 items-stretch'
             ):
                 render_high_block()
 

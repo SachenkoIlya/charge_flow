@@ -57,33 +57,34 @@ def get_metrics(metric: dict):
     text = f'{value} {suffix}'.strip()
     if emoji:
         text = f'{text} {emoji}'
-
-    with ui.element('div').classes(
-        'w-full bg-white rounded-lg shadow-sm border border-gray-200 p-3'
-    ):
-        ui.label(label).classes('text-xs text-gray-500')
-        ui.label(text).classes(f'text-lg font-bold {color}')
-
-def render_high_block(metrics: dict=None):
-    if not metrics:
-        metrics = mock_metrics_1
-    with ui.element('div').classes(
-        'flex-[4] min-w-0 border-2 border-blue-400 rounded-lg p-4'
-        ):
-        render_revenue_left()
     
     with ui.element('div').classes(
-        'flex-[1] border-2 border-green-400 rounded-lg p-4'
+        'w-full flex-1 min-h-0 bg-white rounded-lg shadow-sm border border-gray-200 p-2 overflow-hidden'
+    ):
+        ui.label(label).classes('text-xs text-gray-500 leading-tight')
+        ui.label(text).classes(f'text-base font-bold leading-tight {color}')
+
+
+def render_high_block(metrics: dict = None):
+    if not metrics:
+        metrics = mock_metrics_1
+
+    with ui.element('div').classes(
+        'flex-[4] min-w-0 h-full border-2 border-blue-400 rounded-lg p-2 overflow-hidden'
+    ):
+        render_revenue_left()
+
+    with ui.element('div').classes(
+        'flex-[1] h-full border-2 border-green-400 rounded-lg p-2 overflow-hidden'
     ):
         render_revenue_right(metrics)
 
-
 def render_revenue_left():
     options = render_revenue_chart()
-    ui.echart(options).classes('w-full h-[240px]')
+    ui.echart(options).classes('w-full h-full')
 
 def render_revenue_right(metrics):
-    with ui.column().classes('flex-[1] gap-3 h-full justify-between'):
+    with ui.column().classes('flex-[1] gap-2 h-full overflow-hidden'):
         for metric in metrics:
             get_metrics(metric)
            
