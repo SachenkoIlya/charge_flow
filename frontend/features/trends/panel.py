@@ -114,7 +114,7 @@ class Panel:
                     
             
     async def render_low(self):
-        ROW = 'grid grid-cols-4 gap-2 w-full h-[220px]'
+        ROW = 'grid grid-cols-4 gap-2 w-full h-[200px]'
         CARD = 'min-w-0 h-full bg-white rounded-xl shadow-sm border border-gray-200 p-3 overflow-hidden'
 
         STYLE_LABEL = 'text-sm font-semibold mb-1'
