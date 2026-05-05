@@ -122,20 +122,29 @@ def dynamics_by_day_from_middle_render():
 
 mock_3 = [
     {
-        'title':'Доступность', 
-        'value':'98%', 
-        'color':'text-green-500',
+        'title': 'Доступность', 
+        'value': '98%', 
+        'color': 'text-green-500',
+        'border': 'border-green-500',
     },  
     {
-        'title':'Простой', 
-        'value':'2%', 
-        'color':'text-red-500',
+        'title': 'Простой', 
+        'value': '2%', 
+        'color': 'text-red-500',
+        'border': 'border-red-500',
     },
     {
-        'title':'Утилизация', 
-        'value':'67%', 
-        'color':'text-gray-700',
+        'title': 'Утилизация', 
+        'value': '67%', 
+        'color': 'text-gray-700',
+        'border': 'border-purple-500',
     },
+    {
+        'title': 'Время работы',
+        'value': '67%', 
+        'color': 'text-gray-700',
+        'border': 'border-blue-500',
+    }
 ]
 
 mock_4 = [
@@ -184,11 +193,11 @@ METRIC_CARD_CLASSES = (
     'bg-white rounded-lg shadow-sm border border-gray-200 p-2 '
     'flex flex-col justify-center overflow-hidden'
 )
-def render_small_metric(title, value, delta='', color=''):
-    with ui.element('div').classes(METRIC_CARD_CLASSES):
+def render_small_metric(title, value, delta='', color='', border=''):
+    with ui.element('div').classes(
+        f'{METRIC_CARD_CLASSES} border-b-2 {border}'
+    ):
         ui.label(title).classes('text-xs text-gray-500 leading-tight')
         ui.label(value).classes(f'text-base font-bold leading-tight {color}')
         if delta:
             ui.label(delta).classes('text-xs text-green-500')
-    
-
