@@ -88,7 +88,7 @@ def render_revenue_right(metrics):
 
 
 
-def render_midle_block(metrics:dict):
+def render_midle_block(metrics:dict=None):
     if not metrics:
         metrics = mock_metrics
     with ui.element('div').classes(
