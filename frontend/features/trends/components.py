@@ -74,7 +74,7 @@ def render_high_block(metrics: dict = None):
         render_revenue_left()
     
     with ui.element('div').classes(
-        'flex-[1] h-full border-2 rounded-lg p-2 overflow-hidden'
+        'flex-[1] h-full p-2 overflow-hidden'
     ):
         render_revenue_right(metrics)
 
@@ -95,7 +95,7 @@ def render_midle_block(metrics: dict = None):
         metrics = mock_metrics
 
     with ui.element('div').classes(
-        'flex-[2] min-w-0 h-full border-2 border-blue-400 rounded-lg p-2 overflow-hidden'
+        'flex-[2] min-w-0 h-full rounded-lg p-2 overflow-hidden'
     ):
         render_midle_left()
 
