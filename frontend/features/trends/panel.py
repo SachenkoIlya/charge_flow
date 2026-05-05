@@ -66,16 +66,14 @@ class Panel:
         await get_header(drawer=drawer, role=role, request=self.request)
         
         with ui.element('div').classes(
-            'w-full max-w-[2000px] mx-auto px-5 mt-4 box-border'
-        ).style(
-            'height: calc(100vh - 80px); overflow-y: auto;'
+            'w-full max-w-[2000px] mx-auto px-7 mt-5'
         ) as self.container:
             await self.render_content()
 
     async def render_content(self):
         # min-height: 650px
         with ui.element('div').style(
-            'flex flex-col gap-2 w-full pb-4'
+            'grid grid-rows-[34%_34%_32%] gap-2 w-full h-[calc(100vh-96px)]'
         ):
             await self.render_high()
             await self.render_middle()
@@ -84,7 +82,7 @@ class Panel:
 
     async def render_high(self):
         with ui.element('div').classes(
-            'w-full bg-white rounded-xl shadow-sm border border-gray-200 p-3'
+            'w-full bg-white rounded-xl shadow-sm border border-gray-200 p-5'
         ):
             ui.label('REVENUE BLOCK')
 
@@ -96,7 +94,7 @@ class Panel:
 
 
     async def render_middle(self):
-        element_classes =  'flex-1 min-h-[200px] bg-white rounded-xl shadow-sm border border-gray-200 p-3'
+        element_classes =  'flex-1 min-h-[200px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
         with ui.row().classes('w-full gap-3 items-stretch'):
             # левый визуальный контейнер
             with ui.element('div').classes(
@@ -114,21 +112,21 @@ class Panel:
                 
             
     async def render_low(self):
-        element_classes = 'flex-1 min-w-[150px] min-h-[70px] bg-white rounded-xl shadow-sm border border-gray-200 p-3'
+        element_classes = 'flex-1 min-w-[150px] min-h-[70px] bg-white rounded-xl shadow-sm border border-gray-200 p-4'
         with ui.row().classes('w-full gap-3 items-stretch flex-wrap'):
             render_visual_container(label='ЭКСПЛУАТАЦИЯ', element_classes=element_classes)
             render_visual_container(
                 label='СРЕДНЕЕ',
                 element_classes=element_classes
             )
-        
+           
             with ui.element('div').classes(
                 element_classes
                 # METRIC_CARD_CLASSES
             ):
                 ui.label('СЕССИИ').classes('text-sm font-semibold mb-2')
                 options = render_sessions_chart()
-                ui.echart(options).classes('w-full h-[150px]')
+                ui.echart(options).classes('w-full h-[100px]')
 
             with ui.element('div').classes(
                 element_classes
@@ -136,5 +134,5 @@ class Panel:
             ):
                 ui.label('ТИПЫ КОННЕКТОРОВ').classes('text-sm font-semibold mb-2')
                 options = render_connector_types_chart()
-                ui.echart(options).classes('w-full h-[150px]')
+                ui.echart(options).classes('w-full h-[100px]')
          
