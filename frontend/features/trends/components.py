@@ -191,7 +191,7 @@ def render_visual_container(label: str, metrics: list[dict[str, str]]=None, CARD
 
 METRIC_CARD_CLASSES = (
     'flex-1 min-w-0 h-[72px] '
-    'bg-white rounded-lg shadow-sm border border-gray-200 p-2 '
+    'bg-white rounded-lg shadow-sm border p-2 '
     'flex flex-col justify-center overflow-hidden'
 )
 
