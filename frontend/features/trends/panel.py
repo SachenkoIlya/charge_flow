@@ -70,7 +70,7 @@ class Panel:
     async def render_content(self):
         # min-height: 650px
         with ui.element('div').style(
-           'display: flex; gap: 15px; width: 100%; align-items: stretch; min-height: 650px'
+            'display: flex; flex-direction: column; gap: 10px; width: 100%;'
         ):
             await self.render_high()
             await self.render_middle()
@@ -113,7 +113,25 @@ class Panel:
             render_visual_container(
                 label='СРЕДНЕЕ',
             )
-        
+            # with ui.element('div').classes(
+            #     'flex-1 min-w-[300px] min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-4'
+            # ):
+            #     ui.label('СРЕДНЕЕ ПО ДНЮ').classes('text-sm font-semibold mb-3')
+
+            #     with ui.row().classes('w-full gap-2'):
+            #         for title, value, delta in [
+            #             ('Текущий', '120', '+8%'),
+            #             ('-1 период', '98', '+12%'),
+            #             ('-2 период', '87', ''),
+            #         ]:
+            #             with ui.element('div').classes(
+            #                 'flex-1 min-w-0 bg-white rounded-lg shadow-sm border border-gray-200 p-3'
+            #             ):
+            #                 ui.label(title).classes('text-xs text-gray-500')
+            #                 ui.label(value).classes('text-lg font-bold')
+            #                 if delta:
+            #                     ui.label(delta).classes('text-xs text-green-500')
+
             with ui.element('div').classes(
                 'flex-1 min-w-[300px] min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-4'
             ):
