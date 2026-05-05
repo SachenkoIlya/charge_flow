@@ -194,6 +194,7 @@ METRIC_CARD_CLASSES = (
     'bg-white rounded-lg shadow-sm border border-gray-200 p-2 '
     'flex flex-col justify-center overflow-hidden'
 )
+
 def render_small_metric(title, value, delta='', color='', border=''):
     with ui.element('div').classes(
         f'{METRIC_CARD_CLASSES} border-b-2 {border}'
