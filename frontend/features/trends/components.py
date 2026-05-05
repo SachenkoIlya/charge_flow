@@ -69,12 +69,12 @@ def render_high_block(metrics: dict = None):
     if not metrics:
         metrics = mock_metrics_1
     with ui.element('div').classes(
-        'flex-[4] min-w-0 h-full border-2 border-blue-400 rounded-lg p-2 overflow-hidden'
+        'flex-[4] min-w-0 h-full rounded-lg p-2 overflow-hidden'
     ):
         render_revenue_left()
     
     with ui.element('div').classes(
-        'flex-[1] h-full border-2 border-green-400 rounded-lg p-2 overflow-hidden'
+        'flex-[1] h-full border-2 rounded-lg p-2 overflow-hidden'
     ):
         render_revenue_right(metrics)
 
