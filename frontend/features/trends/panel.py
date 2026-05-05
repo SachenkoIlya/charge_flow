@@ -66,7 +66,7 @@ class Panel:
         await get_header(drawer=drawer, role=role, request=self.request)
         
         with ui.element('div').classes(
-            'w-full max-w-[2000px] mx-auto px-7 mt-10'
+            'w-full max-w-[2000px] mx-auto px-7 mt-5'
         ) as self.container:
             await self.render_content()
 
@@ -94,16 +94,17 @@ class Panel:
 
 
     async def render_middle(self):
+        element_classes =  'flex-1 min-h-[220px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
         with ui.row().classes('w-full gap-3 items-stretch'):
             # левый визуальный контейнер
             with ui.element('div').classes(
-                'flex-1 min-h-[220px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
+               element_classes
             ):
                 ui.label('ЭНЕРГИЯ')
                 with ui.row().classes('w-full gap-4 items-start'):
                     render_midle_block()
             with ui.element('div').classes(
-                'flex-1  min-h-[220px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
+                element_classes
             ):
                 with ui.row().classes('w-full items-center justify-between mb-2'):
                     ui.label('ДИНАМИКА ПО ДНЯМ').classes('text-sm font-semibold')
@@ -111,17 +112,21 @@ class Panel:
                 
             
     async def render_low(self):
+        element_classes = 'flex-1 min-w-[150px] min-h-[70px] bg-white rounded-xl shadow-sm border border-gray-200 p-4'
         with ui.row().classes('w-full gap-3 items-stretch flex-wrap'):
-            render_visual_container(label='ЭКСПЛУАТАЦИЯ')
+            render_visual_container(label='ЭКСПЛУАТАЦИЯ', element_classes=element_classes)
             render_visual_container(
                 label='СРЕДНЕЕ',
+                element_classes=element_classes
             )
             METRIC_CARD_CLASSES = (
                 'flex-1 min-w-0 h-[80px] '
                 'bg-white rounded-lg shadow-sm border border-gray-200 p-3'
             )
+            
+           
             with ui.element('div').classes(
-                'flex-1 min-w-[300px] min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-4'
+                element_classes
                 # METRIC_CARD_CLASSES
             ):
                 ui.label('СЕССИИ').classes('text-sm font-semibold mb-2')
@@ -129,7 +134,7 @@ class Panel:
                 ui.echart(options).classes('w-full h-[150px]')
 
             with ui.element('div').classes(
-                'flex-1 min-w-[300px] min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-4'
+                element_classes
                 # METRIC_CARD_CLASSES
             ):
                 ui.label('ТИПЫ КОННЕКТОРОВ').classes('text-sm font-semibold mb-2')

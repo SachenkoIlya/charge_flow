@@ -157,7 +157,7 @@ mock_4 = [
     },
 ] 
 
-def render_visual_container(label: str, metrics: list[dict[str, str]]=None) -> None:
+def render_visual_container(label: str, element_classes:str,metrics: list[dict[str, str]]=None) -> None:
 
     if not metrics:
         if label == 'СРЕДНЕЕ':
@@ -166,7 +166,7 @@ def render_visual_container(label: str, metrics: list[dict[str, str]]=None) -> N
             metrics = mock_3
    
     with ui.element('div').classes(
-        'flex-1 min-w-[250px] min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-4'
+       element_classes
     ):
         ui.label(label).classes('text-sm font-semibold mb-3')
         with ui.row().classes('w-full gap-2'):
