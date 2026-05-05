@@ -64,13 +64,16 @@ class Panel:
         role = self.user.get('role')
         drawer = get_drawer(role=role)
         await get_header(drawer=drawer, role=role, request=self.request)
-        with ui.element('div').classes('w-full max-w-[2000px] mx-auto px-7 mt-3') as self.container:
+        
+        with ui.element('div').classes(
+            'w-full max-w-[2000px] mx-auto px-7 mt-10'
+        ) as self.container:
             await self.render_content()
 
     async def render_content(self):
         # min-height: 650px
         with ui.element('div').style(
-           'display: flex; gap: 15px; width: 100%; align-items: stretch; min-height: 650px'
+            'display: flex; gap: 15px; width: 100%; align-items: stretch; min-height: 650px'
         ):
             await self.render_high()
             await self.render_middle()
