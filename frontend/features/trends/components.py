@@ -185,7 +185,7 @@ def render_visual_container(label: str, metrics: list[dict[str, str]]=None, CARD
                     value=m.get('value'),
                     delta=m.get('delta'),
                     color=m.get('color'),
-                    color=m.get('border'),
+                    border=m.get('border'),
                 )
 
 
