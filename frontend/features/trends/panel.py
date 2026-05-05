@@ -68,27 +68,31 @@ class Panel:
         await self.refresh()
 
     async def render_filters(self):
-        with ui.element('div').classes(
-            'w-full max-w-[2000px] mx-auto px-5 mt-3'
+        with ui.row().classes(
+            'w-full max-w-[2000px] mx-auto px-5 mt-1 justify-end'
         ):
-            with ui.row().classes(
-                'w-full items-center justify-end gap-2'
-            ):
-                ui.select(
-                    ['Все станции', 'Станция 1', 'Станция 2'],
-                    value='Все станции',
-                    label='Станция',
-                ).props('dense outlined').classes('w-[220px] bg-white rounded-lg')
+            with ui.menu():
+                # кнопка
+                with ui.button('Фильтры', icon='tune')\
+                    .props('outline dense'):
+                    pass
 
-                await get_calendar(
-                    page_key='trends',
-                    on_change_date=None,
-                )
+                # выпадающая панель
+                with ui.column().classes(
+                    'p-3 w-[300px] gap-3 bg-white'
+                ):
+                    ui.select(
+                        ['Все станции', 'Станция 1', 'Станция 2'],
+                        label='Станция'
+                    ).classes('w-full')
 
-                ui.button('Применить')\
-                    .props('dense unelevated')\
-                    .classes('h-[40px]')
+                    await get_calendar(page_key='trends')
 
+                    ui.button(
+                        'Применить',
+                        on_click=self.on_filters_change
+                    ).classes('w-full')
+                    
     async def render(self):
         role = self.user.get('role')
         drawer = get_drawer(role=role)
