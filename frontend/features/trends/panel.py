@@ -73,7 +73,7 @@ class Panel:
     async def render_content(self):
         # min-height: 650px
         with ui.element('div').style(
-             'display: flex; flex-direction: column; gap: 15px; width: 100%;'
+             'display: flex; flex-direction: column; gap: 10px; width: 100%;'
         ):
             await self.render_high()
             await self.render_middle()
