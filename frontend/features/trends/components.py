@@ -113,3 +113,82 @@ def render_midle_right(metrics:dict=None):
 def dynamics_by_day_from_middle_render():
     options = render_daily_dynamics_chart()
     ui.echart(options).classes('w-full h-[240px]')
+
+
+
+mock_3 = [
+    {
+        'title':'Доступность', 
+        'value':'98%', 
+        'color':'text-green-500',
+    },  
+    {
+        'title':'Простой', 
+        'value':'2%', 
+        'color':'text-red-500',
+    },
+    {
+        'title':'Утилизация', 
+        'value':'67%', 
+        'color':'text-gray-700',
+    },
+]
+
+mock_4 = [
+    {
+        'title':'Текущий', 
+        'value':'120', 
+        'delta':'+8%',
+        'color': None
+    },  
+    {
+        'title':'-1 период', 
+        'value':'98%', 
+        'delta':'+8%',
+        'color': None
+    },
+    {
+        'title':'-2 период', 
+        'value':'87', 
+        'delta': None,
+        'color': None
+    },
+] 
+
+def render_nested_container(label: str, metrics: list[dict[str, str]]=None) -> None:
+    if not metrics:
+        if label == 'СРЕДНЕЕ ПО ДНЮ':
+            metrics = mock_4
+        if label == 'ЭКСПЛУАТАЦИЯ':
+            metrics = mock_3
+    for m in metrics:
+        render_visual_container(
+            label=label, 
+            title=m.get('title'),
+            value=m.get('value'),
+            delta=m.get('delta'),
+            delta=m.get('color'),
+        )
+
+
+def _render_nested_container(title, value, delta=None, color:str=None):
+    params = 'text-lg font-bold'
+    if color:
+        params = f"{params} {color}"
+    with ui.row().classes('w-full gap-2'):
+        with ui.element('div').classes(
+            'flex-1 min-w-0 bg-white rounded-lg shadow-sm border border-gray-200 p-3'
+        ):
+            ui.label(title).classes('text-xs text-gray-500')
+            ui.label(value).classes(params)
+            if delta:
+                ui.label(delta).classes('text-xs text-green-500')
+
+# 'СРЕДНЕЕ ПО ДНЮ'
+def render_visual_container(label: str, title:str, value:str, delta:str=None, color:str=None) -> None:
+    with ui.element('div').classes(
+        'flex-1 min-w-[300px] min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-4'
+    ):
+        ui.label(label).classes('text-sm font-semibold mb-3')
+        _render_nested_container(title, value, delta, color)
+       
