@@ -178,7 +178,7 @@ def render_visual_container(label: str, metrics: list[dict[str, str]]=None) -> N
                     color=m.get('color'),
                 )
 METRIC_CARD_CLASSES = (
-    'flex-1 min-w-0 h-[74px] '
+    'flex-1 min-w-0 h-[80px] '
     'bg-white rounded-lg shadow-sm border border-gray-200 p-3'
 )
 
