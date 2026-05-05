@@ -167,7 +167,7 @@ def render_nested_container(label: str, metrics: list[dict[str, str]]=None) -> N
             title=m.get('title'),
             value=m.get('value'),
             delta=m.get('delta'),
-            delta=m.get('color'),
+            color=m.get('color'),
         )
 
 
