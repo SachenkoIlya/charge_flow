@@ -72,7 +72,7 @@ class Panel:
 
     async def render_content(self):
         # min-height: 650px
-        with ui.element('div').style(
+        with ui.element('div').classes(
             'grid grid-rows-[34%_34%_32%] gap-2 w-full h-[calc(100vh-96px)]'
         ):
             await self.render_high()
