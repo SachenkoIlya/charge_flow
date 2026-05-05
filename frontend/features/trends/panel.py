@@ -72,14 +72,13 @@ class Panel:
             'w-full max-w-[2000px] mx-auto px-5 mt-3'
         ):
             with ui.row().classes(
-                'w-full bg-white rounded-xl shadow-sm border border-gray-200 '
-                'p-2 items-center gap-3'
+                'w-full items-center justify-end gap-2'
             ):
                 ui.select(
                     ['Все станции', 'Станция 1', 'Станция 2'],
                     value='Все станции',
                     label='Станция',
-                ).props('dense outlined').classes('w-[220px]')
+                ).props('dense outlined').classes('w-[220px] bg-white rounded-lg')
 
                 await get_calendar(
                     page_key='trends',
@@ -88,9 +87,7 @@ class Panel:
 
                 ui.button('Применить')\
                     .props('dense unelevated')\
-                    .classes('ml-auto')
-
-
+                    .classes('h-[40px]')
 
     async def render(self):
         role = self.user.get('role')
@@ -99,7 +96,7 @@ class Panel:
 
         await self.render_filters()
 
-        
+
         with ui.element('div').classes('w-full max-w-[2000px] mx-auto px-7 mt-3') as self.container:
             await self.render_content()
 
