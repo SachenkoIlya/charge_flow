@@ -166,21 +166,20 @@ def render_nested_container(label: str, metrics: list[dict[str, str]]=None) -> N
         'flex-1 min-w-[300px] min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-4'
     ):
         ui.label(label).classes('text-sm font-semibold mb-3')
-   
-        for m in metrics:
-            render_visual_container(
-                title=m.get('title'),
-                value=m.get('value'),
-                delta=m.get('delta'),
-                color=m.get('color'),
-            )
+        with ui.row().classes('w-full gap-2'):
+            for m in metrics:
+                render_visual_container(
+                    title=m.get('title'),
+                    value=m.get('value'),
+                    delta=m.get('delta'),
+                    color=m.get('color'),
+                )
 
 
-def _render_nested_container(title, value, delta=None, color:str=None):
+def render_visual_container(title, value, delta=None, color:str=None):
     params = 'text-lg font-bold'
     if color:
         params = f"{params} {color}"
-    with ui.row().classes('w-full gap-2'):
         with ui.element('div').classes(
             'flex-1 min-w-0 bg-white rounded-lg shadow-sm border border-gray-200 p-3'
         ):
@@ -189,7 +188,3 @@ def _render_nested_container(title, value, delta=None, color:str=None):
             if delta:
                 ui.label(delta).classes('text-xs text-green-500')
 
-# 'СРЕДНЕЕ ПО ДНЮ'
-def render_visual_container(title:str, value:str, delta:str=None, color:str=None) -> None:
-    _render_nested_container(title, value, delta, color)
-       
