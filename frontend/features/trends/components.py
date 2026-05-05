@@ -156,22 +156,24 @@ mock_4 = [
 ] 
 
 def render_nested_container(label: str, metrics: list[dict[str, str]]=None) -> None:
-    with ui.element('div').classes(
-        'flex-1 min-w-[300px] min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-4'
-    ):
-        ui.label(label).classes('text-sm font-semibold mb-3')
     if not metrics:
         if label == 'СРЕДНЕЕ ПО ДНЮ':
             metrics = mock_4
         if label == 'ЭКСПЛУАТАЦИЯ':
             metrics = mock_3
-    for m in metrics:
-        render_visual_container(
-            title=m.get('title'),
-            value=m.get('value'),
-            delta=m.get('delta'),
-            color=m.get('color'),
-        )
+
+    with ui.element('div').classes(
+        'flex-1 min-w-[300px] min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-4'
+    ):
+        ui.label(label).classes('text-sm font-semibold mb-3')
+   
+        for m in metrics:
+            render_visual_container(
+                title=m.get('title'),
+                value=m.get('value'),
+                delta=m.get('delta'),
+                color=m.get('color'),
+            )
 
 
 def _render_nested_container(title, value, delta=None, color:str=None):
