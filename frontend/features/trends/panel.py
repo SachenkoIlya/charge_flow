@@ -10,7 +10,7 @@ from frontend.features.trends.components import (
     render_high_block, 
     render_midle_block, 
     dynamics_by_day_from_middle_render,
-    render_nested_container
+    render_visual_container
 )
 from frontend.features.trends.charts import (
     render_connector_types_chart, 
@@ -109,7 +109,8 @@ class Panel:
             
     async def render_low(self):
         with ui.row().classes('w-full gap-3 items-stretch flex-wrap'):
-            render_nested_container(
+            render_visual_container(label='ЭКСПЛУАТАЦИЯ')
+            render_visual_container(
                 label='СРЕДНЕЕ ПО ДНЮ',
             )
             # with ui.element('div').classes(
@@ -145,7 +146,7 @@ class Panel:
                 options = render_connector_types_chart()
                 ui.echart(options).classes('w-full h-[150px]')
             # 4. ЭКСПЛУАТАЦИЯ
-            render_nested_container(label='ЭКСПЛУАТАЦИЯ')
+            
             # with ui.element('div').classes(
             #     'flex-1 min-w-[300px] min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-4'
             # ):
