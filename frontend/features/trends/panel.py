@@ -64,16 +64,13 @@ class Panel:
         role = self.user.get('role')
         drawer = get_drawer(role=role)
         await get_header(drawer=drawer, role=role, request=self.request)
-        
-        with ui.element('div').classes(
-            'w-full max-w-[2000px] mx-auto px-7 mt-5'
-        ) as self.container:
+        with ui.element('div').classes('w-full max-w-[2000px] mx-auto px-7 mt-3') as self.container:
             await self.render_content()
 
     async def render_content(self):
         # min-height: 650px
-        with ui.element('div').classes(
-            'grid grid-rows-[34%_34%_32%] gap-2 w-full h-[calc(100vh-96px)]'
+        with ui.element('div').style(
+           'display: flex; gap: 15px; width: 100%; align-items: stretch; min-height: 650px'
         ):
             await self.render_high()
             await self.render_middle()
@@ -94,17 +91,16 @@ class Panel:
 
 
     async def render_middle(self):
-        element_classes =  'flex-1 min-h-[200px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
         with ui.row().classes('w-full gap-3 items-stretch'):
             # левый визуальный контейнер
             with ui.element('div').classes(
-               element_classes
+                'flex-1 min-h-[220px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
             ):
                 ui.label('ЭНЕРГИЯ')
                 with ui.row().classes('w-full gap-4 items-start'):
                     render_midle_block()
             with ui.element('div').classes(
-                element_classes
+                'flex-1  min-h-[220px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
             ):
                 with ui.row().classes('w-full items-center justify-between mb-2'):
                     ui.label('ДИНАМИКА ПО ДНЯМ').classes('text-sm font-semibold')
@@ -112,27 +108,40 @@ class Panel:
                 
             
     async def render_low(self):
-        element_classes = 'flex-1 min-w-[150px] min-h-[70px] bg-white rounded-xl shadow-sm border border-gray-200 p-4'
         with ui.row().classes('w-full gap-3 items-stretch flex-wrap'):
-            render_visual_container(label='ЭКСПЛУАТАЦИЯ', element_classes=element_classes)
+            render_visual_container(label='ЭКСПЛУАТАЦИЯ')
             render_visual_container(
                 label='СРЕДНЕЕ',
-                element_classes=element_classes
             )
-           
+        
             with ui.element('div').classes(
-                element_classes
-                # METRIC_CARD_CLASSES
+                'flex-1 min-w-[300px] min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-4'
             ):
                 ui.label('СЕССИИ').classes('text-sm font-semibold mb-2')
                 options = render_sessions_chart()
-                ui.echart(options).classes('w-full h-[100px]')
+                ui.echart(options).classes('w-full h-[150px]')
 
             with ui.element('div').classes(
-                element_classes
-                # METRIC_CARD_CLASSES
+                'flex-1 min-w-[300px] min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-4'
             ):
                 ui.label('ТИПЫ КОННЕКТОРОВ').classes('text-sm font-semibold mb-2')
                 options = render_connector_types_chart()
-                ui.echart(options).classes('w-full h-[100px]')
-         
+                ui.echart(options).classes('w-full h-[150px]')
+            # 4. ЭКСПЛУАТАЦИЯ
+            
+            # with ui.element('div').classes(
+            #     'flex-1 min-w-[300px] min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-4'
+            # ):
+            #     ui.label('ЭКСПЛУАТАЦИЯ').classes('text-sm font-semibold mb-3')
+
+            #     with ui.row().classes('w-full gap-2'):
+            #         for title, value, color in [
+            #             ('Доступность', '98%', 'text-green-500'),
+            #             ('Простой', '2%', 'text-red-500'),
+            #             ('Утилизация', '67%', 'text-gray-700'),
+            #         ]:
+            #             with ui.element('div').classes(
+            #                 ' bg-white rounded-lg shadow-sm border border-gray-200 p-3'
+            #             ):
+            #                 ui.label(title).classes('text-xs text-gray-500')
+            #                 ui.label(value).classes(f'text-lg font-bold {color}')
