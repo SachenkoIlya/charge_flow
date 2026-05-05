@@ -169,7 +169,7 @@ def render_visual_container(label: str, metrics: list[dict[str, str]]=None, CARD
    
     with ui.element('div').classes(CARD):
         ui.label(label).classes(STYLE_LABEL)
-        with ui.row().classes('w-full gap-2'):
+        with ui.row().classes('w-full h-[150px] gap-2 items-stretch'):
             for m in metrics:
                 render_small_metric(
                     title=m.get('title'),
@@ -181,7 +181,8 @@ def render_visual_container(label: str, metrics: list[dict[str, str]]=None, CARD
 
 METRIC_CARD_CLASSES = (
     'flex-1 min-w-0 h-full '
-    'bg-white rounded-lg shadow-sm border border-gray-200 p-2 overflow-hidden'
+    'bg-white rounded-lg shadow-sm border border-gray-200 p-2 '
+    'flex flex-col justify-center overflow-hidden'
 )
 
 def render_small_metric(title, value, delta='', color=''):
