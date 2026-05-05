@@ -1,4 +1,5 @@
 from nicegui import ui  
+from core.logger.logger import make_logger
 from frontend.features.trends.charts import (
     render_connector_types_chart, 
     render_revenue_chart, 
@@ -6,6 +7,7 @@ from frontend.features.trends.charts import (
     render_sessions_chart
 )
 
+logger = make_logger(__name__, use_telegram=False)
 mock_metrics = [
     {
         'label': 'Текущий год',
@@ -162,7 +164,8 @@ def render_visual_container(label: str, metrics: list[dict[str, str]]=None) -> N
             metrics = mock_4
         if label == 'ЭКСПЛУАТАЦИЯ':
             metrics = mock_3
-    print(metrics)
+    logger.warning(label)
+    logger.warning(metrics)
     with ui.element('div').classes(
         'flex-1 min-w-[300px] min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-4'
     ):
