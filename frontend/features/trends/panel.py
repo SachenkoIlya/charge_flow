@@ -66,14 +66,16 @@ class Panel:
         await get_header(drawer=drawer, role=role, request=self.request)
         
         with ui.element('div').classes(
-            'w-full max-w-[2000px] mx-auto px-7 mt-5'
+            'w-full max-w-[2000px] mx-auto px-5 mt-4 box-border'
+        ).style(
+            'height: calc(100vh - 80px); overflow-y: auto;'
         ) as self.container:
             await self.render_content()
 
     async def render_content(self):
         # min-height: 650px
         with ui.element('div').style(
-             'display: flex; flex-direction: column; gap: 10px; width: 100%;'
+            'flex flex-col gap-2 w-full pb-4'
         ):
             await self.render_high()
             await self.render_middle()
@@ -82,7 +84,7 @@ class Panel:
 
     async def render_high(self):
         with ui.element('div').classes(
-            'w-full bg-white rounded-xl shadow-sm border border-gray-200 p-5'
+            'w-full bg-white rounded-xl shadow-sm border border-gray-200 p-3'
         ):
             ui.label('REVENUE BLOCK')
 
@@ -94,7 +96,7 @@ class Panel:
 
 
     async def render_middle(self):
-        element_classes =  'flex-1 min-h-[220px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
+        element_classes =  'flex-1 min-h-[200px] bg-white rounded-xl shadow-sm border border-gray-200 p-3'
         with ui.row().classes('w-full gap-3 items-stretch'):
             # левый визуальный контейнер
             with ui.element('div').classes(
@@ -112,19 +114,14 @@ class Panel:
                 
             
     async def render_low(self):
-        element_classes = 'flex-1 min-w-[150px] min-h-[70px] bg-white rounded-xl shadow-sm border border-gray-200 p-4'
+        element_classes = 'flex-1 min-w-[150px] min-h-[70px] bg-white rounded-xl shadow-sm border border-gray-200 p-3'
         with ui.row().classes('w-full gap-3 items-stretch flex-wrap'):
             render_visual_container(label='ЭКСПЛУАТАЦИЯ', element_classes=element_classes)
             render_visual_container(
                 label='СРЕДНЕЕ',
                 element_classes=element_classes
             )
-            METRIC_CARD_CLASSES = (
-                'flex-1 min-w-0 h-[80px] '
-                'bg-white rounded-lg shadow-sm border border-gray-200 p-3'
-            )
-            
-           
+        
             with ui.element('div').classes(
                 element_classes
                 # METRIC_CARD_CLASSES
