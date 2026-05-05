@@ -66,29 +66,31 @@ class Panel:
         self.apply_filters()
         await self.load_data()
         await self.refresh()
-   
+    
     async def render_filters(self):
-        with ui.button('Фильтры', icon='tune').props('flat color=white'):
-            with ui.menu().props('anchor=bottom right self=top right'):
-                with ui.column().classes('p-3 w-[320px] gap-3 bg-white'):
-                    ui.label('Фильтры').classes('text-base font-semibold')
+        with ui.dialog() as dialog, ui.card().classes('w-[520px] p-4 gap-4'):
+            ui.label('Фильтры').classes('text-lg font-semibold')
 
-                    ui.select(
-                        ['Все станции', 'Станция 1', 'Станция 2'],
-                        value='Все станции',
-                        label='Станция',
-                    ).props('dense outlined').classes('w-full')
+            ui.select(
+                ['Все станции', 'Станция 1', 'Станция 2'],
+                value='Все станции',
+                label='Станция',
+            ).props('dense outlined').classes('w-full')
 
-                    await get_calendar(
-                        page_key='trends',
-                        on_change_date=None,
-                    )
+            await get_calendar(
+                page_key='trends',
+                on_change_date=None,
+            )
 
-                    ui.button('Применить')\
-                        .props('dense unelevated')\
-                        .classes('w-full')
-                    
-                    
+            with ui.row().classes('w-full justify-end gap-2 mt-2'):
+                ui.button('Отмена', on_click=dialog.close).props('flat')
+                ui.button('Применить', on_click=dialog.close).props('unelevated')
+
+        ui.button('Фильтры', icon='tune', on_click=dialog.open)\
+            .props('flat color=white')
+        
+
+
     async def render(self):
         role = self.user.get('role')
         drawer = get_drawer(role=role)
