@@ -118,16 +118,16 @@ class Panel:
                 'bg-white rounded-lg shadow-sm border border-gray-200 p-3'
             )
             with ui.element('div').classes(
-                # 'flex-1 min-w-[300px] min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-4'
-                METRIC_CARD_CLASSES
+                'flex-1 min-w-[300px] min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-4'
+                # METRIC_CARD_CLASSES
             ):
                 ui.label('СЕССИИ').classes('text-sm font-semibold mb-2')
                 options = render_sessions_chart()
                 ui.echart(options).classes('w-full h-[150px]')
 
             with ui.element('div').classes(
-                # 'flex-1 min-w-[300px] min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-4'
-                METRIC_CARD_CLASSES
+                'flex-1 min-w-[300px] min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-4'
+                # METRIC_CARD_CLASSES
             ):
                 ui.label('ТИПЫ КОННЕКТОРОВ').classes('text-sm font-semibold mb-2')
                 options = render_connector_types_chart()
