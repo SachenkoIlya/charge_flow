@@ -171,23 +171,37 @@ def render_visual_container(label: str, metrics: list[dict[str, str]]=None) -> N
         ui.label(label).classes('text-sm font-semibold mb-3')
         with ui.row().classes('w-full gap-2'):
             for m in metrics:
-                render_nested_container(
+                render_small_metric(
                     title=m.get('title'),
                     value=m.get('value'),
                     delta=m.get('delta'),
                     color=m.get('color'),
                 )
+METRIC_CARD_CLASSES = (
+    'flex-1 min-w-0 h-[72px] '
+    'bg-white rounded-lg shadow-sm border border-gray-200 p-3'
+)
 
+METRIC_TITLE_CLASSES = 'text-xs text-gray-500'
+METRIC_VALUE_CLASSES = 'text-lg font-bold'
 
-def render_nested_container(title, value, delta=None, color:str=None):
-    params = 'text-lg font-bold'
-    if color:
-        params = f"{params} {color}"
-    with ui.element('div').classes(
-        'flex-1 min-w-0 bg-white rounded-lg shadow-sm border border-gray-200 p-3'
-    ):
-        ui.label(title).classes('text-xs text-gray-500')
-        ui.label(value).classes(params)
+def render_small_metric(title:str, value:str, delta:str='', color:str=''):
+    with ui.element('div').classes(METRIC_CARD_CLASSES):
+        ui.label(title).classes(METRIC_TITLE_CLASSES)
+        ui.label(value).classes(f'{METRIC_VALUE_CLASSES} {color}')
         if delta:
             ui.label(delta).classes('text-xs text-green-500')
+    
+
+    
+    # params = 'text-lg font-bold'
+    # if color:
+    #     params = f"{params} {color}"
+    # with ui.element('div').classes(
+    #     'flex-1 min-w-0 bg-white rounded-lg shadow-sm border border-gray-200 p-3'
+    # ):
+    #     ui.label(title).classes('text-xs text-gray-500')
+    #     ui.label(value).classes(params)
+    #     if delta:
+    #         ui.label(delta).classes('text-xs text-green-500')
 
