@@ -91,21 +91,27 @@ class Panel:
 
 
     async def render_middle(self):
-        with ui.row().classes('w-full gap-3 items-stretch'):
-            # левый визуальный контейнер
+        with ui.row().classes('w-full gap-2 items-stretch h-[260px]'):
+            
+            # левый блок
             with ui.element('div').classes(
-                'flex-1 min-h-[220px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
+                'flex-1 h-full bg-white rounded-xl shadow-sm border border-gray-200 p-3 overflow-hidden'
             ):
-                ui.label('ЭНЕРГИЯ')
-                with ui.row().classes('w-full gap-4 items-start'):
+                ui.label('ЭНЕРГИЯ').classes('text-sm')
+
+                with ui.row().classes('w-full h-[210px] gap-2 mt-1 items-stretch'):
                     render_midle_block()
+
+            # правый блок
             with ui.element('div').classes(
-                'flex-1  min-h-[220px] bg-white rounded-xl shadow-sm border border-gray-200 p-5'
+                'flex-1 h-full bg-white rounded-xl shadow-sm border border-gray-200 p-3 overflow-hidden'
             ):
-                with ui.row().classes('w-full items-center justify-between mb-2'):
+                with ui.row().classes('w-full items-center justify-between mb-1'):
                     ui.label('ДИНАМИКА ПО ДНЯМ').classes('text-sm font-semibold')
-                dynamics_by_day_from_middle_render()
-                
+
+                with ui.element('div').classes('w-full h-[210px]'):
+                    dynamics_by_day_from_middle_render()
+                    
             
     async def render_low(self):
         with ui.row().classes('w-full gap-3 items-stretch flex-wrap'):

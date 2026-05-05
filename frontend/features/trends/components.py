@@ -68,12 +68,11 @@ def get_metrics(metric: dict):
 def render_high_block(metrics: dict = None):
     if not metrics:
         metrics = mock_metrics_1
-
     with ui.element('div').classes(
         'flex-[4] min-w-0 h-full border-2 border-blue-400 rounded-lg p-2 overflow-hidden'
     ):
         render_revenue_left()
-
+    
     with ui.element('div').classes(
         'flex-[1] h-full border-2 border-green-400 rounded-lg p-2 overflow-hidden'
     ):
@@ -91,22 +90,24 @@ def render_revenue_right(metrics):
 
 
 
-def render_midle_block(metrics:dict=None):
+def render_midle_block(metrics: dict = None):
     if not metrics:
         metrics = mock_metrics
+
     with ui.element('div').classes(
-        'flex-[2] min-w-0 border-2 border-blue-400 rounded-lg p-3'
+        'flex-[2] min-w-0 h-full border-2 border-blue-400 rounded-lg p-2 overflow-hidden'
     ):
         render_midle_left()
+
     with ui.column().classes(
-        'flex-[1] gap-3 h-full justify-between'
+        'flex-[1] gap-2 h-full overflow-hidden'
     ):
         render_midle_right(metrics)
 
 
 def render_midle_left():
     options = render_revenue_chart()
-    ui.echart(options).classes('w-full h-[220px]')
+    ui.echart(options).classes('w-full h-full')
 
 def render_midle_right(metrics:dict=None):
     for metric in metrics:
@@ -115,7 +116,7 @@ def render_midle_right(metrics:dict=None):
 
 def dynamics_by_day_from_middle_render():
     options = render_daily_dynamics_chart()
-    ui.echart(options).classes('w-full h-[240px]')
+    ui.echart(options).classes('w-full h-full')
 
 
 
