@@ -164,8 +164,7 @@ def render_visual_container(label: str, metrics: list[dict[str, str]]=None) -> N
             metrics = mock_4
         if label == 'ЭКСПЛУАТАЦИЯ':
             metrics = mock_3
-    logger.warning(label)
-    logger.warning(metrics)
+   
     with ui.element('div').classes(
         'flex-1 min-w-[300px] min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-4'
     ):
@@ -184,11 +183,11 @@ def render_nested_container(title, value, delta=None, color:str=None):
     params = 'text-lg font-bold'
     if color:
         params = f"{params} {color}"
-        with ui.element('div').classes(
-            'flex-1 min-w-0 bg-white rounded-lg shadow-sm border border-gray-200 p-3'
-        ):
-            ui.label(title).classes('text-xs text-gray-500')
-            ui.label(value).classes(params)
-            if delta:
-                ui.label(delta).classes('text-xs text-green-500')
+    with ui.element('div').classes(
+        'flex-1 min-w-0 bg-white rounded-lg shadow-sm border border-gray-200 p-3'
+    ):
+        ui.label(title).classes('text-xs text-gray-500')
+        ui.label(value).classes(params)
+        if delta:
+            ui.label(delta).classes('text-xs text-green-500')
 
