@@ -114,33 +114,34 @@ class Panel:
                     
             
     async def render_low(self):
-        CARD = 'flex-1 min-w-0 h-full bg-white rounded-xl shadow-sm border border-gray-200 p-3 overflow-hidden'
+        ROW = 'grid grid-cols-4 gap-2 w-full h-[220px]'
+        CARD = 'min-w-0 h-full bg-white rounded-xl shadow-sm border border-gray-200 p-3 overflow-hidden'
 
         STYLE_LABEL = 'text-sm font-semibold mb-1'
         STYLE_ELEMENT = 'w-full h-[170px]'
         PARAMS_ECHARTS = 'w-full h-full'
-        DIV = 'div'
-        with ui.row().classes(CARD):
+
+        with ui.element('div').classes(ROW):
             render_visual_container(
-                label='СРЕДНЕЕ', 
-                CARD=CARD, 
-                STYLE_LABEL=STYLE_LABEL
+                label='СРЕДНЕЕ',
+                CARD=CARD,
+                STYLE_LABEL=STYLE_LABEL,
             )
-            
-            with ui.element(DIV).classes(CARD):
+
+            with ui.element('div').classes(CARD):
                 ui.label('СЕССИИ').classes(STYLE_LABEL)
-                with ui.element(DIV).classes(STYLE_ELEMENT):
+                with ui.element('div').classes(STYLE_ELEMENT):
                     options = render_sessions_chart()
                     ui.echart(options).classes(PARAMS_ECHARTS)
-            
-            with ui.element(DIV).classes(CARD):
+
+            with ui.element('div').classes(CARD):
                 ui.label('ТИПЫ КОННЕКТОРОВ').classes(STYLE_LABEL)
-                with ui.element(DIV).classes(STYLE_ELEMENT):
+                with ui.element('div').classes(STYLE_ELEMENT):
                     options = render_connector_types_chart()
                     ui.echart(options).classes(PARAMS_ECHARTS)
-            
+
             render_visual_container(
-                label='ЭКСПЛУАТАЦИЯ', 
-                CARD=CARD, 
-                STYLE_LABEL=STYLE_LABEL
+                label='ЭКСПЛУАТАЦИЯ',
+                CARD=CARD,
+                STYLE_LABEL=STYLE_LABEL,
             )
