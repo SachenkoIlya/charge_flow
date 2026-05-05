@@ -66,7 +66,7 @@ class Panel:
         self.apply_filters()
         await self.load_data()
         await self.refresh()
-
+   
     async def render_filters(self):
         with ui.row().classes(
             'w-full max-w-[2000px] mx-auto px-5 mt-1 justify-end'
@@ -90,7 +90,7 @@ class Panel:
 
                     ui.button(
                         'Применить',
-                        on_click=self.on_filters_change
+                        on_click=self.on_date_change
                     ).classes('w-full')
                     
     async def render(self):
