@@ -111,7 +111,7 @@ class Panel:
         with ui.row().classes('w-full gap-3 items-stretch flex-wrap'):
             render_visual_container(label='ЭКСПЛУАТАЦИЯ')
             render_visual_container(
-                label='СРЕДНЕЕ ПО ДНЮ',
+                label='СРЕДНЕЕ',
             )
             # with ui.element('div').classes(
             #     'flex-1 min-w-[300px] min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-4'

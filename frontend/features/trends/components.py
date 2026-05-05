@@ -159,7 +159,7 @@ def render_visual_container(label: str, metrics: list[dict[str, str]]=None) -> N
 
     
     if not metrics:
-        if label == 'СРЕДНЕЕ ПО ДНЮ':
+        if label == 'СРЕДНЕЕ':
             metrics = mock_4
         if label == 'ЭКСПЛУАТАЦИЯ':
             metrics = mock_3
