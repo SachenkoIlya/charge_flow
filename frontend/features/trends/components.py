@@ -166,7 +166,7 @@ def render_visual_container(label: str, metrics: list[dict[str, str]]=None) -> N
             metrics = mock_3
    
     with ui.element('div').classes(
-        'flex-1 min-w-[300px] min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-4'
+        'flex-1 min-w-[250px] min-h-[180px] bg-white rounded-xl shadow-sm border border-gray-200 p-4'
     ):
         ui.label(label).classes('text-sm font-semibold mb-3')
         with ui.row().classes('w-full gap-2'):
@@ -178,7 +178,7 @@ def render_visual_container(label: str, metrics: list[dict[str, str]]=None) -> N
                     color=m.get('color'),
                 )
 METRIC_CARD_CLASSES = (
-    'flex-1 min-w-0 h-[72px] '
+    'flex-1 min-w-0 h-[74px] '
     'bg-white rounded-lg shadow-sm border border-gray-200 p-3'
 )
 
@@ -193,7 +193,7 @@ def render_small_metric(title:str, value:str, delta:str='', color:str=''):
             ui.label(delta).classes('text-xs text-green-500')
     
 
-    
+
     # params = 'text-lg font-bold'
     # if color:
     #     params = f"{params} {color}"
