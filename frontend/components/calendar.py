@@ -37,6 +37,7 @@ async def get_calendar(page_key:str, on_change_date=None):
             page_state['date_to'] = today
             app.storage.user['pages'][page_key] = page_state
 
+
         ui.button(icon='close', on_click=reset_dates_local)\
             .props('flat dense round')\
             .classes('-ml-10')
