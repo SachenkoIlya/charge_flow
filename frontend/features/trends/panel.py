@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from fastapi import Request
-from frontend.components.filter_ccompany import get_filtered_company_from_admin
+from frontend.components.filter_ccompany import get_filtered_company_from_admin, get_filtered_data
 from frontend.components.header import  get_header
 from frontend.components.drawer import get_drawer
 from frontend.components.calendar import get_calendar
@@ -90,7 +90,8 @@ class Panel:
                     if self.role == 'admin':
                         await get_filtered_company_from_admin(
                             request=self.request, 
-                            on_change=self.on_date_change
+                            on_change=self.on_date_change,
+                            fetch=get_filtered_data
                         )
                     ui.select(
                         ['Все станции', 'Станция 1', 'Станция 2'],

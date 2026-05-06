@@ -4,7 +4,7 @@ from frontend.api.client import universal_api
 from fastapi import Request 
 import asyncio 
 
-
+selected_station = ['Все станции', 'Станция 1', 'Станция 2']
 
 async def fetch_companies(request:Request, endpoint_name ='dashboard_companies'):
     
@@ -19,43 +19,38 @@ async def fetch_companies(request:Request, endpoint_name ='dashboard_companies')
     status_code = data['status_code']
     answer = data['data']
     
-
-    # token_expired = answer.get('detail')
-    # if status_code == 401 or token_expired == 'Token expired':
-    #     ui.notify(answer.get('detail'), color='red')
-    #     ui.navigate.to('/login')
-    #     return 
-
     if status_code == 403:
         ui.notify(answer.get('detail'), color='red')
         return 
-
     if status_code >= 402:
         ui.notify(f'Ошибка: {status_code}', color='red')
         return 
-
     return {item['id']: item['name'] for item in answer}
 
 
 
 
-async def get_filtered_company_from_admin(
+async def get_filtered_data(
         request: Request, 
-        companies: dict = None, 
-        on_change=None
+        data: dict = None, 
+        label:str=None,
+        on_change=None,
+        get_filtered_data=None
     ):
-    if not companies:
-        companies = await fetch_companies(request=request)
+    if not data:
+        if not get_filtered_data:
+            data = selected_company
+        data = await get_filtered_data(request=request)
 
     context = app.storage.user.get('context', {})
     selected_company = context.get('company_id')
     
-    if selected_company not in companies:
+    if selected_company not in data:
         selected_company = None
     
     company_select = ui.select(
-        companies,
-        label='Компания',
+        data,
+        label=label,
         value=selected_company,
         with_input=True
     ).props('dense borderless clearable label-color=primary')\
