@@ -5,16 +5,9 @@ from frontend.utils.utils import utils
 from frontend.utils.config import screen_background
 
 @ui.page('/trends')
-async def connect_operator_page(request: Request):
-    try:
-        data_dict = utils.current_user.get_current_user(request=request)
-        user = data_dict['payload']
-    except Exception as e:
-        utils.logger.error(str(e))
-        app.storage.user.clear()
-        app.storage.browser.clear() 
-        ui.navigate.to('/login')
-        return
+@utils.require_auth_decoretor
+async def connect_operator_page(request: Request,  user: dict):
+  
     ui.query('body').classes(screen_background)
     print(ui.context.client.request.query_params)
     await Panel(user=user, request=request).render()
