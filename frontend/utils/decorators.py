@@ -8,16 +8,13 @@ if TYPE_CHECKING:
 from functools import  wraps
 import traceback
 from nicegui import app, ui
-from dotenv import load_dotenv
-import os
-load_dotenv()
 from dataclasses import dataclass
 
 
 @dataclass
 class Auth:
     current_user: "CurrentUser"
-    logger: make_logger
+    logger: "make_logger"
 
     def require_auth(self, func, ut):
         @wraps(func)    
