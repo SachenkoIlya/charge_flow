@@ -28,15 +28,21 @@ async def get_calendar(page_key:str, on_change_date=None):
          .classes('w-56 bg-white rounded-md px-3 text-gray-800')
         
         async def reset_dates_local():
-            page = app.storage.user.get('pages')
-            logger.debug(page)
-            
-            page_state = app.storage.user.get('pages', {}).get(page_key)
-            
+            page = app.storage.user.get('pages', {})
+            page_state = page.get(page_key, {})
+
             page_state['date_from'] = today
             page_state['date_to'] = today
             app.storage.user['pages'][page_key] = page_state
 
+            date_input.value = f'{today} - {today}'
+            date_input.update()
+
+            date_picker.value = {
+                'from': today,
+                'to': today,
+            }
+            date_picker.update()
 
         ui.button(icon='close', on_click=reset_dates_local)\
             .props('flat dense round')\
