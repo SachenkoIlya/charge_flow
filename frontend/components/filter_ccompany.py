@@ -82,11 +82,14 @@ async def get_filtered_data(
             app.storage.user['context'] = context
 
         if endpoint_name in {'station'}:
-            staion_id = select.value
-            page = app.storage.user.get('pages')
-            page_state = page.get(page_key)
-            page[page_key] = page_state
-            app.storage.user['pages'] = page
+            pages = app.storage.user.get('pages')
+            page_state = pages.get(page_key)
+                
+            page_state[endpoint_name] = select.value
+            
+            pages[page_key] = page_state
+            
+            app.storage.user['pages'] = pages
             utils.logger.debug(f"page_state: {page_state}")
             
         
