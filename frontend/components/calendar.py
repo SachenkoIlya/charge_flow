@@ -9,11 +9,9 @@ async def get_calendar(page_key:str, on_change_date=None):
     today = datetime.now().strftime('%d.%m.%Y')
     with ui.row().classes('items-center gap-3 justify-center'):
         page = app.storage.user.get('pages', {})
-        logger.debug(page)
         page_state = page.get(page_key)
         date_from = page_state.get('date_from')
         date_to = page_state.get('date_to')
-        logger.debug(page_state)
         
         value = (
             f'{date_from} - {date_to}' 
@@ -46,7 +44,8 @@ async def get_calendar(page_key:str, on_change_date=None):
 
         ui.button(icon='close', on_click=reset_dates_local)\
             .props('flat dense round')\
-            .classes('-ml-10')
+            .classes('-ml-10')\
+            .on('click.stop')
         
         with ui.menu().classes('anchor=bottom middle self=top middle') as menu:
             date_picker = ui.date().props('range mask=DD.MM.YYYY')
