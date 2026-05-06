@@ -18,6 +18,6 @@ class Utils:
     current_user = CurrentUser()
     normalize_phone = NormalizePhone()
     logger = make_logger(__name__, use_telegram=False)
-    decorators =Decorators(logger, current_user)
+    decorators =Decorators(current_user, logger)
     
 utils = Utils()
