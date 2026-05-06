@@ -35,40 +35,53 @@ async def get_filtered_data(
         data: dict = None, 
         label:str=None,
         on_change=None,
-        endpoint_name: str=None
+        endpoint_name: str=None,
+        page_key: str=None
     ):
     if not data:
-        if endpoint_name == 'station':
-            data = selected_station
-        else:
-            data = await load_data(request=request, endpoint_name=endpoint_name)
-
-    context = app.storage.user.get('context', {})
-    selected_company = context.get('company_id')
-    
-    if selected_company not in data:
-        selected_company = None
-    
-    company_select = ui.select(
+        data = await load_data(
+            request=request, 
+            endpoint_name=endpoint_name
+        )
+    if endpoint_name in {'company'}:
+        value = app.storage.user\
+            .get('context', {})\
+            .get(f'{endpoint_name}_id', None)
+        
+    if endpoint_name in {'station'}:
+        value = app.storage.user\
+            .get(page_key)\
+            .get(endpoint_name)
+        
+    selected_value = ui.select(
         data,
         label=label,
-        value=selected_company,
+        value=value,
         with_input=True
     ).props('outlined dense').classes('w-full')
 # s('w-60 bg-gray-200 rounded-md px-3 text-gray-800')
     
     
     async def apply_filters():
-        company_id = company_select.value
-        context = app.storage.user.get('context', {})
-        context['company_id'] = company_id
-        app.storage.user['context'] = context
+        if endpoint_name in {'company'}:
+            context = app.storage.user.get('context', {})
+            context['company_id'] = selected_value
+            app.storage.user['context'] = context
 
+        if endpoint_name in {'station'}:
+            staion_id = selected_value.value
+            page = app.storage.user.get('pages')
+            page_state = page.get(page_key)
+            page[page_key] = page_state
+            app.storage.user['pages'] = page
+            utils.logger.debug(f"page_state: {page_state}")
+            
+        
         if on_change:
             await on_change()
     
     async def on_select_change(e):
         await apply_filters()
     
-    company_select.on('update:model-value', on_select_change)
+    selected_value.on('update:model-value', on_select_change)
     # ui.button('Применить', on_click=apply_filters)

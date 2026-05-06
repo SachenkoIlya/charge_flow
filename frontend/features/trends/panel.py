@@ -37,6 +37,7 @@ class Panel:
         page_state = pages.setdefault(self.page_key, {
             'date_from': today,
             'date_to': today,
+            'station': {},
         })
 
         context = app.storage.user.setdefault('context', {})
@@ -59,7 +60,7 @@ class Panel:
     def apply_filters(self):
         page = app.storage.user.get('pages', {})
         page_state = page.get(self.page_key)
-
+        # pages': {'trends': {'date_from': '06.05.2026', 'date_to': '06.05.2026'}}
         context = app.storage.user.get('context')
         utils.logger.debug(f"context: {context}")
         company_id = context.get('company_id')
@@ -102,15 +103,15 @@ class Panel:
                     if self.role == 'admin':
                         await get_filtered_data(
                             request=self.request, 
-                            # on_change=self.on_date_change,
-                            endpoint_name ='dashboard_companies',
-                            label='Компании'
+                            endpoint_name ='company',
+                            label='Компании',
+                            page_key=self.page_key
                         )
                     await get_filtered_data(
                             request=self.request, 
-                            # on_change=self.on_date_change,
                             endpoint_name ='station',
-                            label='Станции'
+                            label='Станции',
+                            page_key=self.page_key
                         )
                     with ui.column().classes('w-full gap-2'):
                         ui.label('Период').classes(

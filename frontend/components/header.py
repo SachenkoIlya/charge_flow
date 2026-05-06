@@ -25,11 +25,6 @@ async def get_header(request: Request, drawer, role: str, on_company_change=None
                 ui.button(icon='menu', on_click=lambda: drawer.toggle())\
                     .props('flat color=blue').classes('!text-blue-700')
 
-                # with ui.row().classes('gap-3 items-center'):
-                    # get_calendar()
-                    # if role == 'admin':
-                        # await get_filtered_company_from_admin(request=request, on_change=on_company_change)
-            # Правая часть
             with ui.row().classes('items-center gap-4'):
             #     ui.label('Компания').classes('text-blue-900')
                 if render_filters:
