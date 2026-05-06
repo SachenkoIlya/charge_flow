@@ -39,7 +39,7 @@ async def get_filtered_data(
     ):
     if not data:
         if endpoint_name == 'station':
-            data = selected_company
+            data = selected_station
         else:
             data = await load_data(request=request, endpoint_name=endpoint_name)
 
