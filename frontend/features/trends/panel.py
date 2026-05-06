@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from fastapi import Request
-from frontend.components.filter_ccompany import fetch_companies, get_filtered_data
+from frontend.components.filter_ccompany import get_filtered_data
 from frontend.components.header import  get_header
 from frontend.components.drawer import get_drawer
 from frontend.components.calendar import get_calendar
