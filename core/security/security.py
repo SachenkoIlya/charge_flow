@@ -4,7 +4,7 @@ from fastapi import Depends, HTTPException
 from cryptography.fernet import Fernet
 from passlib.context import CryptContext
 from jose import JWTError, ExpiredSignatureError
-from core.security.config import settings
+from core.security.settings import settings
 from jose import jwt
 import hashlib
 import os
@@ -13,9 +13,8 @@ load_dotenv()
 
 
 class Security:
-    ENCRYPTION_KEY = os.getenv("ENCRYPTION_KEY")
-    if ENCRYPTION_KEY:
-        cipher = Fernet(ENCRYPTION_KEY)
+    if settings.ENCRYPTION_KEY:
+        cipher = Fernet(settings.ENCRYPTION_KEY)
     else:
         raise ValueError("ENCRYPTION_KEY not found in .env file!")
     

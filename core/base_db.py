@@ -1,3 +1,4 @@
+from core.security.settings import settings
 from .logger.logger import make_logger
 import asyncpg
 import os
@@ -121,11 +122,11 @@ class Base:
         )
     
     def __init__(self, dsn:str = None):
-        self.host = os.getenv("DB_HOST")
-        self.port = os.getenv("DB_PORT")
-        self.user = os.getenv("DB_USER")
-        self.password = os.getenv("DB_PASSWORD")
-        self.db = os.getenv("DB_NAME")
+        self.host = settings.DB_HOST
+        self.port = settings.DB_PORT
+        self.user = settings.DB_USER
+        self.password = settings.DB_PASSWORD
+        self.db = settings.DB_NAME
         
         if self.host.startswith('/'):
             self.dsn = f"postgresql://{self.user}:{self.password}@/{self.db}?host={self.host}"
