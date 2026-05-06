@@ -110,7 +110,7 @@ class Panel:
                         ):
                             await get_calendar(
                                 page_key=self.page_key,
-                                on_change_date=None,
+                                on_change_date=self.on_date_change,
                             )
 
                 ui.separator()
