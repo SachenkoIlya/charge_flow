@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from fastapi import Request
+from frontend.components.filter_ccompany import get_filtered_company_from_admin
 from frontend.components.header import  get_header
 from frontend.components.drawer import get_drawer
 from frontend.components.calendar import get_calendar
@@ -84,7 +85,13 @@ class Panel:
                     ).props('flat round dense')
 
                 # Filters block
+                
                 with ui.column().classes('w-full gap-5'):
+                    if self.role == 'admin':
+                        await get_filtered_company_from_admin(
+                            request=self.request, 
+                            on_change=self.on_date_change
+                        )
                     ui.select(
                         ['Все станции', 'Станция 1', 'Станция 2'],
                         value='Все станции',
@@ -131,11 +138,11 @@ class Panel:
 
 
     async def render(self):
-        role = self.user.get('role')
-        drawer = get_drawer(role=role)
+        self.role = self.user.get('role')
+        drawer = get_drawer(role=self.role)
         await get_header(
             drawer=drawer, 
-            role=role, 
+            role=self.role, 
             request=self.request, 
             render_filters=self.render_filters
         )
