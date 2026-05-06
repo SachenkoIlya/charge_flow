@@ -106,10 +106,10 @@ class Panel:
                         )
 
                         with ui.card().classes(
-                            'w-full p-4 border rounded-lg shadow-none'
+                             'w-full bg-gray-50 rounded-xl p-4'
                         ):
                             await get_calendar(
-                                page_key='trends',
+                                page_key=self.page_key,
                                 on_change_date=None,
                             )
 
