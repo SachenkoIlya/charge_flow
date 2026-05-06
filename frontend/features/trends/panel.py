@@ -68,26 +68,56 @@ class Panel:
         await self.refresh()
     
     async def render_filters(self):
-        with ui.dialog() as dialog, ui.card().classes('w-[520px] p-4 gap-4'):
-            ui.label('Фильтры').classes('text-lg font-semibold')
+        with ui.dialog() as dialog:
+            with ui.card().classes(
+                'w-[640px] p-6 rounded-xl shadow-2xl gap-6'
+            ):
+                # Header
+                with ui.row().classes(
+                    'w-full items-center justify-between'
+                ):
+                    ui.label('Фильтры').classes(
+                        'text-2xl font-semibold'
+                    )
+                    ui.button(
+                        icon='close',
+                        on_click=dialog.close
+                    ).props('flat round dense')
 
-            ui.select(
-                ['Все станции', 'Станция 1', 'Станция 2'],
-                value='Все станции',
-                label='Станция',
-            ).props('dense outlined').classes('w-full')
+                # Filters block
+                with ui.column().classes('w-full gap-5'):
+                    ui.select(
+                        ['Все станции', 'Станция 1', 'Станция 2'],
+                        value='Все станции',
+                        label='Станция',
+                    ).props(
+                        'outlined dense'
+                    ).classes('w-full')
 
-            await get_calendar(
-                page_key='trends',
-                on_change_date=None,
-            )
-
-            with ui.row().classes('w-full justify-end gap-2 mt-2'):
-                ui.button('Отмена', on_click=dialog.close).props('flat')
-                ui.button('Применить', on_click=dialog.close).props('unelevated')
-
-        ui.button('Фильтры', icon='tune', on_click=dialog.open)\
-            .props('flat color=white')
+                    with ui.column().classes('gap-2'):
+                        ui.label('Период').classes(
+                            'text-sm text-gray-500 font-medium'
+                        )
+                        with ui.card().classes(
+                            'w-full p-4 border rounded-lg shadow-none'
+                        ):
+                            await get_calendar(
+                                page_key='trends',
+                                on_change_date=None,
+                            )
+                ui.separator()
+                # Footer
+                with ui.row().classes(
+                    'w-full justify-end gap-3'
+                ):
+                    ui.button(
+                        'Отмена',
+                        on_click=dialog.close
+                    ).props('flat')
+                    ui.button(
+                        'Применить',
+                        on_click=dialog.close
+                    ).props('unelevated color=primary')
         
 
 
