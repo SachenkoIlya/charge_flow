@@ -49,6 +49,13 @@ class Panel:
         self.company_id = context.get('company_id')
         utils.logger.debug(app.storage.user)
     
+    async def refresh(self):
+        if not self.container:
+            return
+        self.container.clear()
+        with self.container:
+            await self.render_content()
+    
     def apply_filters(self):
         page = app.storage.user.get('pages', {})
         page_state = page.get(self.page_key)
