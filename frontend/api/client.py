@@ -33,7 +33,7 @@ class Endpoints:
             'url': 'auth/register',
             'method': 'post'
         },
-        'dashboard_companies' :{
+        'company' :{
             'url': 'dashboard/companies',
             'method': 'get'
         },
