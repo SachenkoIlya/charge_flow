@@ -60,7 +60,7 @@ async def get_filtered_data(
             .get(page_key)
             .get(endpoint_name)
         )
-    utils.logger.warning(value)
+    utils.logger.warning(f"{endpoint_name}: {value}")
     selected_value = ui.select(
         data,
         label=label,
