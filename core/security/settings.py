@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     BACKEND_PORT: int
     BACKEND_URL: str
     
-    JWT_SECRET: str
+    JWT_SECRET_KEY: str
     ALGORITHM: str = "HS256"
     
     ENCRYPTION_KEY: str
