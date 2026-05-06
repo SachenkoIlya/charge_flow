@@ -74,9 +74,13 @@ class Panel:
         self.apply_filters()
         # await self.load_data()
         await self.refresh()
-
+    
     async def render_filters(self):
         with ui.dialog() as dialog:
+            async def apply_and_close():
+                self.apply_filters()
+                await self.refresh()
+                dialog.close()
             with ui.card().classes(
                 'w-[640px] min-h-[360px] p-6 rounded-xl shadow-2xl gap-6'
             ):
@@ -117,7 +121,7 @@ class Panel:
                         ):
                             await get_calendar(
                                 page_key=self.page_key,
-                                on_change_date=self.on_date_change,
+                                # on_change_date=self.on_date_change,
                             )
 
                 ui.separator()
@@ -133,7 +137,7 @@ class Panel:
 
                     ui.button(
                         'Применить',
-                        on_click=dialog.close
+                        on_click=apply_and_close
                     ).props('unelevated color=primary')
 
         # Кнопка открытия фильтров
