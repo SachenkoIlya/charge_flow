@@ -66,19 +66,18 @@ class Panel:
         self.apply_filters()
         await self.load_data()
         await self.refresh()
-    
+        
     async def render_filters(self):
         with ui.dialog() as dialog:
             with ui.card().classes(
                 'w-[640px] p-6 rounded-xl shadow-2xl gap-6'
             ):
                 # Header
-                with ui.row().classes(
-                    'w-full items-center justify-between'
-                ):
+                with ui.row().classes('w-full items-center justify-between'):
                     ui.label('Фильтры').classes(
                         'text-2xl font-semibold'
                     )
+
                     ui.button(
                         icon='close',
                         on_click=dialog.close
@@ -94,10 +93,11 @@ class Panel:
                         'outlined dense'
                     ).classes('w-full')
 
-                    with ui.column().classes('gap-2'):
+                    with ui.column().classes('w-full gap-2'):
                         ui.label('Период').classes(
                             'text-sm text-gray-500 font-medium'
                         )
+
                         with ui.card().classes(
                             'w-full p-4 border rounded-lg shadow-none'
                         ):
@@ -105,20 +105,29 @@ class Panel:
                                 page_key='trends',
                                 on_change_date=None,
                             )
+
                 ui.separator()
+
                 # Footer
                 with ui.row().classes(
-                    'w-full justify-end gap-3'
+                    'w-full justify-end gap-3 pt-2'
                 ):
                     ui.button(
                         'Отмена',
                         on_click=dialog.close
                     ).props('flat')
+
                     ui.button(
                         'Применить',
                         on_click=dialog.close
                     ).props('unelevated color=primary')
-        
+
+        # Кнопка открытия фильтров
+        ui.button(
+            'Фильтры',
+            icon='tune',
+            on_click=dialog.open,
+        ).props('flat color=white')
 
 
     async def render(self):
