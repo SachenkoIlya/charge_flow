@@ -10,4 +10,6 @@ async def connect_operator_page(request: Request,  user: dict):
   
     ui.query('body').classes(screen_background)
     print(ui.context.client.request.query_params)
+
+    utils.logger.debug(f"рисуем trends: {user}")
     await Panel(user=user, request=request).render()
