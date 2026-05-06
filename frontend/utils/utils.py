@@ -9,7 +9,7 @@ class Decorators:
     logger: make_logger
     current_user: "CurrentUser"
     
-    auth = Auth(logger, current_user)
+    auth = Auth(current_user, logger)
 
 
 
