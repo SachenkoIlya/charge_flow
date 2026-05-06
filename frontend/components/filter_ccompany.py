@@ -4,7 +4,7 @@ from frontend.api.client import universal_api
 from fastapi import Request 
 import asyncio 
 
-selected_station = ['Все станции', 'Станция 1', 'Станция 2']
+selected_station = [{'1': 'Все станции'}, {'2':'Станция 1'}, {'3': 'Станция 2'}]
 
 async def load_data(request:Request, endpoint_name:str):
     
@@ -38,11 +38,15 @@ async def get_filtered_data(
         endpoint_name: str=None,
         page_key: str=None
     ):
+    
     if not data:
-        data = await load_data(
-            request=request, 
-            endpoint_name=endpoint_name
-        )
+        if endpoint_name in {'station'}:
+            data = selected_station
+        else:
+            data = await load_data(
+                request=request, 
+                endpoint_name=endpoint_name
+            )
     if endpoint_name in {'company'}:
         value = app.storage.user\
             .get('context', {})\
