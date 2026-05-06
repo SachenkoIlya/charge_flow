@@ -47,6 +47,7 @@ async def get_filtered_data(
                 request=request, 
                 endpoint_name=endpoint_name
             )
+    utils.logger.warning(data)
     if endpoint_name in {'company'}:
         value = (
             app.storage.user
