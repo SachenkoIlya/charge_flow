@@ -48,14 +48,18 @@ async def get_filtered_data(
                 endpoint_name=endpoint_name
             )
     if endpoint_name in {'company'}:
-        value = app.storage.user\
-            .get('context', {})\
+        value = (
+            app.storage.user
+            .get('context', {})
             .get(f'{endpoint_name}_id', None)
-        
+        )
     if endpoint_name in {'station'}:
-        value = app.storage.user\
-            .get(page_key)\
-            .get(endpoint_name)
+        value = (
+            app.storage.user
+            .get('pages')
+            .get(page_key)
+            .get(endpoint_name  )
+        )
         
     selected_value = ui.select(
         data,
