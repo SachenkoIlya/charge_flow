@@ -19,11 +19,13 @@ class Auth:
     def require_auth(self, func):
         @wraps(func)    
         async def wrapper(*args, **kwargs):
-
+            self.logger.debug(func)
+            self.logger.debug(f"идем в: func")
             mode = settings.MODE
             try:
                 data_dict = self.current_user.get_current_user(*args, **kwargs)
                 user =  data_dict['payload']
+                self.logger.debug(kwargs)
                 kwargs['user'] = user
 
                 return await func(*args, **kwargs)
