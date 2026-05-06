@@ -62,7 +62,7 @@ async def get_filtered_data(
             .get(endpoint_name)
         )
     utils.logger.warning(f"{endpoint_name}: {value}")
-    selected_value = ui.select(
+    select = ui.select(
         data,
         label=label,
         value=value,
@@ -74,11 +74,11 @@ async def get_filtered_data(
     async def apply_filters():
         if endpoint_name in {'company'}:
             context = app.storage.user.get('context', {})
-            context['company_id'] = selected_value
+            context['company_id'] = select.value
             app.storage.user['context'] = context
 
         if endpoint_name in {'station'}:
-            staion_id = selected_value.value
+            staion_id = select.value
             page = app.storage.user.get('pages')
             page_state = page.get(page_key)
             page[page_key] = page_state
@@ -92,5 +92,5 @@ async def get_filtered_data(
     async def on_select_change(e):
         await apply_filters()
     
-    selected_value.on('update:model-value', on_select_change)
+    select.on('update:model-value', on_select_change)
     # ui.button('Применить', on_click=apply_filters)
