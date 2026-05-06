@@ -6,12 +6,11 @@ from dataclasses import  dataclass, field
 
 @dataclass
 class Decorators:
-    logger: make_logger
     current_user: "CurrentUser"
     auth: "Auth" = field(init=False)
     
     def __post_init__(self):
-        self.auth = Auth(self.current_user, self.logger)
+        self.auth = Auth(self.current_user)
 
 
 class Utils:

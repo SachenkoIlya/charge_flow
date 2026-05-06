@@ -6,8 +6,8 @@ from frontend.utils.config import screen_background
 
 @ui.page('/trends')
 @utils.decorators.auth.require_auth
-async def connect_operator_page(request: Request,  user: dict):
-  
+async def connect_operator_page(request: Request):
+    user =  app.storage.user.get('user')
     ui.query('body').classes(screen_background)
 
     utils.logger.debug(f"рисуем trends: {user}")
