@@ -58,9 +58,9 @@ async def get_filtered_data(
             app.storage.user
             .get('pages')
             .get(page_key)
-            .get(endpoint_name  )
+            .get(endpoint_name)
         )
-        
+    utils.logger.warning(value)
     selected_value = ui.select(
         data,
         label=label,
