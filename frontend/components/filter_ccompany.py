@@ -6,7 +6,7 @@ import asyncio
 
 selected_station = ['Все станции', 'Станция 1', 'Станция 2']
 
-async def fetch_companies(request:Request, endpoint_name ='dashboard_companies'):
+async def load_data(request:Request, endpoint_name:str):
     
     data = await universal_api(
         endpoint_name=endpoint_name,
@@ -35,12 +35,12 @@ async def get_filtered_data(
         data: dict = None, 
         label:str=None,
         on_change=None,
-        get_filtered_data=None
+        endpoint_name: str=None
     ):
     if not data:
-        if not get_filtered_data:
+        if not endpoint_name:
             data = selected_company
-        data = await get_filtered_data(request=request)
+        data = await load_data(request=request)
 
     context = app.storage.user.get('context', {})
     selected_company = context.get('company_id')
@@ -53,8 +53,8 @@ async def get_filtered_data(
         label=label,
         value=selected_company,
         with_input=True
-    ).props('dense borderless clearable label-color=primary')\
-    .classes('w-60 bg-gray-200 rounded-md px-3 text-gray-800')
+    ).props('outlined dense').classes('w-full')
+# s('w-60 bg-gray-200 rounded-md px-3 text-gray-800')
     
     
     async def apply_filters():

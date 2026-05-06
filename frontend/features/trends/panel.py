@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from fastapi import Request
-from frontend.components.filter_ccompany import get_filtered_company_from_admin, get_filtered_data
+from frontend.components.filter_ccompany import fetch_companies, get_filtered_data
 from frontend.components.header import  get_header
 from frontend.components.drawer import get_drawer
 from frontend.components.calendar import get_calendar
@@ -88,19 +88,18 @@ class Panel:
                 
                 with ui.column().classes('w-full gap-5'):
                     if self.role == 'admin':
-                        await get_filtered_company_from_admin(
+                        await get_filtered_data(
                             request=self.request, 
                             on_change=self.on_date_change,
-                            fetch=get_filtered_data
+                            endpoint_name ='dashboard_companies',
+                            label='Компании'
                         )
-                    ui.select(
-                        ['Все станции', 'Станция 1', 'Станция 2'],
-                        value='Все станции',
-                        label='Станция',
-                    ).props(
-                        'outlined dense'
-                    ).classes('w-full')
-
+                    await get_filtered_data(
+                            request=self.request, 
+                            on_change=self.on_date_change,
+                            endpoint_name ='station',
+                            label='Станции'
+                        )
                     with ui.column().classes('w-full gap-2'):
                         ui.label('Период').classes(
                             'text-sm text-gray-500 font-medium'
