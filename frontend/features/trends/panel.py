@@ -107,12 +107,12 @@ class Panel:
                             label='Компании',
                             page_key=self.page_key
                         )
-                    # await get_filtered_data(
-                    #         request=self.request, 
-                    #         endpoint_name ='station',
-                    #         label='Станции',
-                    #         page_key=self.page_key
-                    #     )
+                    await get_filtered_data(
+                            request=self.request, 
+                            endpoint_name ='station',
+                            label='Станции',
+                            page_key=self.page_key
+                        )
                     with ui.column().classes('w-full gap-2'):
                         ui.label('Период').classes(
                             'text-sm text-gray-500 font-medium'

@@ -2,10 +2,14 @@ from nicegui import ui, app
 from frontend.utils.utils import utils
 from frontend.api.client import universal_api
 from fastapi import Request 
-import asyncio 
 
-selected_station = [{'1': 'Все станции'}, {'2':'Станция 1'}, {'3': 'Станция 2'}]
 
+selected_station = {
+    '1': 'Все станции',
+    '2': 'Станция 1',
+    '3': 'Станция 2',
+    '4': 'Станция 3'
+}
 async def load_data(request:Request, endpoint_name:str):
     
     data = await universal_api(
@@ -52,7 +56,7 @@ async def get_filtered_data(
         value = (
             app.storage.user
             .get('context', {})
-            .get(f'{endpoint_name}_id', None)
+            .get(f'{endpoint_name}_id', {})
         )
     if endpoint_name in {'station'}:
         value = (
