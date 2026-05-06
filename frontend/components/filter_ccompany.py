@@ -40,7 +40,8 @@ async def get_filtered_data(
     if not data:
         if not endpoint_name:
             data = selected_company
-        data = await load_data(request=request)
+        else:
+            data = await load_data(request=request, endpoint_name=endpoint_name)
 
     context = app.storage.user.get('context', {})
     selected_company = context.get('company_id')
