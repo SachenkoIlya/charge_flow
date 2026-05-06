@@ -81,6 +81,7 @@ class Panel:
                 self.apply_filters()
                 await self.refresh()
                 dialog.close()
+
             with ui.card().classes(
                 'w-[640px] min-h-[360px] p-6 rounded-xl shadow-2xl gap-6'
             ):
@@ -101,13 +102,13 @@ class Panel:
                     if self.role == 'admin':
                         await get_filtered_data(
                             request=self.request, 
-                            on_change=self.on_date_change,
+                            # on_change=self.on_date_change,
                             endpoint_name ='dashboard_companies',
                             label='Компании'
                         )
                     await get_filtered_data(
                             request=self.request, 
-                            on_change=self.on_date_change,
+                            # on_change=self.on_date_change,
                             endpoint_name ='station',
                             label='Станции'
                         )
