@@ -65,7 +65,7 @@ class Panel:
     
     async def on_date_change(self):
         self.apply_filters()
-        await self.load_data()
+        # await self.load_data()
         await self.refresh()
 
     async def render_filters(self):
