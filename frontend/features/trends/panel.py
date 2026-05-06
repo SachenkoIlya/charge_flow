@@ -70,7 +70,7 @@ class Panel:
     async def render_filters(self):
         with ui.dialog() as dialog:
             with ui.card().classes(
-                'w-[640px] h-[620px] p-6 rounded-xl shadow-2xl gap-6'
+                'w-[640px] min-h-[360px] p-6 rounded-xl shadow-2xl gap-6'
             ):
                 # Header
                 with ui.row().classes('w-full items-center justify-between'):
