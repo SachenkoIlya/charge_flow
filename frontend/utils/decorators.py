@@ -16,7 +16,7 @@ class Auth:
     current_user: "CurrentUser"
     logger: "make_logger"
 
-    def require_auth(self, func, ut):
+    def require_auth(self, func):
         @wraps(func)    
         async def wrapper(*args, **kwargs):
 
