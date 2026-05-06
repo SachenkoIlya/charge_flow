@@ -48,7 +48,7 @@ async def get_calendar(page_key:str, on_change_date=None):
             .props('flat dense round')\
             .classes('-ml-10')
         
-        with ui.menu().classes('anchor=bottom middle self=top middle'):
+        with ui.menu().classes('anchor=bottom middle self=top middle') as menu:
             date_picker = ui.date().props('range mask=DD.MM.YYYY')
             # биндим отображение в input
             date_picker.bind_value(
@@ -72,11 +72,14 @@ async def get_calendar(page_key:str, on_change_date=None):
                 if isinstance(value, str):
                     date_from = value
                     date_to = value
-                    
+                    menu.close()
+
                 elif isinstance(value, dict):
                     date_from = value.get('from')
                     date_to = value.get('to')
-                
+                    if value.get('from') and value.get('to'):
+                        menu.close()
+
                 if not date_from:
                     date_from = today
                 if not date_to:
