@@ -65,14 +65,12 @@ async def get_filtered_data(
             .get(page_key)
             .get(endpoint_name)
         )
-    utils.logger.warning(f"{endpoint_name}: {value}")
     select = ui.select(
         data,
         label=label,
         value=value,
         with_input=True
     ).props('outlined dense').classes('w-full')
-# s('w-60 bg-gray-200 rounded-md px-3 text-gray-800')
     
     
     async def apply_filters():
@@ -88,9 +86,8 @@ async def get_filtered_data(
             page_state[endpoint_name] = select.value
             
             pages[page_key] = page_state
-            
+
             app.storage.user['pages'] = pages
-            utils.logger.debug(f"page_state: {page_state}")
             
         
         if on_change:

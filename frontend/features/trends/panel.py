@@ -153,6 +153,7 @@ class Panel:
     async def render(self):
         self.role = self.user.get('role')
         drawer = get_drawer(role=self.role)
+        utils.logger.debug(app.storage.user)
         await get_header(
             drawer=drawer, 
             role=self.role, 
