@@ -1,21 +1,16 @@
 from nicegui import  ui
 from frontend.components.layouts.login_form import LoginForm
+from core.security.settings import settings
 from frontend.utils.utils import utils
 from fastapi import Request 
-from dotenv import load_dotenv
-import os
-load_dotenv()
+
 
 async def login(request: Request):
     utils.logger.debug('--- REQUEST DEBUG ---')
-
     utils.logger.debug(f"URL: {request.url}")
     utils.logger.debug(f"METHOD: {request.method}")
-
     utils.logger.debug(f"HEADERS: {dict(request.headers)}")
-
     utils.logger.debug(f"COOKIES: {request.cookies}")
-
     form = await request.form()
     utils.logger.debug(f"FORM DATA: {dict(form)}")
 
@@ -36,8 +31,7 @@ async def login_page(request: Request):
     """
 
     ui.page_title('Login')
-    mode = os.getenv('ETL_MODE')
-    if mode in {'test', 'dev'}:
+    if settings.MODE in {'test', 'dev'}:
         await login(request=request)
     
     errors = {
@@ -46,13 +40,9 @@ async def login_page(request: Request):
         'invalid_credentials': 'Неверный логин или пароль'
     }
     error = ui.context.client.request.query_params.get('error')
-
-    utils.logger.debug(f"query_params: {ui.context.client.request.query_params}")
-    utils.logger.debug(error)
-    
     if error:
         ui.notify(f"{errors.get(error)}", color='red')
-        # ui.run_javascript('history.replaceState(null, "", "/login")')
+    
     ui.query('body').classes('bg-gray-100 m-0 overflow-hidden')
     with ui.column().classes(
         'w-full h-screen items-center justify-center'

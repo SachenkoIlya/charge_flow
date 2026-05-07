@@ -1,6 +1,6 @@
 from nicegui import ui, app
 from fastapi import Request
-
+from frontend.components.render_filters import render_filters
 
 
 def logout():
@@ -8,7 +8,14 @@ def logout():
     app.storage.user.pop('token', None)
     ui.navigate.to('/login')
 
-async def get_header(request: Request, drawer, role: str, on_company_change=None, render_filters=None):
+async def get_header(
+    request: Request, 
+    drawer, 
+    apply_filters,
+    page_key,
+    refresh,
+    role
+):
     with ui.header().classes(
                'h-20 z-[100] bg-gradient-to-r from-blue-200 to-blue-800 border-b border-blue-500 flex items-center'
     ):
@@ -27,8 +34,13 @@ async def get_header(request: Request, drawer, role: str, on_company_change=None
 
             with ui.row().classes('items-center gap-4'):
             #     ui.label('Компания').classes('text-blue-900')
-                if render_filters:
-                    await render_filters()
+                await render_filters(
+                        apply_filters=apply_filters,
+                        request=request,
+                        page_key=page_key,
+                        refresh=refresh,
+                        role=role
+                    )
                 ui.label('Контакты')\
                     .classes('text-white text-lg cursor-pointer hover:text-blue-100')\
                     .on('click', lambda: ui.navigate.to('/contacts'))

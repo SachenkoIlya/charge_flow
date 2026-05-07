@@ -53,15 +53,8 @@ class Panel:
         page_state = page.get(self.page_key)
 
         context = app.storage.user.get('context')
-        utils.logger.debug(f"context: {context}")
         company_id = context.get('company_id')
-
-        utils.logger.debug(f"page_stae: {page_state}, company_id: {company_id}".upper())
-
-        # today = datetime.now().strftime('%d.%m.%Y')
         
-        # self.date_from = page_state.get('date_from') or today
-        # self.date_to = page_state.get('date_to') or self.date_from
         self.company_id = company_id
         self.payload = page_state
     
@@ -149,8 +142,6 @@ class Panel:
         if self.company_id:
             payload['company_id'] = self.company_id
         
-        utils.logger.debug(payload)
-
         data = await universal_api(
             endpoint_name=self.endpoints_name,
             payloads=payload,

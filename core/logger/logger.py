@@ -66,3 +66,6 @@ def make_logger(name: str, use_telegram: bool = False, log_dir: str = 'logs') ->
                 logger.warning("❗ TG_TOKEN или TG_CHAT_ID не заданы в .env")
 
     return logger
+
+
+logger = make_logger(__name__, use_telegram=False)

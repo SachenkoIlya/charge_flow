@@ -11,7 +11,8 @@ load_dotenv()
 
 
 @ui.page('/control_panel')
-async def control_panel_page(request: Request):
+@utils.decorators.auth.require_auth
+async def control_panel_page(request: Request, user: dict):
   """
   Страница панели управления пользователя.
   Отображает основной интерфейс приложения, включающий:
@@ -23,27 +24,7 @@ async def control_panel_page(request: Request):
   - drawer содержит навигационные элементы (например, "Аналитика")
   :return: None
   """
-  mode = os.getenv('ETL_MODE')
   ui.page_title('📈 Dashboard')
-  try:
-    data_dict = utils.current_user.get_current_user(request=request)
-    user = data_dict['payload']
-
-  except Exception as e:
-    if mode in {'test', 'dev'}:
-      utils.logger.error(f"----control panel----".upper())
-      utils.logger.error(traceback.format_exc())
-    
-    utils.logger.error(str(e))
-    app.storage.user.clear()
-    app.storage.browser.clear() 
-    ui.navigate.to('/login')
-    return
-
-  ui.query('body').classes(
-     screen_background
-    # 'bg-gray-200 m-0 overflow-hidden'
-    )
-  
+  ui.query('body').classes(screen_background)
   await Panel(user=user, request=request).render()
   
