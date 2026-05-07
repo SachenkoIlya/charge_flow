@@ -21,6 +21,7 @@ class BasePanel(ABC):
 
         context = app.storage.user.setdefault('context', {})
         context.setdefault('company_id', None)
+        
 
         app.storage.user['pages'] = pages
         app.storage.user['context'] = context
