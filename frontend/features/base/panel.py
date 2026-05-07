@@ -1,16 +1,34 @@
 from abc import ABC, abstractmethod
 from core.logger.logger import logger
 from nicegui import app
-# from frontend.components.apply_filters.apply import (
-#     get_context_filters, 
-#     get_page_filters
-# )
+from datetime import datetime
 
 
 class BasePanel(ABC):
     page_key = str
     container = None
     
+    def __post_init__(self):
+        self.data = None
+        today = datetime.now().strftime("%d.%m.%Y")
+        
+        pages = app.storage.user.setdefault('pages', {})
+        page_state = pages.setdefault(self.page_key, {
+            'date_from': today,
+            'date_to': today,
+            'station': None,
+        })
+
+        context = app.storage.user.setdefault('context', {})
+        context.setdefault('company_id', None)
+
+        app.storage.user['pages'] = pages
+        app.storage.user['context'] = context
+
+        self.payload = page_state
+        self.company_id = context.get('company_id')
+        logger.debug(app.storage.user)
+  
     @abstractmethod
     async def render_content(self):
         """
@@ -32,6 +50,7 @@ class BasePanel(ABC):
 
     def apply_filters(self):
         context_filters = self.get_context_filters()
+        logger.debug(f"context_filters: {context_filters}")
         page_filters = self.get_page_filters(self.page_key)
         self.company_id = context_filters.get('company_id')
         self.payload = page_filters
