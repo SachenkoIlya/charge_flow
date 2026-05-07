@@ -72,11 +72,13 @@ class Panel:
         drawer = get_drawer(role=role)
         
         await get_header(
-            drawer=drawer, 
-            role=role, 
-            on_company_change=self.on_date_change,
-            request=self.request
-            )
+            request=self.request,
+            drawer=drawer,
+            apply_filters=self.apply_filters,
+            page_key=self.page_key,
+            refresh=self.refresh,
+            role=role
+        )
         
         with ui.element('div').classes('w-full max-w-[2000px] mx-auto px-7 mt-10') as self.container:
             await self.render_content()
