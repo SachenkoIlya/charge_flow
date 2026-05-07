@@ -24,9 +24,7 @@ class BasePanel(ABC):
     
     def get_context_filters(self):
         context = app.storage.user.get('context')
-        return {
-            'company_id': context.get('company_id'),
-        }
+        return context
 
     def get_page_filters(self, page_key):
         page = app.storage.user.get('pages', {})
