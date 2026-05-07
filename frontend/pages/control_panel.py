@@ -12,7 +12,7 @@ load_dotenv()
 
 @ui.page('/control_panel')
 @utils.decorators.auth.require_auth
-async def control_panel_page(request: Request, user: dict):
+async def control_panel_page(request: Request):
   """
   Страница панели управления пользователя.
   Отображает основной интерфейс приложения, включающий:
@@ -26,5 +26,6 @@ async def control_panel_page(request: Request, user: dict):
   """
   ui.page_title('📈 Dashboard')
   ui.query('body').classes(screen_background)
+  user = app.storage.user.get('user')
   await Panel(user=user, request=request).render()
   
