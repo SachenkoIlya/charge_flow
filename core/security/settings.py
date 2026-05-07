@@ -3,7 +3,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     MODE: str = "dev"
-
+    TOGGLE: bool = False
     FRONTEND_HOST: str
     FRONTEND_PORT: int
     FRONTEND_URL: str

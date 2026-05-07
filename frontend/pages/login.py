@@ -31,7 +31,7 @@ async def login_page(request: Request):
     """
 
     ui.page_title('Login')
-    if settings.MODE in {'test', 'dev'}:
+    if settings.MODE in {'test', 'dev'} and settings.TOGGLE:
         await login(request=request)
     
     errors = {

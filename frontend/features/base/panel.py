@@ -9,9 +9,10 @@ class BasePanel(ABC):
     container = None
     
     def __post_init__(self):
+
         self.data = None
         today = datetime.now().strftime("%d.%m.%Y")
-        
+        logger.debug(f"{self.page_key} запускаю __post_init__".upper())
         pages = app.storage.user.setdefault('pages', {})
         page_state = pages.setdefault(self.page_key, {
             'date_from': today,
@@ -21,7 +22,7 @@ class BasePanel(ABC):
 
         context = app.storage.user.setdefault('context', {})
         context.setdefault('company_id', None)
-        
+
 
         app.storage.user['pages'] = pages
         app.storage.user['context'] = context
