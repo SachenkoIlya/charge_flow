@@ -146,6 +146,7 @@ class BaseAiohttpClient:
             api_key:str=None,
             params: dict=None,
             json:dict=None, 
+            use_rate_limit: bool = None,
             **kwargs
     ):
         """
@@ -164,8 +165,20 @@ class BaseAiohttpClient:
         aiohttp_auth = aiohttp_data.get('aiohttp_auth')
        
         request_method : aiohttp.ClientSession = getattr(self.session, http_method)
-        async with get_lock(token):
-            await respect_min_gap(token)
+        
+        if use_rate_limit:
+            async with get_lock(token):
+                await respect_min_gap(token)
+                return await self.with_retry(
+                    request_method,
+                    url,
+                    headers=headers,
+                    auth=aiohttp_auth,
+                    params=params,
+                    json=json,
+                    **kwargs
+                )
+        else:
             return await self.with_retry(
                 request_method,
                 url,
@@ -175,7 +188,7 @@ class BaseAiohttpClient:
                 json=json,
                 **kwargs
             )
-         
+        
     async def get(
         self, 
         auth_type: str, 
@@ -184,6 +197,7 @@ class BaseAiohttpClient:
         login:str=None, 
         password:str=None, 
         api_key:str=None, 
+        use_rate_limit: bool = None,
         **kwargs
     ):
         """Формирует get запрос"""
@@ -195,6 +209,7 @@ class BaseAiohttpClient:
             login=login,
             password=password,
             api_key=api_key, 
+            use_rate_limit=use_rate_limit
             **kwargs
         )
     
@@ -206,6 +221,7 @@ class BaseAiohttpClient:
         login:str=None, 
         password:str=None, 
         api_key:str=None, 
+        use_rate_limit: bool = None,
         **kwargs
     ):
         """Формирует post запрос"""
@@ -217,6 +233,7 @@ class BaseAiohttpClient:
             login=login,
             password=password,
             api_key=api_key,
+             use_rate_limit=use_rate_limit
             **kwargs
         )
     
