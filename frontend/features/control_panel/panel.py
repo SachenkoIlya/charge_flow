@@ -4,7 +4,6 @@ from frontend.features.control_panel.metrics import get_metrics
 from frontend.features.base.panel import BasePanel
 from frontend.components.header import get_header
 from frontend.components.drawer import get_drawer
-from frontend.api.client import universal_api
 from frontend.api.client import frontend_api
 
 from dataclasses import dataclass

@@ -1,6 +1,6 @@
 from nicegui import ui
 from frontend.utils.utils import utils
-from frontend.api.client import universal_api
+from frontend.api.client import frontend_api
 import traceback
 import httpx
 import asyncio  
@@ -105,7 +105,7 @@ class RegisterForm:
     
     async def load_data(self):
         utils.logger.debug(self.data)
-        data = await universal_api(
+        data = await frontend_api(
             endpoint_name=self.endpoints_name,
             payloads=self.data,
             # request=self.request

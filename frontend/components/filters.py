@@ -1,6 +1,6 @@
 from nicegui import ui, app
 from frontend.utils.utils import utils
-from frontend.api.client import universal_api, frontend_api
+from frontend.api.client import frontend_api
 from fastapi import Request 
 
 

@@ -1,6 +1,6 @@
 from nicegui import ui
 from frontend.utils.utils import utils
-from frontend.api.client import universal_api
+from frontend.api.client import frontend_api
 
 from ..header import  get_header
 from ..drawer import get_drawer
@@ -93,7 +93,7 @@ class ConnectOperatorForm:
 
     async def operators_connect(self):
         
-        data = await universal_api(
+        data = await frontend_api(
             endpoint_name=self.endpoints_name,
             payloads=self.data,
             request=self.request
