@@ -17,12 +17,20 @@ def get_token_from_request(request: Request = None):
     return token
 
 
+session: aiohttp.ClientSession | None = None
+
+async def get_session(timeout:int=10.0) -> aiohttp.ClientSession:
+    global session 
+    if session is None or session.closed:
+        session = aiohttp.ClientSession(
+            base_url=settings.BACKEND_URL,
+            timeout=timeout
+        )
+    return session
 
   
-frontend_session = aiohttp.ClientSession(
-    base_url=settings.BACKEND_URL,
-    timeout=10.0
-)
+
+
 async def frontend_api(
         endpoint_name=None,
         payloads=None,
@@ -30,8 +38,8 @@ async def frontend_api(
         request: Request = None,
         auth_type: str = 'bearer',
 ):
-   
-    client = BaseAiohttpClient(frontend_session)
+    session = await get_session()
+    client = BaseAiohttpClient(session=session)
 
     token = get_token_from_request(request=request)
     url, method = Endpoints.get_data_endpoints(endpoint_name)
