@@ -37,6 +37,7 @@ async def get_header(
             #     ui.label('Компания').classes('text-blue-900')
                 await render_filters(
                         apply_filters=apply_filters,
+                        on_date_change=on_date_change,
                         request=request,
                         page_key=page_key,
                         refresh=refresh,
