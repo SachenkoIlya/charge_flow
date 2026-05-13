@@ -2,7 +2,7 @@ from nicegui import ui, app
 from datetime import datetime
 from core.logger.logger import make_logger
 
-logger = make_logger(__name__, use_telegram=False)
+# logger = make_logger(__name__, use_telegram=False)
 
 
 async def get_calendar(page_key:str, on_change_date=None):
@@ -62,7 +62,6 @@ async def get_calendar(page_key:str, on_change_date=None):
                 if value is None:
                     return
                 
-                logger.debug(f"value calendar: {value}".upper())
                 today = datetime.now().strftime('%d.%m.%Y')
 
                 date_from = None
@@ -91,8 +90,6 @@ async def get_calendar(page_key:str, on_change_date=None):
                 page_state['date_to'] = date_to
                 app.storage.user['pages'][page_key] = page_state
 
-                logger.debug(f"Применили даты, пишем в storage".upper())
-                logger.debug(app.storage.user)
                 if on_change_date:
                     await on_change_date()
                 print('Применили:', date_from, date_to)

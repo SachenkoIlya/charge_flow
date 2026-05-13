@@ -31,6 +31,8 @@ class Settings(BaseSettings):
     S3_BUCKET: str
     S3_ENDPOINT: str
 
+    CHARGEPOINTS_INTERVAL: int = 3
+    CHARGING_SESSIONS_INTERVAL: int = 6
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",

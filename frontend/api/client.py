@@ -1,100 +1,57 @@
-import httpx
-import os
-from dotenv import load_dotenv
-from nicegui import app, ui
+from core.http.aiohttp import BaseAiohttpClient
+from core.http.aiohttp_client import get_client
+from core.security import settings
+from frontend.api.endpoints import Endpoints
+
 from fastapi import Request
+from frontend.api.error import handle_frontend_api_error
 from frontend.utils.utils import utils
-load_dotenv()
+import   aiohttp
 
-
-def get_auth_headers(request: Request = None):
+def get_token_from_request(request: Request = None):
     if not request:
         return {}
     data_dict = utils.current_user.get_current_user(request=request)
     token = data_dict['token']
     if not token:
-        return {}
-    return {
-        "Authorization": f"Bearer {token}"
-    }
+        return None
+    return token
 
 
-class Endpoints:
-    endpoints = {
-        'dashboard_stats' :{
-            'url': 'dashboard/stats',
-            'method': 'post'
-        },
-        'operators_connect' :{
-            'url': 'operators/connect',
-            'method': 'post'
-        },
-        'auth_register' :{
-            'url': 'auth/register',
-            'method': 'post'
-        },
-        'company' :{
-            'url': 'dashboard/companies',
-            'method': 'get'
-        },
-        'auth_login' :{
-            'url': 'auth/login',
-            'method': 'post'
-        },
-    }
 
-    @classmethod
-    def get_data_endpoints(cls, endpoint_name):
-        data = cls.endpoints.get(endpoint_name)
-        if not data:
-            raise ValueError(f'Endpoint {endpoint_name} not found')
-        return data['url'], data['method'] 
-
-
-client = httpx.AsyncClient(
-    base_url=os.getenv("BACKEND_URL"),
-    timeout=10.0,
-    # cookies={}
+  
+frontend_session = aiohttp.ClientSession(
+    base_url=settings.BACKEND_URL,
+    timeout=10.0
 )
-
-async def universal_api(
-        endpoint_name: str, 
-        payloads: dict = None, 
+async def frontend_api(
+        endpoint_name=None,
+        payloads=None,
         params: dict = None,
         request: Request = None,
-       
-    ):
-    
-    headers = get_auth_headers(request=request)
+        auth_type: str = 'bearer',
+):
+   
+    client = BaseAiohttpClient(frontend_session)
+
+    token = get_token_from_request(request=request)
     url, method = Endpoints.get_data_endpoints(endpoint_name)
-  
     try:
         if method == 'post':
             response = await client.post(
+                auth_type=auth_type,
                 url=url,
-                headers=headers,
-                json=payloads,
+                api_key=token,
+                payload=payloads or {},
             )
-        elif method == 'get':
+        else:
             response = await client.get(
+                auth_type=auth_type,
                 url=url,
-                headers=headers,
-                params=params,
+                api_key=token,
+                payload=params or {},
             )
-    except httpx.RequestError as e:
-        utils.logger.error(f"{endpoint_name}: {e}")
-        return {'error': 'network'}
-    try:
-        data = response.json()
-    except Exception:
-        data = None
-    
-    if response.status_code == 401:
-        app.storage.user.clear()
-        ui.notify('Сессия истекла', color='red')
-        ui.navigate.to('/login')
-        return {'error': 'unauthorized'}
-    return {
-        'status_code': response.status_code,
-        'data': data
-    }
+    except Exception as e:
+        await handle_frontend_api_error(e)
+        return None
+    return response

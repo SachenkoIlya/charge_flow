@@ -28,7 +28,7 @@ class Auth:
                 return await func(*args, **kwargs)
             except Exception as e:
                 if mode in {'test', 'dev'}:
-                    logger.error(f"----control panel----".upper())
+                    logger.error(f"{func.__name__}".upper())
                     logger.error(traceback.format_exc())
                     logger.error(str(e))
                 app.storage.user.clear()

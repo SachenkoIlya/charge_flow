@@ -3,11 +3,11 @@ from nicegui import ui
 from frontend.components.calendar import get_calendar
 from frontend.components.filters import get_filtered_data
 
-async def render_filters(apply_filters, request, page_key, refresh, role):
+async def render_filters(apply_filters, on_date_change, request, page_key, refresh, role):
     with ui.dialog() as dialog:
         async def apply_and_close():
-            apply_filters()
-            await refresh()
+            await on_date_change()
+            # await refresh()
             dialog.close()
 
         with ui.card().classes(
@@ -33,12 +33,13 @@ async def render_filters(apply_filters, request, page_key, refresh, role):
                         label='Компании',
                         page_key=page_key
                     )
-                await get_filtered_data(
-                        request=request, 
-                        endpoint_name ='station',
-                        label='Станции',
-                        page_key=page_key
-                    )
+                if page_key in {'trends'}:
+                    await get_filtered_data(
+                            request=request, 
+                            endpoint_name ='station',
+                            label='Станции',
+                            page_key=page_key
+                        )
                 with ui.column().classes('w-full gap-2'):
                     ui.label('Период').classes(
                         'text-sm text-gray-500 font-medium'

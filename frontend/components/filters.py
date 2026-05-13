@@ -1,6 +1,6 @@
 from nicegui import ui, app
 from frontend.utils.utils import utils
-from frontend.api.client import universal_api
+from frontend.api.client import universal_api, frontend_api
 from fastapi import Request 
 
 
@@ -11,25 +11,13 @@ selected_station = {
     '4': 'Станция 3'
 }
 async def load_data(request:Request, endpoint_name:str):
-    
-    data = await universal_api(
-        endpoint_name=endpoint_name,
+    data = await frontend_api(
         request=request,
-
+        endpoint_name=endpoint_name,
     )
-    if not data or data.get('error'):
-        return 
-            
-    status_code = data['status_code']
-    answer = data['data']
-    
-    if status_code == 403:
-        ui.notify(answer.get('detail'), color='red')
-        return 
-    if status_code >= 402:
-        ui.notify(f'Ошибка: {status_code}', color='red')
-        return 
-    return {item['id']: item['name'] for item in answer}
+    if data is None:
+        return {}
+    return {item['id']: item['name'] for item in data}
 
 
 

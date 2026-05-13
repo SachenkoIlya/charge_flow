@@ -1,72 +1,32 @@
-from frontend.features.control_panel.metrics import get_metrics, render_metrics_list
-from frontend.features.control_panel.charts import render_pie_chart
-from frontend.components.calendar import get_calendar
+from frontend.features.control_panel.renders.left import render_left
+from frontend.features.control_panel.renders.right import render_right
+from frontend.features.control_panel.metrics import get_metrics
+from frontend.features.base.panel import BasePanel
 from frontend.components.header import get_header
 from frontend.components.drawer import get_drawer
 from frontend.api.client import universal_api
-from frontend.components.stat_card import stat_card
-from frontend.utils.utils import utils
-from copy import deepcopy
-from dataclasses import dataclass
-from datetime import datetime
+from frontend.api.client import frontend_api
 
-from nicegui import ui, app
+from dataclasses import dataclass
+from copy import deepcopy
 from fastapi import Request
+from nicegui import ui
+
 
 
 
 @dataclass
-class Panel:
+class Panel(BasePanel):
     user: dict
     request: Request
     endpoints_name: str = 'dashboard_stats'
     page_key = 'control_panel'
     
-    
-    def __post_init__(self):
-        self.data = None
-        today = datetime.now().strftime("%d.%m.%Y")
-        
-        pages = app.storage.user.setdefault('pages', {})
-        page_state = pages.setdefault(self.page_key, {
-            'date_from': today,
-            'date_to': today,
-        })
-
-        context = app.storage.user.setdefault('context', {})
-        context.setdefault('company_id', None)
-
-        app.storage.user['pages'] = pages
-        app.storage.user['context'] = context
-
-        self.payload = page_state
-        self.company_id = context.get('company_id')
-        utils.logger.debug(app.storage.user)
-
-    async def refresh(self):
-        self.container.clear()
-        with self.container:
-            await self.render_content()
-
-    def apply_filters(self):
-        page = app.storage.user.get('pages', {})
-        page_state = page.get(self.page_key)
-
-        context = app.storage.user.get('context')
-        company_id = context.get('company_id')
-        
-        self.company_id = company_id
-        self.payload = page_state
-    
-  
-    async def on_date_change(self):
-        self.apply_filters()
-        await self.load_data()
-        await self.refresh()
-
     async def render(self):
         self.apply_filters()
-        await self.load_data()
+        loaded = await self.load_data()
+        if not loaded:
+            return
         
         role = self.user.get('role')
         drawer = get_drawer(role=role)
@@ -75,6 +35,7 @@ class Panel:
             request=self.request,
             drawer=drawer,
             apply_filters=self.apply_filters,
+            on_date_change=self.on_date_change,
             page_key=self.page_key,
             refresh=self.refresh,
             role=role
@@ -88,54 +49,9 @@ class Panel:
         chart = self.data['chart']
         
         with ui.element('div').style('display: flex; gap: 15px; width: 100%; align-items: stretch; min-height: 650px'):
-            await self.render_left(metrics, chart)
-            await self.render_right(metrics)
-            ...
+            await render_left(metrics, chart)
+            await render_right(metrics)
 
-    async def render_header(self):
-        with ui.row().classes('w-full justify-between items-start'):
-            # левая часть
-            with ui.column().classes('gap-1 mb-10'):
-                ui.label('Общий доход по всем локациям').classes('text-3xl font-semibold text-gray-800')
-                ui.label('Агрегировано по всей сети станций').classes('text-l font-semibold text-gray-500')
-                
-            # правая часть
-            with ui.column().classes('items-end'):
-                await get_calendar(on_change_date=self.on_date_change, page_key=self.page_key)
-
-    async def render_left(self, metrics: dict, chart: list[dict]):
-        # p-6 w-full animate-[fadeInUp_0.5s_ease-out]
-        with ui.element('div').style('flex: 2.5; min-width: 0; display: flex'):
-            with ui.card().classes('p-6 w-full').style('flex: 1'):
-                await self.render_header()
-                # ui.space()
-                with ui.row().classes('w-full justify-between items-end'):
-                    with ui.column():
-                        render_metrics_list(
-                            metrics=metrics['main'],
-                            size_label='2xl',
-                            size_value='3xl'
-                        )
-                    # with ui.column().classes('items-end'):
-                    #         await get_calendar(on_change_date=self.on_date_change)
-                            # ui.label("тест, тут должа быть дата )").classes('text-xs text-gray-500 mt-1')
-                ui.separator().classes('my-2 bg-blue-300 h-[2px]')
-
-                with ui.row().classes('w-full gap-3'):
-                    render_metrics_list(metrics=metrics['secondary'])
-                    render_pie_chart(data=chart)
-    
-
-    async def render_right(self, metrics: dict):
-        with ui.element('div').style('width: 30%; padding: 0;'):
-            # with ui.element('div').style('flex: 1'):
-                with ui.element('div').style('display: grid; grid-template-rows: repeat(4, 1fr); gap: 12px; height: 100%'):
-                    for m in metrics['extra']:
-                        stat_card(
-                            label=m['label'],
-                            value=m['value'],
-                            gradient=m.get('color')
-                        )
 
 
     async def load_data(self):
@@ -143,31 +59,16 @@ class Panel:
         
         if self.company_id:
             payload['company_id'] = self.company_id
-        
-        data = await universal_api(
+
+        data = await frontend_api(
             endpoint_name=self.endpoints_name,
             payloads=payload,
-            request=self.request
+            request=self.request,
         )
+        if data is None:
+            self.data = {}
+            return False
+
+        self.data = data
+        return True
         
-        if not data or data.get('error'):
-            ui.notify('Сервер недоступен', color='red')
-            return
-            
-        status_code = data['status_code']
-        answer = data['data']
-
-        if status_code == 401:
-            ui.notify(answer.get('detail'), color='red')
-            ui.navigate.to('/login')
-            return
-
-        if status_code == 403:
-            ui.notify(answer.get('detail'), color='red')
-            return
-
-        if status_code >= 400:
-            ui.notify(f'Ошибка: {status_code}', color='red')
-            return
-
-        self.data = answer

@@ -14,6 +14,7 @@ async def get_header(
     apply_filters,
     page_key,
     refresh,
+    on_date_change,
     role
 ):
     with ui.header().classes(

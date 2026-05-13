@@ -12,7 +12,7 @@ class BasePanel(ABC):
 
         self.data = None
         today = datetime.now().strftime("%d.%m.%Y")
-        logger.debug(f"{self.page_key} запускаю __post_init__".upper())
+        
         pages = app.storage.user.setdefault('pages', {})
         page_state = pages.setdefault(self.page_key, {
             'date_from': today,
@@ -29,8 +29,8 @@ class BasePanel(ABC):
 
         self.payload = page_state
         self.company_id = context.get('company_id')
-        logger.debug(app.storage.user)
   
+
     @abstractmethod
     async def render_content(self):
         """
@@ -70,5 +70,6 @@ class BasePanel(ABC):
     
     async def on_date_change(self):
         self.apply_filters()
-        # await self.load_data()
-        await self.refresh()
+        loaded = await self.load_data()
+        if loaded:
+            await self.refresh()

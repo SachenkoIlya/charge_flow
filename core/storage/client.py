@@ -6,17 +6,17 @@ import aiohttp
 import os
 import pandas as pd
 load_dotenv()
-
-
+from core.logger.logger import make_logger
+from core.security.settings import settings
+logger = make_logger(__name__, use_telegram=False)
 
 
 class S3Client:
-    def __init__(self, logger):
-        self.logger = logger
-        self.access_key = os.getenv("S3_ACCESS_KEY")
-        self.secret_key = os.getenv("S3_SECRET_KEY")
-        self.bucket_name = os.getenv("S3_BUCKET")
-        self.endpoint_url = os.getenv("S3_ENDPOINT")
+    def __init__(self):
+        self.access_key = settings.S3_ACCESS_KEY
+        self.secret_key = settings.S3_SECRET_KEY
+        self.bucket_name = settings.S3_BUCKET
+        self.endpoint_url = settings.S3_ENDPOINT
         self.config = Config(signature_version="s3v4")
     
     
@@ -67,12 +67,6 @@ class S3Client:
                 Body=buffer.getvalue()
             )
 
-            # # 🟢 4. Генерируем ссылку
-            # url = await s3.generate_presigned_url(
-            #     "get_object",
-            #     Params={"Bucket": self.bucket_name, "Key": key},
-            #     ExpiresIn=expire,
-            # )
         return key, compression, size_parquet
     
     
@@ -102,8 +96,8 @@ class S3Client:
                 obj = await s3.get_object(Bucket=bucket, Key=key)
                 data = await obj['Body'].read()
                 df = pd.read_parquet(BytesIO(data))
-                self.logger.info(f"✅ Успешно загружен parquet строк({df.shape[0]}), столбцов({df.shape[1]})")
+                logger.info(f"✅ Успешно загружен parquet строк({df.shape[0]}), столбцов({df.shape[1]})")
                 return df
         except Exception as e:
-            self.logger.error(f"❌ Ошибка при чтении parquet из S3 по ключу {key}: {e}")
+            logger.error(f"❌ Ошибка при чтении parquet из S3 по ключу {key}: {e}")
             return None
