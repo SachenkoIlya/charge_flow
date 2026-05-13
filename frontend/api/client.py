@@ -19,7 +19,7 @@ def get_token_from_request(request: Request = None):
 
 session: aiohttp.ClientSession | None = None
 
-async def get_session(timeout:int=10.0) -> aiohttp.ClientSession:
+async def get_session(timeout:float=10.0) -> aiohttp.ClientSession:
     global session 
     if session is None or session.closed:
         session = aiohttp.ClientSession(
