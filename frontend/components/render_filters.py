@@ -3,7 +3,7 @@ from nicegui import ui
 from frontend.components.calendar import get_calendar
 from frontend.components.filters import get_filtered_data
 
-async def render_filters(apply_filters, on_date_change, request, page_key, refresh, role):
+async def render_filters(on_date_change, request, page_key, refresh, role):
     with ui.dialog() as dialog:
         async def apply_and_close():
             await on_date_change()

@@ -11,7 +11,6 @@ def logout():
 async def get_header(
     request: Request, 
     drawer, 
-    apply_filters,
     page_key,
     refresh,
     on_date_change,
@@ -36,7 +35,6 @@ async def get_header(
             with ui.row().classes('items-center gap-4'):
             #     ui.label('Компания').classes('text-blue-900')
                 await render_filters(
-                        apply_filters=apply_filters,
                         on_date_change=on_date_change,
                         request=request,
                         page_key=page_key,

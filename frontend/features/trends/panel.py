@@ -24,7 +24,7 @@ class Panel(BasePanel):
         await get_header(
             request=self.request,
             drawer=drawer,
-            apply_filters=self.apply_filters,
+            on_date_change=self.on_date_change,
             page_key=self.page_key,
             refresh=self.refresh,
             role=self.role
