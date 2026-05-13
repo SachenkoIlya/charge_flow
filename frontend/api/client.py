@@ -1,12 +1,11 @@
 from core.http.aiohttp import BaseAiohttpClient
-from core.http.aiohttp_client import get_client
 from core.security import settings
 from frontend.api.endpoints import Endpoints
 
 from fastapi import Request
 from frontend.api.error import handle_frontend_api_error
 from frontend.utils.utils import utils
-import   aiohttp
+import aiohttp
 
 def get_token_from_request(request: Request = None):
     if not request:
