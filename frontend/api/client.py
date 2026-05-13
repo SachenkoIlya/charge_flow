@@ -51,6 +51,7 @@ async def frontend_api(
                 url=url,
                 api_key=token,
                 payload=payloads or {},
+                use_rate_limit=False
             )
         else:
             response = await client.get(
@@ -58,6 +59,7 @@ async def frontend_api(
                 url=url,
                 api_key=token,
                 payload=params or {},
+                use_rate_limit=False
             )
     except Exception as e:
         await handle_frontend_api_error(e)
