@@ -1,5 +1,5 @@
 from core.http.aiohttp import BaseAiohttpClient
-from core.security import settings
+from core.security.settings import settings
 from frontend.api.endpoints import Endpoints
 
 from fastapi import Request
