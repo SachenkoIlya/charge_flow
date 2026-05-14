@@ -31,7 +31,16 @@ class UserCredentials:
             password=security.decrypt_data(row['password']),
             api_key=security.decrypt_data(row['api_key']) if row['api_key'] else None,
         )
-    
+    @classmethod
+    def from_db_test(cls, row):
+        return cls(
+            id=row['user_id'],
+            is_active=row['is_active'],
+            operator=row['operator'], # Исправил присвоение
+            created_at=row['created_at'],
+            auth_type=row['auth_type'],
+            updated_at=row['updated_at'],
+        )
 
     @property
     def full_name(self):

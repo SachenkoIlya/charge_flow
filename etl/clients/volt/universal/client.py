@@ -7,17 +7,16 @@ from datetime import datetime, timezone
 from dataclasses import dataclass
 from copy import deepcopy   
 import traceback
-import aiohttp
-
+from core.logger.logger import logger
 
 @dataclass
-class Universal:
+class BaseVoltApi:
     body: dict
     url: str
     method: str
     type_method: str
     
-    async def get_data(self, sess: aiohttp.ClientSession, run_ctx: "RunContext", ctx:"Ctx"):
+    async def get_data(self, run_ctx: "RunContext", ctx:"Ctx"):
         start_run = datetime.now(timezone.utc)
         body = deepcopy(self.body)
         error,result = [], []
@@ -26,18 +25,26 @@ class Universal:
         
         while True:
             try:
-                response = await ctx.work_spase.request_to_marketplace(
-                    user=run_ctx.user,
-                    sessions=sess,
-                    body=body,
-                    data={
-                        'method': self.method,
-                        'url': self.url,
-                        'type_method': self.type_method,
-                    },
+                ctx.logger.info(
+                    f"[VOLT REQUEST] user={run_ctx.user.id}/{run_ctx.user.full_name} "
+                    f"type={ctx.type_method} "
+                    f"from={body.get('from')} "
+                    f"to={body.get('to')} "
+                    f"offset={body.get('offset')} "
+                    f"limit={body.get('limit')}"
                 )
+
+                if self.method == 'get':
+                    response = await ctx.aiohttp_client.get(
+                        auth_type=run_ctx.user.auth_type,
+                        url=self.url,
+                        payload=body,
+                        login=run_ctx.user.login,
+                        password=run_ctx.user.password,
+                        use_rate_limit=True
+                    )
             except Exception as e:
-                ctx.logger.error(traceback.format_exc())
+                logger.error(traceback.format_exc())
                 error.append({
                     "status": "error",
                     "page": cnt,
@@ -78,6 +85,9 @@ class Universal:
             result=result,
             api_error=error,
             type_method=self.type_method,
-            now=run_ctx.now, 
+            now=run_ctx.now,
+            s3=ctx.s3,
+            run_id=ctx.run_id,
+            operator=ctx.operator
         )
 

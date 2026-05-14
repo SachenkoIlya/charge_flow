@@ -1,36 +1,45 @@
 
 import pandas as pd
 
-class Parser:
-    
+from etl.clients.volt.universal.shema import ChargePointModel, ChargingSessionModel
 
+
+
+class ChargePointParser:
     @staticmethod
-    def to_df(data:list[dict], type_method: str):
+    def to_df(data:list[dict]):
         res = []
-        if type_method == 'chargepoints':
-            for d in data:
-                location = d['location']
-                base = {
-                    "station_id": d['id'],
-                    "key": d['key'],
-                    "name": d['name'],
-                    "serialNumber": d['serialNumber'],
-                    "state": d["state"],
-                    "connected": d['connected'],
-                    "lastSeen": d["lastSeen"],
-                    "model": d['model'],
-                    "vendor": d['vendor'],
-                    "protocol": d['protocol'],
-                    "operatorId": d['operatorId'],
-                    "operatorName": d['operatorName'],
-                    "location_id": location['id'],
-                    "location_name": location['name'], 
-                    "location_address": location['address'], 
-                    "location_city": location['city'], 
-                    "location_latitude": location['latitude'], 
-                    "location_longitude": location['longitude']
-                }
+        for raw in data:
+            d = ChargePointModel.model_validate(raw)
+            location = d.location
+            res.append({
+                "station_id": d.id,
+                "key": d.key,
+                "name": d.name,
+                "serialNumber": d.serialNumber,
+                "state": d.state,
+                "connected": d.connected,
+                "lastSeen": d.lastSeen,
+                "model": d.model,
+                "vendor": d.vendor,
+                "protocol": d.protocol,
+                "operatorId": d.operatorId,
+                "operatorName": d.operatorName,
+                "location_id": location.id,
+                "location_name": location.name, 
+                "location_address": location.address, 
+                "location_city": location.city, 
+                "location_latitude": location.latitude, 
+                "location_longitude": location.longitude
+            })
+        return pd.DataFrame(res)
 
-                res.append(base)
-            return pd.DataFrame(res)
-        return pd.DataFrame(data)
+
+class ChargeSessionsParser:
+    @staticmethod
+    def to_df(data:list[dict]):
+        row = [
+            ChargingSessionModel.model_validate(d).model_dump() 
+            for d in data
+        ]
+        return pd.DataFrame(row)

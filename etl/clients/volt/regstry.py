@@ -1,9 +1,10 @@
 
-from .universal.client import Universal
+from .universal.client import BaseVoltApi
 
 
 
 class Endpoints:
+    
     base_url = 'https://api.volt-ev.ru/quantum/rest'
     endpoints = {
         'chargepoints': 'partner/v1/chargepoints',
@@ -24,22 +25,19 @@ class Endpoints:
 class RegstryVolt:
 
     registry = {
-        'chargepoints' : Universal(
+        'chargepoints' : BaseVoltApi(
             type_method='chargepoints',
             method='get',
             url=Endpoints.get_full_url('chargepoints'),
             body={"limit": 50, "offset": 0},
         ),
-        'charging_sessions': Universal(
+        'charging_sessions': BaseVoltApi(
             type_method='charging_sessions',
             method='get',
             url=Endpoints.get_full_url('charging_sessions'),
             body={
-                # "chargePointId": "RU77FON01",
-                "limit": 50, 
+                "limit": 10, 
                 "offset": 0,
-                # 'startTs': None,
-                # 'endTs': None
             },
         )
     }

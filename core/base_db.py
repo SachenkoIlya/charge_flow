@@ -128,7 +128,9 @@ class Base:
         self.password = settings.DB_PASSWORD
         self.db = settings.DB_NAME
         
-        if self.host.startswith('/'):
+        if dsn:
+            self.dsn = dsn
+        elif self.host.startswith('/'):
             self.dsn = f"postgresql://{self.user}:{self.password}@/{self.db}?host={self.host}"
         else:
             self.dsn = f"postgresql://{self.user}:{self.password}@{self.host}:{self.port}/{self.db}"

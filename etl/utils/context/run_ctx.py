@@ -5,12 +5,12 @@ from dataclasses import dataclass
 
 
 if TYPE_CHECKING:
-    from backend.users.users import Users
+    from etl.users.users import UserCredentials
 
 
 
 @dataclass
 class RunContext:
-    user: "Users"
+    user: "UserCredentials"
     now: datetime
     last_success: datetime | None

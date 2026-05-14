@@ -14,13 +14,12 @@ from core.http.services.exception import (
     RetryExceededError,
 )
 from core.http.rate_limiter import (get_lock, respect_min_gap)
-from core.logger.logger import make_logger
+from core.logger.logger import logger
 import random
 import aiohttp
 import asyncio 
 
 
-logger = make_logger(__name__, use_telegram=False)
 
 async def wait_for_retry(resp: aiohttp.ClientResponse, attempt:int, tries:int, backoff:int):
     res = resp.headers.get("Retry-After")
@@ -93,8 +92,6 @@ class BaseAiohttpClient:
         self.method_enum = MethodEnum()
         self.session = session
     
-    
-    
     @staticmethod
     async def with_retry(
         request_method : aiohttp.ClientSession, 
@@ -107,7 +104,6 @@ class BaseAiohttpClient:
         **kwargs
     ):  
         backoff = 1
-       
         for attempt in range(1, tries + 1):
             try:
                 async with request_method(

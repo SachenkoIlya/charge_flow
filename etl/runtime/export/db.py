@@ -124,6 +124,7 @@ class RunExport:
     @Base.with_retries(retries=5, delay=1.5, msg_prefix='RunExport.insert_charging_sessions_df')
     async def insert_charging_sessions_df(self, df:pd.DataFrame, run_mode: str):
         table = self._get_table_name(CHARGIN_SESSION)
+        table_charge_points = self._get_table_name(CHARGEPOINTS)
         columns = [
             'session_id','contract','subscriber_id','user_id','operator',
             'charger_name','evse_path','state','connector_type','evse_type','reason',
@@ -138,16 +139,25 @@ class RunExport:
         q = f"""
             INSERT INTO {table} (
                 session_id, contract, subscriber_id, user_id, operator,
-                charger_name, evse_path , state, connector_type, evse_type, reason,
+                charger_name, evse_path, station_id, state, connector_type, evse_type, reason,
                 start_ts, end_ts, duration_minutes, energy_kwh,
                 charge_duration_minutes, post_charge_duration_minutes,
                 gross_revenue, partner_revenue,
                 soc_start, current_soc, soc_delta
             )
             VALUES (
-                $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,
+                $1,$2,$3,$4,$5,$6,$7,
+                (
+                    SELECT c.id
+                    FROM {table_charge_points} c
+                    WHERE c.operator = $5
+                        AND c.key = split_part($7, '/', 1)
+                    LIMIT 1
+                ),
+                $8,$9,$10,$11,
                 $12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22
             )
+           
             ON CONFLICT (session_id) DO NOTHING;
         """
         records = [

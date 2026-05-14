@@ -16,6 +16,7 @@ def get_lock(token: str)-> asyncio.Lock:
         _token_locks[token] = asyncio.Lock()
     return _token_locks[token]
 
+
 async def respect_min_gap(token: str):
     loop = asyncio.get_running_loop()
     now = loop.time()

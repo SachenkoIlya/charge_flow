@@ -3,18 +3,15 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from etl.utils.context.ctx import Ctx
 
-
+from core.logger.logger import logger
 
 
 class DataFramePipeline:
     def __init__(self, ctx:"Ctx"):
         self.ctx = ctx
-    
+        self.BUCKET= 'chargeflow'
     
     async def run(self, user_id:int) -> pd.DataFrame:
-        self.ctx.logger.info(f"Run DataFramePipeline.run")
-        
-        self.ctx.logger.debug(f"Получею s3 key")
         rows = await self.ctx.db.run_export.get_s3_key(
             user_id=user_id,
             type_method=self.ctx.type_method,
@@ -28,7 +25,7 @@ class DataFramePipeline:
             s3_key = row['s3_key']
             
             df = await self.ctx.s3.download_parquet_s3_from_key(
-                bucket='chargeflow', 
+                bucket=self.BUCKET, 
                 key=s3_key
             )
 
@@ -41,7 +38,7 @@ class DataFramePipeline:
                         user_id=user_id
                     )
                 except Exception as e:
-                    self.ctx.logger.error(f"Normalize error {s3_key}: {e}")
+                    logger.error(f"Normalize error {s3_key}: {e}")
                     df = None
             
             res[task_id] = {
@@ -66,55 +63,56 @@ class DataFramePipeline:
 
         if type_method == 'chargepoints':
             df = df.where(pd.notnull(df), None)
-            df['lastSeen'] = pd.to_datetime(df['lastSeen'], utc=True)
+            df["lastSeen"] = pd.to_datetime(
+                df["lastSeen"],
+                utc=True,
+            )
             return df
         
         # даты
-        df['startTs'] = pd.to_datetime(df['startTs'], utc=True)
-        df['endTs'] = pd.to_datetime(df['endTs'], utc=True)
-
+        df["start_ts"] = pd.to_datetime(df["start_ts"], utc=True)
+        df["end_ts"] = pd.to_datetime(df["end_ts"], utc=True)
         # деньги
-        df['grossRevenue'] = pd.to_numeric(df['grossRevenue'], errors='coerce').fillna(0).round(2)
-        df['partnerRevenue'] = pd.to_numeric(df['partnerRevenue'], errors='coerce').fillna(0).round(2)
+        df["gross_revenue"] = (
+            pd.to_numeric(df["gross_revenue"], errors="coerce")
+            .fillna(0)
+            .round(2)
+        )
+
+        df["partner_revenue"] = (
+            pd.to_numeric(df["partner_revenue"], errors="coerce")
+            .fillna(0)
+            .round(2)
+        )
 
         # энергия
-        df['energyKwh'] = pd.to_numeric(df['energyKwh'], errors='coerce').round(3)
-
+        df["energy_kwh"] = (
+            pd.to_numeric(df["energy_kwh"], errors="coerce")
+            .round(3)
+        )
         # время
-        df['durationMinutes'] = pd.to_numeric(df['durationMinutes'], errors='coerce').round(2)
-        df['chargeDurationMinutes'] = pd.to_numeric(df['chargeDurationMinutes'], errors='coerce').round(2)
-
+        df["duration_minutes"] = (
+            pd.to_numeric(df["duration_minutes"], errors="coerce")
+            .round(2)
+        )
+        df["charge_duration_minutes"] = (
+            pd.to_numeric(df["charge_duration_minutes"], errors="coerce")
+            .round(2)
+        )
         # SOC
-        df['socStart'] = pd.to_numeric(df['socStart'], errors='coerce').astype('Int64')
-       
-
-        df['currentSoc'] = pd.to_numeric(df['currentSoc'], errors='coerce')
-        df['currentSoc'] = df['currentSoc'].round().fillna(0).astype(int)
-
-        # delta
-        df['soc_delta'] = df['currentSoc'] - df['socStart'].fillna(0)
-
-        return DataFramePipeline.rename_cols(df)
+        df["soc_start"] = (
+            pd.to_numeric(df["soc_start"], errors="coerce")
+            .astype("Int64")
+        )
+        df["current_soc"] = (
+            pd.to_numeric(df["current_soc"], errors="coerce")
+            .round()
+            .fillna(0)
+            .astype(int)
+        )
+        df["soc_delta"] = (
+            df["current_soc"] - df["soc_start"].fillna(0)
+        )
+        return df
     
 
-
-    @staticmethod
-    def rename_cols(df:pd.DataFrame) -> pd.DataFrame:
-        return df.rename(columns={
-            'id': 'session_id',
-            'chargerName': 'charger_name',
-            'evsePath': 'evse_path',
-            'connectorType': 'connector_type',
-            'evseType': 'evse_type',
-            'startTs': 'start_ts',
-            'endTs': 'end_ts',
-            'durationMinutes': 'duration_minutes',
-            'energyKwh': 'energy_kwh',
-            'socStart': 'soc_start',
-            'currentSoc': 'current_soc',
-            'chargeDurationMinutes': 'charge_duration_minutes',
-            'postChargeDurationMinutes': 'post_charge_duration_minutes',
-            'grossRevenue': 'gross_revenue',
-            'partnerRevenue': 'partner_revenue',
-            'subscriberId': 'subscriber_id'
-        })
