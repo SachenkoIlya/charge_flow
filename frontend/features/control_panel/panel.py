@@ -43,11 +43,11 @@ class Panel(BasePanel):
         ):
             render_sidebar(role=role)
         
-        with ui.element('main').classes(
-                # 'w-full max-w-[2000px] mx-auto px-7 mt-10'
-                    'flex-1 h-screen overflow-y-auto px-7 py-8'
-            ) as self.container:
-                await self.render_content()
+            with ui.element('main').classes(
+                    # 'w-full max-w-[2000px] mx-auto px-7 mt-10'
+                        'flex-1 h-screen overflow-y-auto px-7 py-8'
+                ) as self.container:
+                    await self.render_content()
     
     async def render_content(self):
         metrics = get_metrics(self.data)
