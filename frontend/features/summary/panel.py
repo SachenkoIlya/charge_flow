@@ -11,7 +11,7 @@ from frontend.features.summary.render.title import render_title
 
 
 
-
+@dataclass
 class Panel(BasePanel):
     user: dict
     request: Request
