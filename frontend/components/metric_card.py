@@ -18,7 +18,7 @@ def metric_card(metric: dict):
                 ui.label(metric['title']).classes('text-sm text-white font-semibold')
                 ui.label(metric['subtitle']).classes('text-xs text-gray-400')
 
-        ui.space()
+        # ui.space()
 
         with ui.row().classes('w-full items-end justify-between'):
             ui.label(metric['value']).classes(
