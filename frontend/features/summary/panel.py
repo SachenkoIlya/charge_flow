@@ -45,6 +45,7 @@ class Panel(BasePanel):
                     await self.render_content()
 
 
+
     async def render_content(self):
         # metrics = get_metrics(self.data)
         # chart = self.data['chart']
