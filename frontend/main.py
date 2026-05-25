@@ -6,7 +6,7 @@ import frontend.pages.register
 import frontend.pages.control_panel
 import frontend.pages.connect_operator
 import frontend.pages.trends
-
+import frontend.pages.summary
 from dotenv import load_dotenv
 import os
 load_dotenv()
