@@ -8,21 +8,21 @@ def metric_card(metric: dict):
             border border-[#1f2937]
             rounded-xl
             shadow-xl
-            p-4
+            p-3
             text-white
-            min-h-[120px]
+            h-[105px]
         """
     ):
-        with ui.row().classes('items-start gap-4'):
+        with ui.row().classes('items-start gap-3'):
             with ui.element('div').classes(
                 f"""
                     {metric["icon_bg"]}
-                    w-12 h-12
-                    rounded-xl
-                    flex items-center justify-center 
+                    w-10 h-10
+                    rounded-lg
+                    flex items-center justify-center
                 """
             ):
-                ui.icon(metric['icon']).classes('text-white text-2xl')
+                ui.icon(metric['icon']).classes('text-white text-lg')
             
             with ui.column().classes('gap-1'):
                 ui.label(metric['title']).classes(
@@ -33,10 +33,10 @@ def metric_card(metric: dict):
                     'text-xs text-gray-400'
                 )
             ui.label(metric['value']).classes(
-                'text-2xl font-bold mt-5'
+                'text-xl font-bold mt-3'
             )
 
             ui.label(metric['delta']).classes(
-                'text-sm text-green-400 mt-2'
+                'text-sm text-green-400 mt-1'
             )
      

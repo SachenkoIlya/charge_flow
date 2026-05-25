@@ -17,11 +17,11 @@ def render_chart(metrics:dict):
     ):
 
         ui.label('Динамика ключевых метрик').classes(
-            'text-lg font-bold text-white mb-4'
+            'text-base font-bold text-white mb-2'
         )
 
         ui.echart(metrics).classes(
-            'w-full h-[350px]'
+            'w-full h-[250px]'
         )
 
 CHART_METRICS = {
