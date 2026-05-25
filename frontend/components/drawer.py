@@ -51,7 +51,7 @@ def render_sidebar(role: str):
 
     with ui.column().classes(
         """
-        w-[260px] h-screen shrink-0
+        w-[260px] min-h-screen shrink-0
         bg-[#071019]
         border-r border-[#1f2937]
         px-4 py-5 gap-2
