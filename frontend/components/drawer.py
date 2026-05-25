@@ -67,6 +67,7 @@ def render_sidebar(role: str):
         ui.label('Панель').classes('text-xl font-bold text-white mb-4')
 
         nav_item('dashboard', 'Общая сводка', '/control_panel', active=True)
+        nav_item('dashboard', 'Сводка', '/summary', active=True)
         nav_item('trending_up', 'Тренды', '/trends')
 
         if role == 'admin':
