@@ -7,7 +7,7 @@ from core.logger.logger import make_logger
 
 async def get_calendar(page_key:str, on_change_date=None):
     today = datetime.now().strftime('%d.%m.%Y')
-    with ui.row().classes('items-center gap-3 justify-center'):
+    with ui.row().classes('items-center gap-2 justify-end'):
         page = app.storage.user.get('pages', {})
         page_state = page.get(page_key)
         date_from = page_state.get('date_from')
@@ -20,10 +20,22 @@ async def get_calendar(page_key:str, on_change_date=None):
         )
         
         date_input = ui.input(
-            label='Выберите диапазон',
+            # label='Выберите диапазон',
             value=value
-        ).props('dense borderless label-color=primary')\
-         .classes('w-56 bg-white rounded-md px-3 text-gray-800')
+        ).props(
+            'dense borderless readonly'
+        )\
+         .classes(
+            """
+                w-[260px]
+                h-[42px]
+                bg-[#101923]
+                border border-[#1f2937]
+                rounded-lg
+                px-3
+                text-white
+            """
+        )
         
         async def reset_dates_local():
             page = app.storage.user.get('pages', {})
@@ -43,10 +55,10 @@ async def get_calendar(page_key:str, on_change_date=None):
             date_picker.update()
 
         ui.button(icon='close', on_click=reset_dates_local)\
-            .props('flat dense round')\
-            .classes('-ml-10')\
+            .props('flat dense round color=grey')\
+            .classes('-ml-12 text-gray-400 hover:text-white')\
             .on('click.stop')
-        
+            
         with ui.menu().classes('anchor=bottom middle self=top middle') as menu:
             date_picker = ui.date().props('range mask=DD.MM.YYYY')
             # биндим отображение в input
