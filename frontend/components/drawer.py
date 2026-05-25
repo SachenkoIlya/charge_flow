@@ -1,4 +1,11 @@
-from nicegui import ui  
+from nicegui import ui, app  
+
+
+
+def logout():
+    app.storage.user.clear()
+    app.storage.user.pop('token', None)
+    ui.navigate.to('/login')
 
 def get_drawer(role: str) -> ui.left_drawer:
     def nav_item(icon, text, route):
@@ -34,7 +41,7 @@ def get_drawer(role: str) -> ui.left_drawer:
     return drawer
 
 
-from nicegui import ui
+
 
 
 def render_sidebar(role: str):
@@ -70,3 +77,14 @@ def render_sidebar(role: str):
         else:
             nav_item('ev_station', 'Мои станции', '/stations')
             nav_item('bar_chart', 'Аналитика', '/analytics')
+
+        ui.space()
+        nav_item('contacts', 'Контакты', '/contacts')
+        with ui.row().classes(
+        '''
+            w-full items-center gap-3 px-4 py-3 rounded-xl font-semibold
+            cursor-pointer transition text-gray-300 hover:bg-[#111827] hover:text-white
+        '''
+        ).on('click', logout):
+            ui.icon('logout', size='20px')
+            ui.label('Выйти')
