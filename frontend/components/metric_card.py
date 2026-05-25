@@ -39,3 +39,4 @@ def metric_card(metric: dict):
             ui.label(metric['delta']).classes(
                 'text-sm text-green-400 mt-2'
             )
+     
