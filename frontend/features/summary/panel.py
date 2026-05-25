@@ -1,7 +1,7 @@
 from frontend.features.base.panel import BasePanel
 from frontend.components.drawer import render_sidebar
 from frontend.api.client import frontend_api
-
+from frontend.features.summary.render.metrics import render_metrics, METRICS
 from dataclasses import dataclass
 from copy import deepcopy
 from fastapi import Request
@@ -67,3 +67,4 @@ class Panel(BasePanel):
                 label='Общая сводка по сети',
                 label_aggre='Executive Dashboard'
             )
+            render_metrics(METRICS)
