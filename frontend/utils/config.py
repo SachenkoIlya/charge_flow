@@ -8,7 +8,7 @@ screen_background = """
     to-[#071019]
     text-white
     m-0
-    overf
+    overflow-hidden
 """
 
 

@@ -22,10 +22,11 @@ CARD_STYLE = 'flex: 1'
 #             ui.label(label_aggre).classes()
                 
 
-def render_title(label: str = None, style: str = None, label_aggre: str = None):
-    label = label or 'Общая сводка по сети'
-    label_aggre = label_aggre or 'Executive Dashboard'
-
-    with ui.column().classes('mb-6'):
-        ui.label(label).classes('text-3xl font-bold text-white')
-        ui.label(label_aggre).classes('text-sm text-gray-400')
+def render_title(label: str, label_aggre: str):
+    with ui.column().classes('gap-1 mb-6'):
+        ui.label(label).classes(
+            'text-3xl font-bold text-white leading-tight'
+        )
+        ui.label(label_aggre).classes(
+            'text-base text-gray-400'
+        )

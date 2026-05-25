@@ -45,9 +45,10 @@ class Panel(BasePanel):
                     # 'w-full max-w-[2000px] mx-auto px-7 mt-10'
                         """
                             flex-1
-                            px-8
-                            py-8
-                            flex
+                            h-screen
+                            overflow-hidden
+                            px-10
+                            py-6
                         """
                 ) as self.container:
                     await self.render_content()
