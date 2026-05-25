@@ -49,7 +49,7 @@ class Panel(BasePanel):
                             h-screen
                             overflow-hidden
                             px-10
-                            py-6
+                            py-2
                         """
                 ) as self.container:
                     await self.render_content()

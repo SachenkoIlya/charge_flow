@@ -23,10 +23,10 @@ CARD_STYLE = 'flex: 1'
                 
 
 def render_title(label: str, label_aggre: str):
-    with ui.column().classes('gap-1 mb-6'):
-        ui.label(label).classes(
-            'text-3xl font-bold text-white leading-tight'
-        )
-        ui.label(label_aggre).classes(
-            'text-base text-gray-400'
-        )
+    ui.label(label).classes(
+        'text-3xl font-bold text-white leading-tight'
+    )
+
+    ui.label(label_aggre).classes(
+        'text-sm text-gray-400 mt-1'
+    )
