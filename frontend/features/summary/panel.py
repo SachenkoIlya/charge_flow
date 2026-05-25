@@ -64,9 +64,11 @@ class Panel(BasePanel):
         style: str = None
         label_aggre: str = None
         with ui.element('div').classes('w-full max-w-[1700px]'):
-            render_title(
+            await render_title(
                 label='Общая сводка по сети',
-                label_aggre='Executive Dashboard'
-            )
+                label_aggre='Executive Dashboard',
+                page_key=self.page_key,
+                on_date_change=self.on_date_change,
+        )
             render_metrics(METRICS)
             render_chart(CHART_METRICS)

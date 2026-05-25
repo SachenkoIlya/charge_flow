@@ -1,4 +1,6 @@
 from nicegui import ui
+
+from frontend.components.calendar import get_calendar
 CARD = 'w-full justify-between items-start'
 STYLE_COLUMN = 'gap-1 mb-10'
 LABEL_REVENUE = 'Общий доход по всем локациям'
@@ -22,11 +24,26 @@ CARD_STYLE = 'flex: 1'
 #             ui.label(label_aggre).classes()
                 
 
-def render_title(label: str, label_aggre: str):
-    ui.label(label).classes(
-        'text-3xl font-bold text-white leading-tight'
-    )
+async def render_title(
+    label: str, 
+    label_aggre: str,
+    page_key: str,
+    on_date_change=None,
 
-    ui.label(label_aggre).classes(
-        'text-sm text-gray-400 mt-1'
-    )
+):
+    with ui.row().classes('w-full items-start justify-between mb-6'):
+
+        with ui.column().classes('gap-0'):
+            ui.label(label).classes(
+                'text-3xl font-bold text-white leading-tight'
+            )
+
+            ui.label(label_aggre).classes(
+                'text-sm text-gray-400 mt-1'
+            )
+
+        await get_calendar(
+            page_key=page_key,
+            on_change_date=on_date_change,
+        )
+    
