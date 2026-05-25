@@ -61,13 +61,13 @@ def render_sidebar(role: str):
         w-[260px] min-h-screen shrink-0
         bg-[#071019]
         border-r border-[#1f2937]
-        px-4 py-5 gap-2
+        px-4 pt-8 gap-2
         """
     ):
         ui.label('Панель').classes('text-xl font-bold text-white mb-4')
 
         nav_item('dashboard', 'Общая сводка', '/control_panel', active=True)
-        nav_item('dashboard', 'Сводка', '/summary', active=True)
+        nav_item('dashboard', 'Сводка', '/summary', active=False)
         nav_item('trending_up', 'Тренды', '/trends')
 
         if role == 'admin':
