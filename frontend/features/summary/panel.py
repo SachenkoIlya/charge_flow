@@ -60,7 +60,7 @@ class Panel(BasePanel):
         # metrics = get_metrics(self.data)
         # chart = self.data['chart']
         
-        label = 'Общая сводкка по сети'
+        label = 'Общая сводка по сети'
         style: str = None
         label_aggre: str = None
         with ui.element('div').classes('w-full max-w-[1700px]'):

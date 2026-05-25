@@ -64,8 +64,8 @@ def render_sidebar(role: str):
             bg-[#071019]
             border-r border-[#1f2937]
             px-4
-            pt-8
-            pb-6
+            pt-4
+            pb-4
             overflow-hidden
         """
     ):
