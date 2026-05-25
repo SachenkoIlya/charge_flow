@@ -3,7 +3,7 @@ from frontend.features.control_panel.renders.right import render_right
 from frontend.features.control_panel.metrics import get_metrics
 from frontend.features.base.panel import BasePanel
 from frontend.components.header import get_header
-from frontend.components.drawer import get_drawer
+from frontend.components.drawer import get_drawer, render_sidebar
 from frontend.api.client import frontend_api
 
 from dataclasses import dataclass
@@ -28,19 +28,26 @@ class Panel(BasePanel):
             return
         
         role = self.user.get('role')
-        drawer = get_drawer(role=role)
+        # drawer = get_drawer(role=role)
         
-        await get_header(
-            request=self.request,
-            drawer=drawer,
-            on_date_change=self.on_date_change,
-            page_key=self.page_key,
-            refresh=self.refresh,
-            role=role
-        )
+        # await get_header(
+        #     request=self.request,
+        #     drawer=drawer,
+        #     on_date_change=self.on_date_change,
+        #     page_key=self.page_key,
+        #     refresh=self.refresh,
+        #     role=role
+        # )
+        with ui.element('div').classes(
+            'w-screen h-screen flex bg-gradient-to-br from-[#050b12] via-[#08111b] to-[#0b1724] text-white overflow-hidden'
+        ):
+            render_sidebar(role=role)
         
-        with ui.element('div').classes('w-full max-w-[2000px] mx-auto px-7 mt-10') as self.container:
-            await self.render_content()
+        with ui.element('main').classes(
+                # 'w-full max-w-[2000px] mx-auto px-7 mt-10'
+                    'flex-1 h-screen overflow-y-auto px-7 py-8'
+            ) as self.container:
+                await self.render_content()
     
     async def render_content(self):
         metrics = get_metrics(self.data)

@@ -229,7 +229,7 @@ class BaseAiohttpClient:
             login=login,
             password=password,
             api_key=api_key,
-             use_rate_limit=use_rate_limit,
+            use_rate_limit=use_rate_limit,
             **kwargs
         )
     

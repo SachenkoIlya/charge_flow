@@ -32,3 +32,41 @@ def get_drawer(role: str) -> ui.left_drawer:
         ui.query('.q-drawer').style('height: calc(100% - 80px)')
 
     return drawer
+
+
+from nicegui import ui
+
+
+def render_sidebar(role: str):
+    def nav_item(icon, text, route, active=False):
+        with ui.row().classes(
+            f"""
+            w-full items-center gap-3 px-4 py-3 rounded-xl font-semibold
+            cursor-pointer transition
+            {'bg-[#122033] text-white' if active else 'text-gray-300 hover:bg-[#111827] hover:text-white'}
+            """
+        ).on('click', lambda: ui.navigate.to(route)):
+            ui.icon(icon, size='20px')
+            ui.label(text)
+
+    with ui.column().classes(
+        """
+        w-[260px] h-screen shrink-0
+        bg-[#071019]
+        border-r border-[#1f2937]
+        px-4 py-5 gap-2
+        """
+    ):
+        ui.label('Панель').classes('text-xl font-bold text-white mb-4')
+
+        nav_item('dashboard', 'Общая сводка', '/control_panel', active=True)
+        nav_item('trending_up', 'Тренды', '/trends')
+
+        if role == 'admin':
+            nav_item('groups', 'Инвесторы', '/investors')
+            ui.separator().classes('bg-[#1f2937] my-2')
+            nav_item('link', 'Подключить оператора', '/operator')
+            nav_item('monitor_heart', 'Мониторинг системы', '/system_monitoring')
+        else:
+            nav_item('ev_station', 'Мои станции', '/stations')
+            nav_item('bar_chart', 'Аналитика', '/analytics')

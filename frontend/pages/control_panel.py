@@ -3,11 +3,6 @@ from fastapi import Request
 from frontend.utils.utils import utils
 from frontend.features.control_panel.panel import Panel
 from frontend.utils.config import screen_background
-from dotenv import load_dotenv
-import traceback
-import os
-load_dotenv()
-
 
 
 @ui.page('/control_panel')
