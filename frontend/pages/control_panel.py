@@ -1,5 +1,6 @@
 from nicegui import ui, app
 from fastapi import Request
+from frontend.components.setup_theme import setup_theme
 from frontend.utils.utils import utils
 from frontend.features.control_panel.panel import Panel
 from frontend.utils.config import screen_background
@@ -19,6 +20,7 @@ async def control_panel_page(request: Request):
   - drawer содержит навигационные элементы (например, "Аналитика")
   :return: None
   """
+  setup_theme()
   ui.page_title('📈 Dashboard')
   ui.query('body').classes(screen_background)
   user = app.storage.user.get('user')
