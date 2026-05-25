@@ -30,7 +30,7 @@ class Panel(BasePanel):
             'w-screen min-h-screen flex bg-gradient-to-br from-[#050b12] via-[#08111b] to-[#0b1724] text-white overflow-hidden'
         ):
             render_sidebar(role=role)
-        
+
             with ui.element('main').classes(
                     # 'w-full max-w-[2000px] mx-auto px-7 mt-10'
                         """
@@ -38,8 +38,6 @@ class Panel(BasePanel):
                             px-8
                             py-8
                             flex
-                            items-center
-                            justify-center
                         """
                 ) as self.container:
                     await self.render_content()
