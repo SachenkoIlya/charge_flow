@@ -1,4 +1,5 @@
 from dotenv import load_dotenv
+from frontend.components.setup_theme import setup_theme
 from nicegui import ui
 import os 
 load_dotenv()
@@ -22,6 +23,7 @@ class LoginForm:
 
         :return: None
         """
+        setup_theme()
         backend_url = os.getenv('BACKEND_URL')
         container = ui.column().classes('w-full max-w-sm mx-auto')
         with container:
