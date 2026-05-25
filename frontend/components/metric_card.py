@@ -8,9 +8,9 @@ def metric_card(metric: dict):
             border border-[#1f2937]
             rounded-xl
             shadow-xl
-            p-5
+            p-4
             text-white
-            min-h-[140px]
+            min-h-[120px]
         """
     ):
         with ui.row().classes('items-start gap-4'):
@@ -33,7 +33,7 @@ def metric_card(metric: dict):
                     'text-xs text-gray-400'
                 )
             ui.label(metric['value']).classes(
-                'text-3xl font-bold mt-5'
+                'text-2xl font-bold mt-5'
             )
 
             ui.label(metric['delta']).classes(
