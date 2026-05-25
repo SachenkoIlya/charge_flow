@@ -58,34 +58,50 @@ def render_sidebar(role: str):
 
     with ui.column().classes(
         """
-        w-[260px] min-h-screen shrink-0
-        bg-[#071019]
-        border-r border-[#1f2937]
-        px-4 pt-8 gap-2
+            w-[260px]
+            h-screen
+            shrink-0
+            bg-[#071019]
+            border-r border-[#1f2937]
+            px-4
+            pt-8
+            pb-6
+            overflow-hidden
         """
     ):
         ui.label('Панель').classes('text-xl font-bold text-white mb-4')
 
-        nav_item('dashboard', 'Общая сводка', '/control_panel', active=True)
-        nav_item('dashboard', 'Сводка', '/summary', active=False)
-        nav_item('trending_up', 'Тренды', '/trends')
-
-        if role == 'admin':
+        with ui.column().classes('w-full gap-2'):
+            nav_item('dashboard', 'Общая сводка', '/control_panel', active=True)
+            nav_item('dashboard', 'Сводка', '/summary')
+            nav_item('trending_up', 'Тренды', '/trends')
             nav_item('groups', 'Инвесторы', '/investors')
-            ui.separator().classes('bg-[#1f2937] my-2')
+
+            ui.separator().classes('bg-[#1f2937] my-4')
+
             nav_item('link', 'Подключить оператора', '/operator')
             nav_item('monitor_heart', 'Мониторинг системы', '/system_monitoring')
-        else:
-            nav_item('ev_station', 'Мои станции', '/stations')
-            nav_item('bar_chart', 'Аналитика', '/analytics')
 
         ui.space()
-        nav_item('contacts', 'Контакты', '/contacts')
-        with ui.row().classes(
-        '''
-            w-full items-center gap-3 px-4 py-3 rounded-xl font-semibold
-            cursor-pointer transition text-gray-300 hover:bg-[#111827] hover:text-white
-        '''
-        ).on('click', logout):
-            ui.icon('logout', size='20px')
-            ui.label('Выйти')
+
+        with ui.column().classes('w-full gap-2'):
+            nav_item('contacts', 'Контакты', '/contacts')
+
+            with ui.row().classes(
+                """
+                    w-full 
+                    items-center 
+                    gap-3 
+                    px-4 
+                    py-3 
+                    rounded-xl 
+                    font-semibold 
+                    cursor-pointer 
+                    transition 
+                    text-gray-300 
+                    hover:bg-[#111827] 
+                    hover:text-white
+                """
+            ).on('click', logout):
+                ui.icon('logout', size='20px')
+                ui.label('Выйти')
