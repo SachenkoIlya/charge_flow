@@ -66,7 +66,7 @@ class Panel(BasePanel):
         style: str = None
         label_aggre: str = None
         # with ui.element('div').classes('w-full max-w-[1700px]'):
-        with ui.element('div').style('zoom: 0.9'):
+        with ui.element('div').style('zoom: 0.8'):
             await render_title(
                 label='Общая сводка по сети',
                 label_aggre='Executive Dashboard',
