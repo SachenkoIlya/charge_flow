@@ -3,7 +3,7 @@ from frontend.components.drawer import render_sidebar
 from frontend.api.client import frontend_api
 from frontend.features.summary.render.charts import render_chart, CHART_METRICS
 from frontend.features.summary.render.metrics import render_metrics, METRICS
-from frontend.components.render_top_table import TOP_ROWS
+from frontend.components.render_top_table import TOP_ROWS, REVERS_ROWS
 from dataclasses import dataclass
 from copy import deepcopy
 from fastapi import Request
@@ -75,4 +75,4 @@ class Panel(BasePanel):
             )
             render_metrics(METRICS)
             render_chart(CHART_METRICS)
-            render_tables_section(TOP_ROWS)
+            render_tables_section(TOP_ROWS, REVERS_ROWS)

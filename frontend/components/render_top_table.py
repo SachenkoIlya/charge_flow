@@ -34,3 +34,6 @@ TOP_ROWS = [
     {'station': 'ЭЭС-077 ТЦ Калейдоскоп', 'revenue': '986 210', 'load': '32.1%'},
     {'station': 'ЭЭС-021 Аэропорт Шереметьево', 'revenue': '872 340', 'load': '29.8%'},
 ]
+
+
+REVERS_ROWS = list(reversed(TOP_ROWS))
