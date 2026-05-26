@@ -6,10 +6,7 @@ from nicegui import ui
 def render_metrics(metrics: list):
 
     with ui.grid(columns=5).classes(
-        # 'w-full gap-4 mt-6'
-        'grid gap-3 mt-5'
-    ).style(
-        'grid-template-columns: repeat(5, 250px);'
+        'w-full gap-4 mt-6'
     ):
 
         for metric in metrics:

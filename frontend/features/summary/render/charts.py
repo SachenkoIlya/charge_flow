@@ -5,16 +5,15 @@ def render_chart(metrics:dict):
 
 
     with ui.card().classes(
-        """
-            w-full
-            max-w-[1500px]
-            mt-5
-            bg-[#101923]/90
-            border border-[#1f2937]
-            rounded-xl
-            shadow-xl
-            p-4
-        """
+        '''
+        w-full
+        mt-5
+        bg-[#101923]/90
+        border border-[#1f2937]
+        rounded-xl
+        shadow-xl
+        p-4
+        '''
     ):
 
         ui.label('Динамика ключевых метрик').classes(
