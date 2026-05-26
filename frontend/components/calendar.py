@@ -7,7 +7,7 @@ from core.logger.logger import make_logger
 
 async def get_calendar(page_key:str, on_change_date=None):
     today = datetime.now().strftime('%d.%m.%Y')
-    with ui.row().classes('items-center gap-2 justify-end'):
+    with ui.row().classes('items-center gap-2 justify-end mr-2'):
         page = app.storage.user.get('pages', {})
         page_state = page.get(page_key)
         date_from = page_state.get('date_from')
