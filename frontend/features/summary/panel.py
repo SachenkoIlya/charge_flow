@@ -3,11 +3,13 @@ from frontend.components.drawer import render_sidebar
 from frontend.api.client import frontend_api
 from frontend.features.summary.render.charts import render_chart, CHART_METRICS
 from frontend.features.summary.render.metrics import render_metrics, METRICS
+from frontend.components.render_top_table import TOP_ROWS
 from dataclasses import dataclass
 from copy import deepcopy
 from fastapi import Request
 from nicegui import ui
 
+from frontend.features.summary.render.tables_section import render_tables_section
 from frontend.features.summary.render.title import render_title
 
 
@@ -69,6 +71,7 @@ class Panel(BasePanel):
                 label_aggre='Executive Dashboard',
                 page_key=self.page_key,
                 on_date_change=self.on_date_change,
-        )
+            )
             render_metrics(METRICS)
             render_chart(CHART_METRICS)
+            render_tables_section(TOP_ROWS)
