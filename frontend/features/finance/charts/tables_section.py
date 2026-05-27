@@ -1,5 +1,6 @@
 from nicegui import ui
 
+from frontend.components.metric_card import render_metrics
 from frontend.components.render_top_table import render_plan_fact_table
 
 
@@ -7,9 +8,9 @@ def render_tables_section(rows: list[dict], plan_rows: list[dict]):
     with ui.element('div').classes('grid gap-4 mt-4 w-full').style(
         'grid-template-columns: 2fr 1fr;'
     ):
-        render_plan_fact_table(
-            title='P&L по станциям',
-            rows=rows,
+        render_metrics(
+            metrics=rows,
+            columns=6
         )
 
         render_plan_fact_table(
