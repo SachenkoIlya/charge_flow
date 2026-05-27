@@ -74,6 +74,7 @@ def render_sidebar(role: str):
         with ui.column().classes('w-full gap-2'):
             nav_item('dashboard', 'Общая сводка', '/control_panel', active=True)
             nav_item('dashboard', 'Сводка', '/summary')
+            nav_item('dashboard', 'Финансы', '/finance')
             nav_item('trending_up', 'Тренды', '/trends')
             nav_item('groups', 'Инвесторы', '/investors')
 
