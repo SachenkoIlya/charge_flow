@@ -22,6 +22,8 @@ async def render_title(
             )
 
         if page_key in {'finance'}:
+
+            selected = {'value': 'ВСЕ'}
             with ui.row().classes(
                 '''
                 items-center gap-1
@@ -30,19 +32,48 @@ async def render_title(
                 rounded-2xl
                 p-1
                 '''
+                
             ):
+                buttons = {}
+                def set_active(value):
+                    selected['value'] = value
+
+                    for key, btn in buttons.items():
+
+                        if key == value:
+                            btn.classes(
+                                replace=
+                                '''
+                                px-5 py-2.5
+                                rounded-xl
+                                text-sm font-bold
+                                bg-green-500
+                                text-black
+                                transition
+                                '''
+                            )
+
+                    else:
+                        btn.classes(
+                            replace=
+                                '''
+                                px-5 py-2.5
+                                rounded-xl
+                                text-sm font-bold
+                                text-gray-300
+                                hover:bg-[#1a2432]
+                                hover:text-white
+                                transition
+                                '''
+                        )
                 for item in ['6 МЕС', '1 ГОД', 'ВСЕ']:
-                    ui.button(item).props('flat').classes(
-                        '''
-                        px-4 py-2
-                        rounded-lg
-                        text-xs font-bold
-                        text-gray-300
-                        hover:bg-[#1a2432]
-                        hover:text-white
-                        transition
-                        '''
-                    )
+                    btn = ui.button(
+                        item,
+                        on_click=lambda v=item: set_active(v)
+                    ).props('flat')
+
+                    buttons[item] = btn
+                set_active('ВСЕ')
         else:
             await get_calendar(
                 page_key=page_key,
