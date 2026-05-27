@@ -135,7 +135,12 @@ def render_plan_fact_table(title: str, rows: list[dict], height:int):
         ):
 
             for row in rows:
-
+                color = (
+                    'text-green-400'
+                    if row['positive']
+                    else 'text-red-400'
+                )
+                
                 with ui.row().classes(
                     '''
                     w-full
@@ -148,14 +153,18 @@ def render_plan_fact_table(title: str, rows: list[dict], height:int):
                     '''
                 ):
 
-                    ui.label(row['label']).classes('w-[160px]')
-                    ui.label(row['plan']).classes('w-[120px]')
-                    ui.label(row['fact']).classes('w-[120px]')
+                    ui.label(row['metric']).classes(
+                        'text-gray-300'
+                    )
+
+                    ui.label(row['plan'])
+
+                    ui.label(row['fact'])
 
                     ui.label(row['delta']).classes(
-                        f'w-[140px] font-semibold {row["delta_class"]}'
+                        color
                     )
 
                     ui.label(row['percent']).classes(
-                        f'w-[60px] font-semibold {row["delta_class"]}'
+                        f'{color} font-semibold text-right'
                     )
