@@ -1,7 +1,7 @@
 from nicegui import ui
 
 from frontend.components.calendar import get_calendar
-
+from core.logger.logger import logger
 
 async def render_title(
     label: str, 
@@ -22,58 +22,26 @@ async def render_title(
             )
 
         if page_key in {'finance'}:
-
-            selected = {'value': 'ВСЕ'}
-            with ui.row().classes(
+            period_toggle = ui.toggle(
+                ['6 МЕС', '1 ГОД', 'ВСЕ'],
+                value='ВСЕ',
+            ).props(
+                'unelevated toggle-color=green'
+            ).classes(
                 '''
-                items-center gap-1
                 bg-[#101923]
                 border border-[#1f2937]
                 rounded-2xl
                 p-1
+                text-sm
+                font-bold
                 '''
-                
-            ):
-                buttons = {}
-                def set_active(value):
-                    selected['value'] = value
-
-                    for key, btn in buttons.items():
-
-                        if key == value:
-                            btn.classes(
-                                replace=
-                                '''
-                                px-5 py-2.5
-                                rounded-xl
-                                text-sm font-bold
-                                bg-green-500
-                                text-black
-                                transition
-                                '''
-                            )
-
-                    else:
-                        btn.classes(
-                            replace=
-                                '''
-                                px-5 py-2.5
-                                rounded-xl
-                                text-sm font-bold
-                                text-gray-300
-                                hover:bg-[#1a2432]
-                                hover:text-white
-                                transition
-                                '''
-                        )
-                for item in ['6 МЕС', '1 ГОД', 'ВСЕ']:
-                    btn = ui.button(
-                        item,
-                        on_click=lambda v=item: set_active(v)
-                    ).props('flat')
-
-                    buttons[item] = btn
-                set_active('ВСЕ')
+            )
+            period_toggle.on(
+                'update:model-value',
+                lambda e: logger.debug(f"period:, {e.args}")
+            )
+          
         else:
             await get_calendar(
                 page_key=page_key,
