@@ -12,7 +12,7 @@ FINANCE_METRICS = [
         'icon': 'monitoring',
         'icon_bg': 'bg-orange-500',
         'title': 'EBITDA сети',
-        'subtitle': 'операционная прибыль',
+        'subtitle': 'опер. прибыль',
         'value': '15 246 320 ₽',
         'delta': '+2.4 п.п.',
     },
