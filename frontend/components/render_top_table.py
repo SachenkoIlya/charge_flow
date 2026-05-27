@@ -28,11 +28,12 @@ def render_top_table(title: str, title_class: str, rows: list):
                 ui.label(row['load'])
 
 
-def render_plan_fact_table(title: str, rows: list[dict]):
+def render_plan_fact_table(title: str, rows: list[dict], height:int):
     with ui.card().classes(
-        '''
-        bg-[#101923]/90 border border-[#1f2937]
-        rounded-xl shadow-xl p-4 text-white
+        f'''
+            h-[{height}px]
+            bg-[#101923]/90 border border-[#1f2937]
+            rounded-xl shadow-xl p-4 text-white
         '''
     ):
 

@@ -5,15 +5,17 @@ from frontend.components.pnl_table import render_pnl_table
 from frontend.components.render_top_table import render_plan_fact_table
 
 
-def render_tables_section(rows: list[dict], plan_rows: list[dict]):
+def render_tables_section(rows: list[dict], plan_rows: list[dict], height:int=470):
+    
     with ui.element('div').classes('grid gap-4 mt-4 w-full').style(
         'grid-template-columns: 2.02fr 1fr;'
     ):
-        render_pnl_table(rows=rows)
+        render_pnl_table(rows=rows, height=height)
 
         render_plan_fact_table(
             title='План-факт',
             rows=plan_rows,
+            height=height
         )
 
 
