@@ -1,6 +1,7 @@
 from nicegui import ui
 
 from frontend.components.metric_card import render_metrics
+from frontend.components.pnl_table import render_pnl_table
 from frontend.components.render_top_table import render_plan_fact_table
 
 
@@ -8,67 +9,31 @@ def render_tables_section(rows: list[dict], plan_rows: list[dict]):
     with ui.element('div').classes('grid gap-4 mt-4 w-full').style(
         'grid-template-columns: 2fr 1fr;'
     ):
-        render_metrics(
-            metrics=rows,
-            columns=6
-        )
+        render_pnl_table(rows=rows)
 
         render_plan_fact_table(
             title='План-факт',
             rows=plan_rows,
         )
 
-
-METRICS_PNL = [
+PNL_ROWS = [
     {
-        'title': 'Выручка сети',
-        'subtitle': 'месячный оборот',
-        'value': '45 812 650 ₽',
-        'delta': '+18.7%',
-        'icon': 'payments',
-        'icon_bg': 'bg-[#22c55e]',
-    },
-    {
-        'title': 'EBITDA сети',
-        'subtitle': 'операц. прибыль',
-        'value': '15 246 320 ₽',
-        'delta': '+2.4 п.п.',
-        'icon': 'trending_up',
-        'icon_bg': 'bg-[#f97316]',
-    },
-    {
-        'title': 'Чистая прибыль сети',
-        'subtitle': 'после налогов',
-        'value': '12 745 980 ₽',
-        'delta': '+3.1 п.п.',
-        'icon': 'show_chart',
-        'icon_bg': 'bg-[#a855f7]',
-    },
-    {
-        'title': 'CAPEX (всего)',
-        'subtitle': 'инвестиции в сеть',
-        'value': '152 450 000 ₽',
-        'delta': '657 978 ₽ / ЭЗС',
-        'icon': 'account_balance_wallet',
-        'icon_bg': 'bg-[#3b82f6]',
-        'value_class': 'text-lg',
-    },
-    {
-        'title': 'Накопленный cash flow',
-        'subtitle': 'денежный поток',
-        'value': '28 950 760 ₽',
-        'delta': '+5 780 450 ₽',
-        'icon': 'savings',
-        'icon_bg': 'bg-[#06b6d4]',
-        'value_class': 'text-lg',
-    },
-    {
-        'title': 'Средняя окупаемость',
-        'subtitle': 'прогноз ROI',
-        'value': '18.6 мес.',
-        'delta': 'прогноз: 16.2 мес.',
-        'icon': 'receipt_long',
-        'icon_bg': 'bg-[#eab308]',
+        'station': 'ЭЭС-105 ТЦ Мега Химки',
+        'revenue_month': '1 245 780',
+        'revenue_total': '12 457 800',
+        'energy_cost': '302 450',
+        'kwh': '78 540',
+        'price_kwh': '3.85',
+        'rent_fixed': '100 000',
+        'rent_percent': '8%',
+        'rent_total': '199 662',
+        'operator_own': '74 746',
+        'operator_external': '124 578',
+        'operator_total': '199 324',
+        'operator_percent': '16.0%',
+        'ebitda': '422 113',
+        'profit': '315 880',
+        'margin': '25.4%',
     },
 ]
 

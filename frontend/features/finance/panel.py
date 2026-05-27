@@ -16,7 +16,7 @@ from frontend.features.finance.charts.cost_structure import COST_STRUCTURE
 from frontend.features.finance.charts.tables_section import (
     render_tables_section, 
     PLAN_FACT_ROWS, 
-    METRICS_PNL
+    PNL_ROWS
 )
 
 from dataclasses import dataclass
@@ -90,6 +90,6 @@ class Panel(BasePanel):
                 cost_structure=COST_STRUCTURE
             )
             render_tables_section(
-                rows=METRICS_PNL,
+                rows=PNL_ROWS,
                 plan_rows=PLAN_FACT_ROWS
             )
