@@ -20,11 +20,29 @@ async def render_title(
             ui.label(label_aggre).classes(
                 'text-sm text-gray-400 mt-1'
             )
+            
         if page_key in {'finance'}:
-            ui.toggle(
-                ['6 мес', '1 год', 'Все'],
-                value='6 мес'
-            )
+            with ui.row().classes(
+                '''
+                items-center gap-1
+                bg-[#101923]
+                border border-[#1f2937]
+                rounded-xl
+                p-1
+                '''
+            ):
+                for item in ['6 МЕС', '1 ГОД', 'ВСЕ']:
+                    ui.button(item).props('flat').classes(
+                        '''
+                        px-4 py-2
+                        rounded-lg
+                        text-xs font-bold
+                        text-gray-300
+                        hover:bg-[#1a2432]
+                        hover:text-white
+                        transition
+                        '''
+                    )
         else:
             await get_calendar(
                 page_key=page_key,
