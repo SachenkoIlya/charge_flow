@@ -3,9 +3,15 @@ from nicegui import ui
 def render_pnl_table(rows: list[dict]):
        with ui.card().classes(
         '''
-        w-full bg-[#101923]/90 border border-[#1f2937]
-        rounded-xl shadow-xl p-4 text-white
-        overflow-hidden
+            w-full
+            h-[210px]
+            bg-[#101923]/90
+            border border-[#1f2937]
+            rounded-xl
+            shadow-xl
+            p-3
+            text-white
+            overflow-hidden
         '''
     ):
         ui.label('P&L по станциям').classes('text-base font-bold mb-3')
