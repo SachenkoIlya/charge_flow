@@ -20,14 +20,14 @@ async def render_title(
             ui.label(label_aggre).classes(
                 'text-sm text-gray-400 mt-1'
             )
-            
+
         if page_key in {'finance'}:
             with ui.row().classes(
                 '''
                 items-center gap-1
                 bg-[#101923]
                 border border-[#1f2937]
-                rounded-xl
+                rounded-2xl
                 p-1
                 '''
             ):
