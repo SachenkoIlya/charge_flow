@@ -1,22 +1,20 @@
 from nicegui import ui
 
-from frontend.components.render_top_table import render_top_table
+from frontend.components.render_top_table import render_plan_fact_table
 
 
 def render_tables_section(rows: list[dict], plan_rows: list[dict]):
     with ui.element('div').classes('grid gap-4 mt-4 w-full').style(
         'grid-template-columns: 2fr 1fr;'
     ):
-        render_top_table(
-            'P&L по станциям',
-            'text-white',
-            rows,
+        render_plan_fact_table(
+            title='P&L по станциям',
+            rows=rows,
         )
 
-        render_top_table(
-            'План-факт',
-            'text-white',
-            plan_rows,
+        render_plan_fact_table(
+            title='План-факт',
+            rows=plan_rows,
         )
 
 
