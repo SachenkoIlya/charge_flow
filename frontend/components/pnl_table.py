@@ -3,7 +3,7 @@ from nicegui import ui
 def render_pnl_table(rows: list[dict]):
        with ui.card().classes(
         '''
-        w-full mt-5 bg-[#101923]/90 border border-[#1f2937]
+        w-full bg-[#101923]/90 border border-[#1f2937]
         rounded-xl shadow-xl p-4 text-white
         overflow-hidden
         '''

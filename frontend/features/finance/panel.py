@@ -72,7 +72,7 @@ class Panel(BasePanel):
 
 
     async def render_content(self):
-        with ui.element('div').style('zoom: 0.9'):
+        with ui.element('div').style('zoom: 0.8'):
             await render_title(
                 label='Фиинансы и прибыльность',
                 label_aggre='Finance & Profitability',

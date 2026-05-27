@@ -7,7 +7,7 @@ from frontend.components.render_top_table import render_plan_fact_table
 
 def render_tables_section(rows: list[dict], plan_rows: list[dict]):
     with ui.element('div').classes('grid gap-4 mt-4 w-full').style(
-        'grid-template-columns: 2fr 1fr;'
+        'grid-template-columns: 2.02fr 1fr;'
     ):
         render_pnl_table(rows=rows)
 
@@ -16,9 +16,10 @@ def render_tables_section(rows: list[dict], plan_rows: list[dict]):
             rows=plan_rows,
         )
 
+
 PNL_ROWS = [
     {
-        'station': 'ЭЭС-105 ТЦ Мега Химки',
+        'station': 'ЭЗС-106 Рига Молл',
         'revenue_month': '1 245 780',
         'revenue_total': '12 457 800',
         'energy_cost': '302 450',
@@ -35,8 +36,79 @@ PNL_ROWS = [
         'profit': '315 880',
         'margin': '25.4%',
     },
+    {
+        'station': 'ЭЗС-042 ТРК Европолис',
+        'revenue_month': '1 102 430',
+        'revenue_total': '9 874 210',
+        'energy_cost': '268 990',
+        'kwh': '69 870',
+        'price_kwh': '3.85',
+        'rent_fixed': '90 000',
+        'rent_percent': '7%',
+        'rent_total': '167 390',
+        'operator_own': '66 146',
+        'operator_external': '110 243',
+        'operator_total': '176 389',
+        'operator_percent': '16.0%',
+        'ebitda': '364 058',
+        'profit': '267 381',
+        'margin': '24.3%',
+    },
+    {
+        'station': 'ЭЗС-089 ТЦ Афимолл Сити',
+        'revenue_month': '1 087 950',
+        'revenue_total': '8 563 480',
+        'energy_cost': '265 230',
+        'kwh': '68 910',
+        'price_kwh': '3.85',
+        'rent_fixed': '85 000',
+        'rent_percent': '7%',
+        'rent_total': '159 560',
+        'operator_own': '63 102',
+        'operator_external': '105 401',
+        'operator_total': '168 503',
+        'operator_percent': '15.5%',
+        'ebitda': '358 747',
+        'profit': '250 873',
+        'margin': '23.1%',
+    },
+    {
+        'station': 'ЭЗС-077 ТЦ Капитолий',
+        'revenue_month': '986 210',
+        'revenue_total': '7 654 920',
+        'energy_cost': '240 110',
+        'kwh': '62 370',
+        'price_kwh': '3.85',
+        'rent_fixed': '80 000',
+        'rent_percent': '7%',
+        'rent_total': '145 378',
+        'operator_own': '57 650',
+        'operator_external': '96 480',
+        'operator_total': '154 130',
+        'operator_percent': '15.6%',
+        'ebitda': '330 790',
+        'profit': '226 430',
+        'margin': '22.9%',
+    },
+    {
+        'station': 'ЭЗС-021 Аэропорт Шереметьево',
+        'revenue_month': '872 340',
+        'revenue_total': '6 532 100',
+        'energy_cost': '212 890',
+        'kwh': '55 300',
+        'price_kwh': '3.85',
+        'rent_fixed': '70 000',
+        'rent_percent': '7%',
+        'rent_total': '127 822',
+        'operator_own': '50 596',
+        'operator_external': '84 812',
+        'operator_total': '135 408',
+        'operator_percent': '15.5%',
+        'ebitda': '296 220',
+        'profit': '198 743',
+        'margin': '22.8%',
+    },
 ]
-
 
 PLAN_FACT_ROWS = [
     {

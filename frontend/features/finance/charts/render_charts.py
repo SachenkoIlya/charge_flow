@@ -6,7 +6,7 @@ from frontend.features.finance.charts.cost_structure import render_cost_structur
 
 
 def render_finance_charts(cashflow:dict, break_even:dict, cost_structure:dict):
-    with ui.grid(columns=3).classes('w-full gap-4 mt-5'):
+    with ui.grid(columns=3).classes('w-full gap-4 mt-4'):
         render_cashflow_chart(cashflow)
         render_break_even_chart(break_even)
         render_cost_structure_chart(cost_structure)
