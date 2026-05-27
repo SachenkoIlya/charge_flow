@@ -60,10 +60,10 @@ class Panel(BasePanel):
 
     async def render_content(self):
         with ui.element('div').style('zoom: 0.8'):
-            render_title(
+            await render_title(
                 label='Фиинансы и прибыльность',
                 label_aggre='Finance & Profitability',
                 page_key=self.page_key,
                 on_date_change=self.on_date_change 
             )
-            render_metrics(metrics=FINANCE_METRICS, columns=6)
+            render_metrics(metrics=FINANCE_METRICS, columns=2)
