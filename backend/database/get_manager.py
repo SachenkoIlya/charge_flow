@@ -14,6 +14,7 @@ def get_current_token(
     r = security.decode_token(data_credentials)
     return r
 
+
 def get_manager(request: Request) -> Manager:
     """
     Получение менеджера базы данных из состояния приложения.

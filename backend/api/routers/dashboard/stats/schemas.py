@@ -2,8 +2,8 @@ from pydantic import BaseModel, EmailStr
 from typing import Optional
 
 class DashboardFilterSchema(BaseModel):
-    date_from: str | None
-    date_to: str | None
+    date_from: Optional[str] = None
+    date_to: Optional[str] = None
     company_id: Optional[int] = None
 
 class MetricItemSchema(BaseModel):

@@ -43,6 +43,15 @@ class BaseVoltApi:
                         password=run_ctx.user.password,
                         use_rate_limit=True
                     )
+                else:
+                    response = await ctx.aiohttp_client.post(
+                        auth_type=run_ctx.user.auth_type,
+                        url=self.url,
+                        payload=body,
+                        login=run_ctx.user.login,
+                        password=run_ctx.user.password,
+                        use_rate_limit=True
+                    )
             except Exception as e:
                 logger.error(traceback.format_exc())
                 error.append({

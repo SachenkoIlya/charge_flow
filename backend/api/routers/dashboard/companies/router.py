@@ -1,13 +1,12 @@
 from backend.database.get_manager import get_merics
 from backend.services.admin_required import admin_required
-from core.logger.logger import make_logger
+from core.logger.logger import logger
 from backend.api.routers.dashboard.manager import ManagerMetrics
 from backend.api.routers.dashboard.companies.schemas import CompanySchema
 from fastapi import APIRouter
 from fastapi import Depends
 
 
-logger = make_logger(__name__, use_telegram=False)
 router = APIRouter(prefix='/dashboard', tags=['companies'])
 
 

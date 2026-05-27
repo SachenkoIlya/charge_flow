@@ -29,14 +29,17 @@ class RegstryVolt:
             type_method='chargepoints',
             method='get',
             url=Endpoints.get_full_url('chargepoints'),
-            body={"limit": 50, "offset": 0},
+            body={
+                "limit": 50, 
+                "offset": 0
+            },
         ),
         'charging_sessions': BaseVoltApi(
             type_method='charging_sessions',
             method='get',
             url=Endpoints.get_full_url('charging_sessions'),
             body={
-                "limit": 10, 
+                "limit": 50, 
                 "offset": 0,
             },
         )

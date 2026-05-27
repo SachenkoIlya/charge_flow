@@ -3,6 +3,7 @@ from core.base_db import Base
 from backend.database.manager import Manager
 from fastapi.middleware.cors import  CORSMiddleware
 from backend.api.routers.dashboard.manager import ManagerMetrics
+from core.security.settings import settings
 from contextlib import asynccontextmanager
 import httpx
 import os
@@ -12,7 +13,6 @@ from backend.api.router import api_router
 load_dotenv()
 
 logger = make_logger(__name__, use_telegram=False)
-base_url = os.getenv('BACKEND_URL')
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -40,7 +40,7 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:8080",  
         "http://127.0.0.1:8080",
-        base_url
+        settings.BACKEND_URL
     ],
     allow_credentials=True,
     allow_methods=["*"],

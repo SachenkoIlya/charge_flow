@@ -16,7 +16,8 @@ class  UserRepositoryMetrics:
 
     async def get_companies(self):
         return await self.normalize_company_data()
-       
+    
+    
     async def normalize_company_data(self):
         rows = await self.db.get_company()
         return [
@@ -26,3 +27,5 @@ class  UserRepositoryMetrics:
             }
             for r in rows
         ]
+    
+    

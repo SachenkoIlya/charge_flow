@@ -85,7 +85,7 @@ class StatsDB:
             FROM {info_station} s
             
             LEFT JOIN {charging_sessions} as cs
-                ON split_part(cs.evse_path, '/', 1) = s.key
+                ON cs.station_id = s.id
                 AND cs.user_id = $1
                 AND cs.start_ts BETWEEN $2 AND $3
                 
