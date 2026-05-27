@@ -34,16 +34,39 @@ def render_pnl_table(rows: list[dict]):
                     ('Маржа', 'margin'),
                 ]
 
-                with ui.row().classes('min-w-[1400px] text-xs text-gray-400 border-b border-[#1f2937] pb-2'):
+                with ui.row().classes(
+                    '''
+                    min-w-[1400px]
+                    text-xs text-gray-400
+                    border-b border-[#1f2937]
+                    pb-2
+                    flex-nowrap
+                    '''
+                ):
                     for label, _ in columns:
-                        ui.label(label).classes('w-[90px] truncate')
+                        ui.label(label).classes(
+                            'w-[90px] shrink-0 truncate whitespace-nowrap'
+                        )
 
                 for row in rows:
-                    with ui.row().classes('min-w-[1400px] text-sm text-gray-200 py-2 border-b border-[#141c28]'):
+                    with ui.row().classes(
+                        '''
+                        min-w-[1400px]
+                        text-sm text-gray-200
+                        py-2
+                        border-b border-[#141c28]
+                        flex-nowrap
+                        '''
+                    ):
+
                         for label, key in columns:
-                            cls = 'w-[90px] truncate'
+
+                            cls = 'w-[90px] shrink-0 truncate whitespace-nowrap'
+
                             if key == 'station':
-                                cls = 'w-[170px] truncate'
+                                cls = 'w-[170px] shrink-0 truncate whitespace-nowrap'
+
                             if key == 'margin':
                                 cls += ' text-green-400 font-semibold'
+
                             ui.label(row[key]).classes(cls)
