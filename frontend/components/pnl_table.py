@@ -45,7 +45,7 @@ def render_pnl_table(rows: list[dict]):
                 ):
                     for label, _ in columns:
                         ui.label(label).classes(
-                            'w-[90px] shrink-0 truncate whitespace-nowrap'
+                            'w-[150px] shrink-0 truncate whitespace-nowrap'
                         )
 
                 for row in rows:
