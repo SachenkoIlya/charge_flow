@@ -45,7 +45,7 @@ def render_pnl_table(rows: list[dict]):
                 ):
                     for label, _ in columns:
                         ui.label(label).classes(
-                            'w-[140px] shrink-0 truncate whitespace-nowrap'
+                            'w-[180px] shrink-0 truncate whitespace-nowrap'
                         )
 
                 for row in rows:
@@ -61,10 +61,10 @@ def render_pnl_table(rows: list[dict]):
 
                         for label, key in columns:
 
-                            cls = 'w-[140px] shrink-0 truncate whitespace-nowrap'
+                            cls = 'w-[180px] shrink-0 truncate whitespace-nowrap'
 
                             if key == 'station':
-                                cls = 'w-[140px] shrink-0 truncate whitespace-nowrap'
+                                cls = 'w-[180px] shrink-0 truncate whitespace-nowrap'
 
                             if key == 'margin':
                                 cls += ' text-green-400 font-semibold'
