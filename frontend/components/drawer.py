@@ -76,12 +76,16 @@ def render_sidebar(role: str):
             nav_item('dashboard', 'Сводка', '/summary')
             nav_item('dashboard', 'Финансы', '/finance')
             nav_item('trending_up', 'Тренды', '/trends')
-            nav_item('groups', 'Инвесторы', '/investors')
+           
 
             ui.separator().classes('bg-[#1f2937] my-4')
 
-            nav_item('link', 'Подключить оператора', '/operator')
-            nav_item('monitor_heart', 'Мониторинг системы', '/system_monitoring')
+        if role == 'admin':
+            ui.label('Адмиин панель').classes('text-xl font-bold text-white mb-4')
+            with ui.column().classes('w-full gap-2'):    
+                nav_item('groups', 'Инвесторы', '/investors')
+                nav_item('link', 'Подключить оператора', '/operator')
+                nav_item('monitor_heart', 'Мониторинг системы', '/system_monitoring')
 
         ui.space()
 
