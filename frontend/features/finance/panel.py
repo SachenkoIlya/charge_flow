@@ -2,6 +2,8 @@
 from frontend.components.drawer import render_sidebar
 
 from frontend.features.base.panel import BasePanel
+
+from frontend.features.finance.charts.render_charts import render_finance_charts
 from frontend.features.finance.charts.render_charts import render_finance_charts
 from frontend.features.finance.render.metrics import FINANCE_METRICS
 from frontend.components.render_title import render_title
@@ -14,6 +16,10 @@ from fastapi import Request
 from nicegui import ui
 
 from frontend.features.finance.charts.cashflow import CASHFLOW_METRICS
+from frontend.features.finance.charts.break_even import BREAK_EVEN_METRICS
+from frontend.features.finance.charts.cost_structure import COST_STRUCTURE
+
+
 
 @dataclass
 class Panel(BasePanel):
@@ -73,5 +79,7 @@ class Panel(BasePanel):
             )
             
             render_finance_charts(
-                cashflow=CASHFLOW_METRICS
+                cashflow=CASHFLOW_METRICS,
+                break_even=BREAK_EVEN_METRICS,
+                cost_structure=COST_STRUCTURE
             )

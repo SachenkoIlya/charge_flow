@@ -1,6 +1,6 @@
 from nicegui import ui
 
-def chart_card(title: str):
+def chart_card(title: str=None):
     return ui.card().classes(
         """
         bg-[#101923]/90

@@ -3,7 +3,7 @@ from nicegui import ui
 
 
 def render_cashflow_chart(metrics):
-    with chart_card('Накопленный денежный поток'):
+    with chart_card():
         ui.label('Накопленный денежный поток').classes('text-sm font-bold mb-2')
         ui.echart(metrics).classes('w-full h-[220px]')
 
