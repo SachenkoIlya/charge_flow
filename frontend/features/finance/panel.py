@@ -83,3 +83,38 @@ class Panel(BasePanel):
                 break_even=BREAK_EVEN_METRICS,
                 cost_structure=COST_STRUCTURE
             )
+            with ui.card().classes(
+                '''
+                bg-[#101923]/90
+                border border-[#1f2937]
+                rounded-xl
+                shadow-xl
+                p-4
+                text-white
+                '''
+            ):
+                ui.label('План / Факт').classes(
+                    'text-base font-bold mb-4'
+                )
+
+                rows = [
+                    ('Выручка', '+4.1%', True),
+                    ('EBITDA', '+15.5%', True),
+                    ('Чистая прибыль', '+18.0%', True),
+                    ('CAPEX', '-2.7%', False),
+                    ('OPEX', '-5.4%', False),
+                ]
+
+                for name, value, positive in rows:
+
+                    with ui.row().classes(
+                        'w-full justify-between items-center py-2 border-b border-[#1f2937]'
+                    ):
+
+                        ui.label(name).classes(
+                            'text-sm text-gray-300'
+                        )
+
+                        ui.label(value).classes(
+                            f'text-sm font-bold {"text-green-400" if positive else "text-red-400"}'
+                        )
