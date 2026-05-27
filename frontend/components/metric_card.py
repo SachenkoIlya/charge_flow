@@ -19,13 +19,19 @@ def metric_card(metric: dict):
         p-3 text-white h-[105px] overflow-hidden
         '''
     ):
-        with ui.row().classes('items-start gap-3'):
+        with ui.row().classes(
+            # 'items-start gap-3'
+            'items-start gap-3 w-full overflow-hidden'
+        ):
             with ui.element('div').classes(
                 f'{metric["icon_bg"]} w-10 h-10 rounded-lg flex items-center justify-center shrink-0'
             ):
                 ui.icon(metric['icon']).classes('text-white text-lg')
 
-            with ui.column().classes('gap-0 min-w-0'):
+            with ui.column().classes(
+                # 'gap-0 min-w-0'
+                'gap-0 min-w-0 flex-1'
+            ):
                 ui.label(metric['title']).classes('text-sm text-white font-semibold')
                 ui.label(metric['subtitle']).classes('text-xs text-gray-400')
 
