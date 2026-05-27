@@ -1,3 +1,4 @@
+from core.security.settings import settings
 from nicegui import ui
 from nicegui import app
 
@@ -7,9 +8,9 @@ import frontend.pages.control_panel
 import frontend.pages.connect_operator
 import frontend.pages.trends
 import frontend.pages.summary
-from dotenv import load_dotenv
-import os
-load_dotenv()
+import frontend.pages.finance
+
+
 
 
 
@@ -25,9 +26,9 @@ def root():
 ui.run(
     language='ru',
     dark=True,
-    storage_secret=os.getenv('SECRET_KEY_FROM_UI'),
-    host=os.getenv('FRONTEND_HOST', '0.0.0.0'),
-    port=int(os.getenv('FRONTEND_PORT', 8080)),
+    storage_secret=settings.SECRET_KEY_FROM_UI,
+    host=settings.FRONTEND_HOST,
+    port=settings.FRONTEND_PORT
 )
 
 # py -m frontend.main

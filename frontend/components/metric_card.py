@@ -1,6 +1,17 @@
 from nicegui import ui
 
 
+def render_metrics(metrics: list, columns:int):
+
+    with ui.grid(columns=columns).classes(
+        'w-full gap-4 mt-6'
+    ):
+        for metric in metrics:
+            metric_card(metric)
+
+
+
+
 def metric_card(metric: dict):
     with ui.card().classes(
         '''

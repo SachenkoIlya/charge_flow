@@ -2,21 +2,10 @@
 from frontend.components.drawer import render_sidebar
 
 from frontend.features.base.panel import BasePanel
-from frontend.features.summary.render.tables_section import (
-    render_tables_section, 
-    TOP_ROWS, 
-    REVERS_ROWS
-)
-from frontend.features.summary.render.charts import (
-    render_chart, 
-    CHART_METRICS
-)
-
-from frontend.features.summary.render.metrics import METRICS
-from frontend.components.metric_card import render_metrics 
-from frontend.api.client import frontend_api
+from frontend.features.finance.render.metrics import FINANCE_METRICS
 from frontend.components.render_title import render_title
 from frontend.components.metric_card import render_metrics 
+from frontend.api.client import frontend_api
 
 from dataclasses import dataclass
 from copy import deepcopy
@@ -29,9 +18,10 @@ from nicegui import ui
 class Panel(BasePanel):
     user: dict
     request: Request
-    endpoints_name: str = 'summary'
-    page_key = 'summary'
+    endpoints_name: str = 'finance'
+    page_key = 'finance'
 
+    
     async def render(self):
         self.apply_filters()
         # loaded = await self.load_data()
@@ -70,12 +60,10 @@ class Panel(BasePanel):
 
     async def render_content(self):
         with ui.element('div').style('zoom: 0.8'):
-            await render_title(
-                label='Общая сводка по сети',
-                label_aggre='Executive Dashboard',
+            render_title(
+                label='Фиинансы и прибыльность',
+                label_aggre='Finance & Profitability',
                 page_key=self.page_key,
-                on_date_change=self.on_date_change,
+                on_date_change=self.on_date_change 
             )
-            render_metrics(metrics=METRICS, columns=5)
-            render_chart(CHART_METRICS)
-            render_tables_section(TOP_ROWS, REVERS_ROWS)
+            render_metrics(metrics=FINANCE_METRICS, columns=6)
