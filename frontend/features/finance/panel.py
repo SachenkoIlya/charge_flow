@@ -63,7 +63,7 @@ class Panel(BasePanel):
                             flex-1
                             h-screen
                             overflow-hidden
-                            px-10
+                            px-8
                             py-2
                         """
                 ) as self.container:
