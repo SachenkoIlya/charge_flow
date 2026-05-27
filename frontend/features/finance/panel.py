@@ -6,7 +6,6 @@ from frontend.features.finance.charts.render_charts import render_finance_charts
 from frontend.features.finance.render.metrics import FINANCE_METRICS
 from frontend.components.render_title import render_title
 from frontend.components.metric_card import render_metrics 
-from components.chart_card import chart_card
 from frontend.api.client import frontend_api
 
 from dataclasses import dataclass
