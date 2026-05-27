@@ -64,7 +64,7 @@ def render_pnl_table(rows: list[dict]):
                             cls = 'w-[130px] shrink-0 truncate whitespace-nowrap'
 
                             if key == 'station':
-                                cls = 'w-[150px] shrink-0 truncate whitespace-nowrap'
+                                cls = 'w-[130px] shrink-0 truncate whitespace-nowrap'
 
                             if key == 'margin':
                                 cls += ' text-green-400 font-semibold'
