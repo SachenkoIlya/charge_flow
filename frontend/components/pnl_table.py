@@ -4,7 +4,7 @@ def render_pnl_table(rows: list[dict]):
        with ui.card().classes(
         '''
             w-full
-            h-[500px]
+            h-[450px]
             bg-[#101923]/90
             border border-[#1f2937]
             rounded-xl
