@@ -9,7 +9,7 @@ FINANCE_METRICS = [
     },
 
     {
-        'icon': 'monitoring',
+        'icon': 'trending_up',
         'icon_bg': 'bg-orange-500',
         'title': 'EBITDA сети',
         'subtitle': 'опер. прибыль',
