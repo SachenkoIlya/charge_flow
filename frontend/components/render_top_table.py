@@ -40,52 +40,54 @@ def render_plan_fact_table(title: str, rows: list[dict], height:int):
         ui.label(title).classes(
             'text-base font-bold mb-4 text-white'
         )
-
-        with ui.grid(
-            columns='1.4fr 1fr 1fr 1fr 70px'
-        ).classes(
-            'w-full text-xs text-gray-400 mb-2'
+        with ui.element('div').classes(
+            'h-[195px] overflow-y-auto pr-2'
         ):
-
-            ui.label('Показатель')
-            ui.label('План')
-            ui.label('Факт')
-            ui.label('Отклонение')
-            ui.label('%')
-
-        for row in rows:
-
-            color = (
-                'text-green-400'
-                if row['positive']
-                else 'text-red-400'
-            )
-
             with ui.grid(
                 columns='1.4fr 1fr 1fr 1fr 70px'
             ).classes(
-                '''
-                w-full
-                text-sm
-                text-gray-200
-                py-2
-                border-t border-[#1f2937]
-                items-center
-                '''
+                'w-full text-xs text-gray-400 mb-2'
             ):
 
-                ui.label(row['metric']).classes(
-                    'text-gray-300'
+                ui.label('Показатель')
+                ui.label('План')
+                ui.label('Факт')
+                ui.label('Отклонение')
+                ui.label('%')
+
+            for row in rows:
+
+                color = (
+                    'text-green-400'
+                    if row['positive']
+                    else 'text-red-400'
                 )
 
-                ui.label(row['plan'])
+                with ui.grid(
+                    columns='1.4fr 1fr 1fr 1fr 70px'
+                ).classes(
+                    '''
+                    w-full
+                    text-sm
+                    text-gray-200
+                    py-2
+                    border-t border-[#1f2937]
+                    items-center
+                    '''
+                ):
 
-                ui.label(row['fact'])
+                    ui.label(row['metric']).classes(
+                        'text-gray-300'
+                    )
 
-                ui.label(row['delta']).classes(
-                    color
-                )
+                    ui.label(row['plan'])
 
-                ui.label(row['percent']).classes(
-                    f'{color} font-semibold text-right'
-                )
+                    ui.label(row['fact'])
+
+                    ui.label(row['delta']).classes(
+                        color
+                    )
+
+                    ui.label(row['percent']).classes(
+                        f'{color} font-semibold text-right'
+                    )
