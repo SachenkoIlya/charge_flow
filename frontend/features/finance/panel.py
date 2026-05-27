@@ -2,9 +2,11 @@
 from frontend.components.drawer import render_sidebar
 
 from frontend.features.base.panel import BasePanel
+from frontend.features.finance.charts.render_charts import render_finance_charts
 from frontend.features.finance.render.metrics import FINANCE_METRICS
 from frontend.components.render_title import render_title
 from frontend.components.metric_card import render_metrics 
+from components.chart_card import chart_card
 from frontend.api.client import frontend_api
 
 from dataclasses import dataclass
@@ -12,7 +14,7 @@ from copy import deepcopy
 from fastapi import Request
 from nicegui import ui
 
-
+from frontend.features.finance.charts.cashflow import CASHFLOW_METRICS
 
 @dataclass
 class Panel(BasePanel):
@@ -66,4 +68,11 @@ class Panel(BasePanel):
                 page_key=self.page_key,
                 on_date_change=self.on_date_change 
             )
-            render_metrics(metrics=FINANCE_METRICS, columns=len(FINANCE_METRICS))
+            render_metrics(
+                metrics=FINANCE_METRICS, 
+                columns=len(FINANCE_METRICS)
+            )
+            
+            render_finance_charts(
+                cashflow=CASHFLOW_METRICS
+            )
