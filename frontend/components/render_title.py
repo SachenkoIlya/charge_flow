@@ -52,13 +52,11 @@ async def render_title(
             page = app.storage.user.get('pages', {})
             page_state = page.setdefault(page_key, {})
             
-            if page_state.get('toggle_value') is None:
-                page_state['toggle_value'] = data.get('default_value')
-            
-            page = app.storage.user.get('pages', {})
-            current_value = page_state.get('toggle_value')
-
             toggle = data.get('toggle')
+            if current_value not in toggle:
+                current_value = data.get('default_value')
+                page_state['toggle_value'] = current_value
+            
             
             period_toggle = ui.toggle(
                 toggle,
@@ -84,7 +82,7 @@ async def render_title(
 
                 logger.debug(f"old_value: {old_value}")
                 logger.debug(f"new_value: {new_value}")
-                
+
                 if old_value == new_value:
                     return
 
