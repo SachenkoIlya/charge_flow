@@ -68,17 +68,17 @@ async def render_form(data: dict[str, list], selected_station:dict, mode:str = '
     ):
         with ui.card().classes(
             '''
-            w-full
-            max-w-2xl
-            p-8
-            shadow-xl
-            rounded-2xl
-            gap-5
-            bg-[#101923]/90
-            text-white
+                w-full
+                max-w-2xl
+                h-[620px]
+                p-8
+                rounded-2xl
+                bg-[#101923]/90
+                text-white
+                overflow-hidden
             '''
         ):
-            with ui.column().classes('w-full gap-1 mb-4'):
+            with ui.column().classes('w-full h-full'):
                 ui.label(f'{mode.upper()}').classes(
                     'text-2xl font-bold text-white'
                 )
