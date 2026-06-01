@@ -45,23 +45,21 @@ async def render_title(
             ui.label(label_aggre).classes(
                 'text-sm text-gray-400 mt-1'
             )
-
-        page = app.storage.user.get('pages', {})
-        page_state = page.setdefault(page_key, {})
-        logger.debug(f"page: {page_key}")
-        logger.debug(f"page_state: {page_state}")
-
-       
+        
         data = get_data_from_map(page_key)
 
         if data:
-            toggle = data.get('toggle')
-            current_value = page_state.get('toggle_value')
+            page = app.storage.user.get('pages', {})
+            page_state = page.setdefault(page_key, {})
             
-            if current_value not in toggle:
-                current_value = data.get('default_value')
-                page_state['toggle_value'] = current_value
+            if page_state.get('toggle_value') is None:
+                page_state['toggle_value'] = data.get('default_value')
+            
+            page = app.storage.user.get('pages', {})
+            current_value = page_state.get('toggle_value')
 
+            toggle = data.get('toggle')
+            
             period_toggle = ui.toggle(
                 toggle,
                 value=current_value,
@@ -84,6 +82,9 @@ async def render_title(
                 old_value = page_state.get('toggle_value')
                 new_value = e.args
 
+                logger.debug(f"old_value: {old_value}")
+                logger.debug(f"new_value: {new_value}")
+                
                 if old_value == new_value:
                     return
 
