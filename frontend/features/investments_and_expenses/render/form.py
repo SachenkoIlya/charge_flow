@@ -13,6 +13,7 @@ EXPENSES_MAP = {
         'insurance': 'Страхование',
         'service_maintenance': 'Сервисное обслуживание',
         'other_expenses': 'Прочие расходы',
+        'comment': 'Комментарий'
     },
 
     'capex': {
@@ -20,6 +21,7 @@ EXPENSES_MAP = {
         'equipment_purchase': 'Приобретение оборудования (ЭЗС)',
         'construction_and_installation': 'СМР и пусконаладочные работы',
         'other_capex': 'Прочие капитальные расходы',
+        'comment': 'Комментарий'
     },
 }
 
@@ -54,6 +56,11 @@ async def render_form(data: dict[str, list], selected_station:dict, mode:str = '
                 color='red'
             )
             return
+        if len(payload.get('comment')) >= 250:
+            ui.notify(
+                'Комментарий не должен превышать 250 символов',
+                color='red'
+            )
         model = resolve_model(payload, mode)
         logger.debug(model)
 
@@ -107,6 +114,16 @@ async def render_form(data: dict[str, list], selected_station:dict, mode:str = '
                         'dense'
                     )
 
+                inputs['comment'] = ui.textarea(
+                    label='Комментарий',
+                    placeholder='Необязательный комментарий',
+                    max_length=250,
+                ).props(
+                    'filled counter'
+                ).classes(
+                    'w-full'
+                )
+                
                 ui.button(
                     'Применить',
                     on_click=submit
