@@ -5,6 +5,8 @@ from frontend.components.render_title import render_title
 from frontend.features.base.panel import BasePanel
 from nicegui import ui, app
 from core.logger.logger import logger
+from copy import deepcopy
+
 
 @dataclass
 class Panel(BasePanel):
@@ -63,8 +65,9 @@ class Panel(BasePanel):
             )
     
     async def load_data(self):
+        payload = deepcopy(self.payload)
         logger.debug(f"{self.page_key}: зашли в load_data".upper())
-        logger.debug(f"payload: {self.payload}")
+        logger.debug(f"payload: {payload}")
         return True
 
         
