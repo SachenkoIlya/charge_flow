@@ -80,8 +80,12 @@ async def render_title(
                 page_state = page.setdefault(page_key, {})
 
                 old_value = page_state.get('toggle_value')
-                new_value = e.args[1].get('label')
-
+                raw_value = e.args
+                if isinstance(raw_value, list) and len(raw_value) > 1:
+                    new_value = e.args[1].get('label')
+                else:
+                    new_value = raw_value
+                    
                 logger.debug(f"old_value: {old_value}")
                 logger.debug(f"new_value: {new_value}")
 

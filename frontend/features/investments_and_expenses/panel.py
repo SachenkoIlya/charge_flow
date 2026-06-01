@@ -60,6 +60,7 @@ class Panel(BasePanel):
     
     async def load_data(self):
         logger.debug(f"{self.page_key}: зашли в load_data".upper())
+        logger.debug(f"payload: {self.payload}")
         return True
 
         
