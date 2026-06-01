@@ -77,7 +77,7 @@ class Panel(BasePanel):
             
             logger.debug(f"перед render_form {self.page_key} проверяем")
             logger.debug(f"toggle_value = {toggle_value}")
-            render_form(EXPENSES_MAP, toggle_value.lower())
+            await render_form(EXPENSES_MAP, toggle_value.lower())
             
     async def load_data(self):
         payload = deepcopy(self.payload)

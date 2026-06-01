@@ -1,5 +1,9 @@
-from core.logger.logger import logger
+# from core.logger.logger import logger
 
-async def submit(data:dict):
-    logger.debug(f"зашли в submit")
-    logger.debug(data)
+# async def submit():
+#     payload = {
+#         key: input_.value
+#         for key, input_ in inputs.items()
+#     }
+
+#     logger.debug(payload)
