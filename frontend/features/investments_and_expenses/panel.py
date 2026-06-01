@@ -4,7 +4,7 @@ from frontend.components.drawer import render_sidebar
 from frontend.components.render_title import render_title
 from frontend.features.base.panel import BasePanel
 from nicegui import ui
-
+from core.logger.logger import logger
 
 @dataclass
 class Panel(BasePanel):
@@ -16,9 +16,9 @@ class Panel(BasePanel):
     
     async def render(self):
         self.apply_filters()
-        # loaded = await self.load_data()
-        # if not loaded:
-        #     return
+        loaded = await self.load_data()
+        if not loaded:
+            return
         
         role = self.user.get('role')
 
@@ -57,6 +57,9 @@ class Panel(BasePanel):
                 page_key=self.page_key,
                 on_date_change=self.on_date_change 
             )
-
+    
+    async def load_data(self):
+        logger.debug(f"{self.page_key}: зашли в load_data".upper())
+        return None
 
         
