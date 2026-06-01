@@ -1,5 +1,6 @@
 from nicegui import  ui
 from frontend.components.layouts.register_form import RegisterForm
+from frontend.components.setup_theme import setup_theme
 
 
 
@@ -17,6 +18,7 @@ async def register_page():
 
     :return: None
     """
+    setup_theme()
     ui.query('body').classes('bg-gray-100 m-0 overflow-hidden')
     with ui.column().classes(
         'w-full h-screen items-center justify-center'
