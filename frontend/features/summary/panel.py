@@ -38,9 +38,9 @@ class Panel(BasePanel):
 
         page_state.setdefault('toggle_value', 'ВСЕ')
         self.apply_filters()
-        # loaded = await self.load_data()
-        # if not loaded:
-        #     return
+        loaded = await self.load_data()
+        if not loaded:
+            return
         
         role = self.user.get('role')
 
