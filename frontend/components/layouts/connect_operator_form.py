@@ -14,54 +14,44 @@ class ConnectOperatorForm:
     endpoints_name = 'operators_connect'
     page_ky = 'operators_connect'
 
-
     async def render(self):
         role = self.user.get('role')
 
         with ui.element('div').classes(
-            """
-                w-screen
-                h-screen
-                flex
-                bg-gradient-to-br
-                from-[#050b12]
-                via-[#08111b]
-                to-[#0b1724]
-                text-white
-                overflow-hidden
-            """
+            '''
+            w-screen h-screen flex
+            bg-gradient-to-br from-[#050b12] via-[#08111b] to-[#0b1724]
+            text-white overflow-hidden
+            '''
         ):
             render_sidebar(role=role)
 
             with ui.element('main').classes(
-                # 'w-full h-screen flex items-center justify-center'
-                'w-full h-screen flex items-start justify-center pt-20'
+                'flex-1 h-screen flex items-start justify-center pt-20'
             ):
                 with ui.card().classes(
-                    'w-full max-w-md p-8 shadow-lg rounded-2xl gap-4'
+                    '''
+                    w-full max-w-md p-8 shadow-lg rounded-2xl gap-4
+                    bg-[#101923]/90 border border-[#1f2937] text-white
+                    '''
                 ):
-                    ui.label('Подключение оператора').classes(
-                        'text-xl font-semibold'
-                    )
+                    ui.label('Подключение оператора').classes('text-xl font-semibold')
+
                     ui.label(
                         'Введите email пользователя (инвестора) и данные оператора '
                         'для подключения к системе.'
-                    ).classes('text-sm text-gray-500')
+                    ).classes('text-sm text-gray-400')
 
-                    ui.separator()
+                    ui.separator().classes('bg-[#1f2937]')
 
-                
-                    container = ui.column().classes('w-full gap-3')
-
-                    with container:
-                        # 🔹 Пользователь
+                    with ui.column().classes('w-full gap-3') as container:
                         ui.label('Пользователь').classes('text-xs text-gray-400')
+
                         self.email = ui.input(
                             'Email',
                             placeholder='email зарегистрированного пользователя'
                         ).classes('w-full')
 
-                        # 🔹 Оператор
                         ui.label('Данные оператора').classes('text-xs text-gray-400 mt-2')
 
                         self.login = ui.input('Login').classes('w-full')
@@ -83,7 +73,7 @@ class ConnectOperatorForm:
                         ).classes('mt-4 w-full')
 
                     container.on('keydown.enter', lambda e: self.submit())
-        
+            
 
     async def submit(self):
         if not all([
