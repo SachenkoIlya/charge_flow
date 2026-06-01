@@ -39,7 +39,8 @@ class Panel(BasePanel):
         page = app.storage.user.setdefault('pages', {})
         page_state = page.setdefault(self.page_key, {})
 
-        page_state.setdefault('toggle_value', 'ВСЕ')
+        if page_state.get('toggle_value') is None:
+            page_state['toggle_value'] = 'ВСЕ'
         self.apply_filters()
         loaded = await self.load_data()
         if not loaded:

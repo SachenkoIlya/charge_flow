@@ -19,8 +19,10 @@ class Panel(BasePanel):
     async def render(self):
         page = app.storage.user.setdefault('pages', {})
         page_state = page.setdefault(self.page_key, {})
-
-        page_state.setdefault('toggle_value', 'CAPEX')
+        
+        if page_state.get('toggle_value') is None:
+            page_state['toggle_value'] = 'CAPEX'
+            
         self.apply_filters()
         loaded = await self.load_data()
         if not loaded:
