@@ -11,7 +11,7 @@ from frontend.features.summary.render.charts import (
     render_chart, 
     CHART_METRICS
 )
-
+from core.logger.logger import logger
 from frontend.features.summary.render.metrics import METRICS
 from frontend.components.metric_card import render_metrics 
 from frontend.api.client import frontend_api
@@ -21,7 +21,7 @@ from frontend.components.metric_card import render_metrics
 from dataclasses import dataclass
 from copy import deepcopy
 from fastapi import Request
-from nicegui import ui
+from nicegui import ui, app
 
 
 
@@ -33,6 +33,10 @@ class Panel(BasePanel):
     page_key = 'summary'
 
     async def render(self):
+        page = app.storage.user.setdefault('pages', {})
+        page_state = page.setdefault(self.page_key, {})
+
+        page_state.setdefault('toggle_value', 'ВСЕ')
         self.apply_filters()
         # loaded = await self.load_data()
         # if not loaded:
@@ -79,3 +83,10 @@ class Panel(BasePanel):
             render_metrics(metrics=METRICS, columns=5)
             render_chart(CHART_METRICS)
             render_tables_section(TOP_ROWS, REVERS_ROWS)
+
+    async def load_data(self):
+        logger.debug(f"{self.page_key}: зашли в load_data".upper())
+        logger.debug(f"payload: {self.payload}")
+        return True
+
+        
