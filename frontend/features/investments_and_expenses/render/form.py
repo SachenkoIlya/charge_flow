@@ -78,15 +78,14 @@ async def render_form(data: dict[str, list], selected_station:dict, mode:str = '
                     'text-2xl font-bold text-white'
                 )
                 ui.label(
-                    'Указывайте суммы только цифрами, без пробелов и текста.'
-                ).classes(
-                    'text-xs text-gray-500'
-                )
-
-                ui.label(
                     'Заполните статьи расходов для финансовой модели'
                 ).classes(
                     'text-sm text-gray-400'
+                )
+                ui.label(
+                    'Указывайте суммы только цифрами, без пробелов и текста.'
+                ).classes(
+                    'text-xs text-gray-500'
                 )
 
             ui.separator().classes('bg-[#1f2937]')
@@ -96,7 +95,7 @@ async def render_form(data: dict[str, list], selected_station:dict, mode:str = '
                     selected_station,
                     label='Cтанция',
                     with_input=True
-                ).props('outlined dense').classes('w-full')
+                ).props('dense').classes('w-full')
     
                 for key, label in category.items():
                     inputs[key] = ui.input(
@@ -105,7 +104,7 @@ async def render_form(data: dict[str, list], selected_station:dict, mode:str = '
                     ).classes(
                         'w-full'
                     ).props(
-                        'dense outlined'
+                        'dense'
                     )
 
                 ui.button(

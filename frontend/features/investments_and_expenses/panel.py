@@ -85,7 +85,7 @@ class Panel(BasePanel):
                 data=EXPENSES_MAP, 
                 selected_station=SELECTED_STATION, 
                 mode=toggle_value.lower()
-            )
+                )
             
     async def load_data(self):
         payload = deepcopy(self.payload)
