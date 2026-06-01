@@ -2,19 +2,20 @@ from nicegui import ui
 
 from frontend.components.calendar import get_calendar
 from core.logger.logger import logger
-
+from nicegui import app
 
 
 MAP = {
     'finance': {
         'toggle': ['6 МЕС', '1 ГОД', 'ВСЕ'],
-        'value': 'ВСЕ'
+        'default_value': 'ВСЕ'
     },
     'investments_and_expenses': {
         'toggle': ['CAPEX', 'OPEX'],
-        'value': 'CAPEX'
+        'default_value': 'CAPEX'
     }
 }
+
 
 def get_data_from_map(page_key: str):
     data = MAP.get(page_key, None)
@@ -40,14 +41,25 @@ async def render_title(
                 'text-sm text-gray-400 mt-1'
             )
 
+        page = app.storage.user.get('pages', {})
+        page_state = page.setdefault(page_key, {})
+        logger.debug(f"page: {page_key}")
+        logger.debug(f"page_state: {page_state}")
+
+       
         data = get_data_from_map(page_key)
+
         if data:
             toggle = data.get('toggle')
-            value = data.get('value')
             
+            current_value = page_state.get(
+                'toggle_value',
+                data.get('default_value')
+            )
             period_toggle = ui.toggle(
                 toggle,
-                value=value,
+                value=current_value,
+
             ).props(
                 'unelevated toggle-color=green'
             ).classes(
@@ -60,12 +72,27 @@ async def render_title(
                 font-bold
                 '''
             )
+            async def handle_toggle(e):
+                page = app.storage.user.setdefault('pages', {})
+                page_state = page.setdefault(page_key, {})
+
+                old_value = page_state.get('toggle_value')
+                new_value = e.args
+
+                if old_value == new_value:
+                    return
+
+                page_state['toggle_value'] = new_value
+                app.storage.user['pages'] = page
+
+                if on_date_change:
+                    await on_date_change()
+
             period_toggle.on(
                 'update:model-value',
-                lambda e: logger.debug(f"period:, {e.args}")
+                handle_toggle
             )
-            if on_date_change:
-                await on_date_change()
+           
         else:
             await get_calendar(
                 page_key=page_key,

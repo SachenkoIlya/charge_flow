@@ -18,6 +18,7 @@ class BasePanel(ABC):
             'date_from': today,
             'date_to': today,
             'station': None,
+            'toggle_value': None
         })
 
         context = app.storage.user.setdefault('context', {})
