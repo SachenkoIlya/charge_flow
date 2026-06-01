@@ -75,6 +75,7 @@ def render_sidebar(role: str):
             # nav_item('dashboard', 'Общая сводка', '/control_panel', active=True)
             nav_item('dashboard', 'Сводка', '/summary')
             nav_item('dashboard', 'Финансы', '/finance')
+            nav_item('account_balance_wallet', 'CAPEX & OPEX', '/investments_and_expenses')
             # nav_item('trending_up', 'Тренды', '/trends')
            
 

@@ -102,7 +102,7 @@ class ConnectOperatorForm:
             'password': self.password.value,
             'login': self.login.value
         }
-        self.operators_connect()
+        await self.operators_connect()
 
 
     async def operators_connect(self):
