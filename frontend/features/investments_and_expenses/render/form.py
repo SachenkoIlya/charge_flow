@@ -90,12 +90,12 @@ async def render_form(data: dict[str, list], selected_station:dict, mode:str = '
                 ui.label(
                     'Заполните статьи расходов для финансовой модели'
                 ).classes(
-                    'text-sm text-gray-400'
+                    'text-xl text-gray-400'
                 )
                 ui.label(
                     'Указывайте суммы только цифрами, без пробелов и текста.'
                 ).classes(
-                    'text-xs text-gray-500'
+                    'text-l text-gray-500'
                 )
 
             ui.separator().classes('bg-[#1f2937]')
