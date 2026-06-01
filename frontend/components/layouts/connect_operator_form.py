@@ -33,7 +33,7 @@ class ConnectOperatorForm:
         ):
             render_sidebar(role=role)
 
-            with ui.element('div').classes(
+            with ui.element('main').classes(
                 # 'w-full h-screen flex items-center justify-center'
                 'w-full h-screen flex items-start justify-center pt-20'
             ):
