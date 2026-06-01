@@ -9,7 +9,7 @@ import frontend.pages.connect_operator
 import frontend.pages.trends
 import frontend.pages.summary
 import frontend.pages.finance
-
+import frontend.pages.investments_and_expenses
 
 
 

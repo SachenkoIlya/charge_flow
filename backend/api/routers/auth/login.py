@@ -91,7 +91,7 @@ async def check_login(
         }
     )
     redirect = RedirectResponse(
-        url=f'{frontend_url}/control_panel',
+        url=f'{frontend_url}/summary',
         status_code=302
     )
     redirect.set_cookie(

@@ -69,19 +69,19 @@ def render_sidebar(role: str):
             overflow-hidden
         """
     ):
-        ui.label('Панель').classes('text-xl font-bold text-white mb-4')
+        ui.label('Меню').classes('text-xl font-bold text-white mb-4')
 
         with ui.column().classes('w-full gap-2'):
-            nav_item('dashboard', 'Общая сводка', '/control_panel', active=True)
+            # nav_item('dashboard', 'Общая сводка', '/control_panel', active=True)
             nav_item('dashboard', 'Сводка', '/summary')
             nav_item('dashboard', 'Финансы', '/finance')
-            nav_item('trending_up', 'Тренды', '/trends')
+            # nav_item('trending_up', 'Тренды', '/trends')
            
 
             ui.separator().classes('bg-[#1f2937] my-4')
 
         if role == 'admin':
-            ui.label('Адмиин панель').classes('text-xl font-bold text-white mb-4')
+            ui.label('Адмиин меню').classes('text-xl font-bold text-white mb-4')
             with ui.column().classes('w-full gap-2'):    
                 nav_item('groups', 'Инвесторы', '/investors')
                 nav_item('link', 'Подключить оператора', '/operator')

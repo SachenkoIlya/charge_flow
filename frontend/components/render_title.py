@@ -3,6 +3,25 @@ from nicegui import ui
 from frontend.components.calendar import get_calendar
 from core.logger.logger import logger
 
+
+
+MAP = {
+    'finance': {
+        'toggle': ['6 МЕС', '1 ГОД', 'ВСЕ'],
+        'value': 'ВСЕ'
+    },
+    'investments_and_expenses': {
+        'toggle': ['CAPEX', 'OPEX'],
+        'value': 'CAPEX'
+    }
+}
+
+def get_data_from_map(page_key: str):
+    data = MAP.get(page_key, None)
+    if not data: 
+        return None
+    return data
+
 async def render_title(
     label: str, 
     label_aggre: str,
@@ -21,10 +40,14 @@ async def render_title(
                 'text-sm text-gray-400 mt-1'
             )
 
-        if page_key in {'finance'}:
+        data = get_data_from_map(page_key)
+        if data:
+            toggle = data.get('toggle')
+            value = data.get('value')
+            
             period_toggle = ui.toggle(
-                ['6 МЕС', '1 ГОД', 'ВСЕ'],
-                value='ВСЕ',
+                toggle,
+                value=value,
             ).props(
                 'unelevated toggle-color=green'
             ).classes(
