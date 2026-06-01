@@ -7,6 +7,8 @@ from nicegui import ui, app
 from core.logger.logger import logger
 from copy import deepcopy
 
+from frontend.features.investments_and_expenses.render.form import EXPENSES_MAP, render_form
+
 
 @dataclass
 class Panel(BasePanel):
@@ -20,9 +22,12 @@ class Panel(BasePanel):
         page = app.storage.user.setdefault('pages', {})
         page_state = page.setdefault(self.page_key, {})
         
+        
         if page_state.get('toggle_value') is None:
             page_state['toggle_value'] = 'CAPEX'
-            
+        
+        self.toggle_value = page_state.get('toggle_value')
+        
         self.apply_filters()
         loaded = await self.load_data()
         if not loaded:
@@ -58,14 +63,18 @@ class Panel(BasePanel):
 
 
     async def render_content(self):
-         with ui.element('div').style('zoom: 1'):
+        
+
+        with ui.element('div').style('zoom: 1'):
             await render_title(
                 label='CAPEX & OPEX',
                 label_aggre='Инвестиции и операционные расходы',
                 page_key=self.page_key,
                 on_date_change=self.on_date_change 
             )
-    
+            
+            render_form(EXPENSES_MAP, self.toggle_value)
+            
     async def load_data(self):
         payload = deepcopy(self.payload)
         logger.debug(f"{self.page_key}: зашли в load_data".upper())
