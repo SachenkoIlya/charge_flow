@@ -13,7 +13,6 @@ EXPENSES_MAP = {
         'insurance': 'Страхование',
         'service_maintenance': 'Сервисное обслуживание',
         'other_expenses': 'Прочие расходы',
-        'comment': 'Комментарий'
     },
 
     'capex': {
@@ -21,7 +20,6 @@ EXPENSES_MAP = {
         'equipment_purchase': 'Приобретение оборудования (ЭЗС)',
         'construction_and_installation': 'СМР и пусконаладочные работы',
         'other_capex': 'Прочие капитальные расходы',
-        'comment': 'Комментарий'
     },
 }
 
@@ -66,7 +64,7 @@ async def render_form(data: dict[str, list], selected_station:dict, mode:str = '
 
 
     with ui.element('main').classes(
-        'flex-1 h-screen flex items-start justify-center pt-16'
+        'flex-1 h-screen flex items-start justify-center pt-10'
     ):
         with ui.card().classes(
             '''
