@@ -7,13 +7,20 @@ from nicegui import app
 
 MAP = {
     'finance': {
-        'toggle': ['6 МЕС', '1 ГОД', 'ВСЕ'],
-        'default_value': 'ВСЕ'
+        'toggle': [
+            {'label': '6 МЕС', 'value': '6m'},
+            {'label': '1 ГОД', 'value': '1y'},
+            {'label': 'ВСЕ', 'value': 'all'},
+        ],
+        'default_value': 'all',
     },
     'investments_and_expenses': {
-        'toggle': ['CAPEX', 'OPEX'],
-        'default_value': 'CAPEX'
-    }
+        'toggle': [
+            {'label': 'CAPEX', 'value': 'capex'},
+            {'label': 'OPEX', 'value': 'opex'},
+        ],
+        'default_value': 'capex',
+    },
 }
 
 
@@ -59,7 +66,6 @@ async def render_title(
             period_toggle = ui.toggle(
                 toggle,
                 value=current_value,
-
             ).props(
                 'unelevated toggle-color=green'
             ).classes(
