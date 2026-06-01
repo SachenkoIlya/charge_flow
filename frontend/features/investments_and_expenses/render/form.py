@@ -1,7 +1,7 @@
 from nicegui import ui
 from frontend.features.investments_and_expenses.render.submit import submit
 EXPENSES_MAP = {
-    'OPEX': {
+    'opex': {
         'electricity_compensation': 'Компенсация электроэнергии',
         'rent_payment': 'Арендная плата',
         'operator_commission': 'Комиссия оператору',
@@ -12,7 +12,7 @@ EXPENSES_MAP = {
         'other_expenses': 'Прочие расходы',
     },
 
-    'CAPEX': {
+    'capex': {
         'location_search': 'Поиск и согласование локации',
         'equipment_purchase': 'Приобретение оборудования (ЭЗС)',
         'construction_and_installation': 'СМР и пусконаладочные работы',
@@ -34,6 +34,9 @@ def render_form(data: dict[str, list], mode:str = 'opex'):
                 '''
             ):
                 with ui.column().classes('w-full gap-3') as container:
+
+                    ui.label(mode).classes('text-xs text-gray-400')
+                    
                     for key, label in category.items():
                         inputs[key] = ui.input(
                             label=label,
