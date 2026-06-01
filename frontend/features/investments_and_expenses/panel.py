@@ -57,3 +57,6 @@ class Panel(BasePanel):
                 page_key=self.page_key,
                 on_date_change=self.on_date_change 
             )
+
+
+        

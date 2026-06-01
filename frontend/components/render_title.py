@@ -64,7 +64,8 @@ async def render_title(
                 'update:model-value',
                 lambda e: logger.debug(f"period:, {e.args}")
             )
-          
+            if on_date_change:
+                await on_date_change()
         else:
             await get_calendar(
                 page_key=page_key,
