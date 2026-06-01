@@ -117,13 +117,12 @@ async def render_form(data: dict[str, list], selected_station:dict, mode:str = '
                 inputs['comment'] = ui.textarea(
                     label='Комментарий',
                     placeholder='Необязательный комментарий',
-                    max_length=250,
                 ).props(
-                    'filled counter'
+                    'filled counter max_length=250'
                 ).classes(
                     'w-full'
                 )
-                
+
                 ui.button(
                     'Применить',
                     on_click=submit
