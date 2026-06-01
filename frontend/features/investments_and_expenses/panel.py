@@ -7,7 +7,11 @@ from nicegui import ui, app
 from core.logger.logger import logger
 from copy import deepcopy
 
-from frontend.features.investments_and_expenses.render.form import EXPENSES_MAP, render_form
+from frontend.features.investments_and_expenses.render.form import (
+    EXPENSES_MAP, 
+    SELECTED_STATION, 
+    render_form
+)
 
 
 @dataclass
@@ -77,7 +81,11 @@ class Panel(BasePanel):
             
             logger.debug(f"перед render_form {self.page_key} проверяем")
             logger.debug(f"toggle_value = {toggle_value}")
-            await render_form(EXPENSES_MAP, toggle_value.lower())
+            await render_form(
+                data=EXPENSES_MAP, 
+                selected_station=SELECTED_STATION, 
+                mode=toggle_value.lower()
+            )
             
     async def load_data(self):
         payload = deepcopy(self.payload)

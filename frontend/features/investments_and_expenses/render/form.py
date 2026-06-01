@@ -1,6 +1,6 @@
 from nicegui import ui
 from core.logger.logger import logger
-# from frontend.features.investments_and_expenses.render.submit import submit
+from frontend.features.investments_and_expenses.schemas.schemas import schemas
 EXPENSES_MAP = {
     'opex': {
         'electricity_compensation': 'Компенсация электроэнергии',
@@ -21,8 +21,20 @@ EXPENSES_MAP = {
     },
 }
 
+SELECTED_STATION = {
+    '1': 'Все станции',
+    '2': 'Станция 1',
+    '3': 'Станция 2',
+    '4': 'Станция 3'
+}
 
-async def render_form(data: dict[str, list], mode:str = 'opex'):
+
+def resolve_model(payload:dict, mode:str):
+    schema = schemas.get(mode)
+    return schema.model_validate(payload)
+
+
+async def render_form(data: dict[str, list], selected_station:dict, mode:str = 'opex'):
     inputs = {}
     category = data.get(mode)
     async def submit():
@@ -31,6 +43,9 @@ async def render_form(data: dict[str, list], mode:str = 'opex'):
             for key, input_ in inputs.items()
         }
         logger.debug(payload)
+        model = resolve_model(payload, mode)
+        logger.debug(model)
+
         
     with ui.element('main').classes(
         'flex-1 h-screen flex items-start justify-center pt-16'
@@ -62,6 +77,12 @@ async def render_form(data: dict[str, list], mode:str = 'opex'):
             ui.separator().classes('bg-[#1f2937]')
 
             with ui.column().classes('w-full gap-3') as container:
+                inputs['station_id'] = ui.select(
+                    selected_station,
+                    label='Cтанция',
+                    with_input=True
+                ).props('outlined dense').classes('w-full')
+    
                 for key, label in category.items():
                     inputs[key] = ui.input(
                         label=label,
