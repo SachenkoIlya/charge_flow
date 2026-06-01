@@ -64,7 +64,7 @@ async def render_form(data: dict[str, list], selected_station:dict, mode:str = '
 
 
     with ui.element('main').classes(
-        'flex-1 h-screen flex items-start justify-center pt-3'
+        'flex-1 min-h-screen flexjustify-center pt-8'
     ):
         with ui.card().classes(
             '''
