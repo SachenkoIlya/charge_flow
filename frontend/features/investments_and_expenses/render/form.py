@@ -70,7 +70,7 @@ async def render_form(data: dict[str, list], selected_station:dict, mode:str = '
             '''
                 w-full
                 max-w-2xl
-                h-[620px]
+                h-[650px]
                 p-8
                 rounded-2xl
                 bg-[#101923]/90
