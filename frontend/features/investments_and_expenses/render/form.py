@@ -1,6 +1,8 @@
 from nicegui import ui
 from core.logger.logger import logger
 from frontend.features.investments_and_expenses.schemas.schemas import schemas
+from pydantic import ValidationError
+
 EXPENSES_MAP = {
     'opex': {
         'electricity_compensation': 'Компенсация электроэнергии',
@@ -31,8 +33,11 @@ SELECTED_STATION = {
 
 def resolve_model(payload:dict, mode:str):
     schema = schemas.get(mode)
-    return schema.model_validate(payload)
-
+    try:
+        return schema.model_validate(payload)
+    except ValidationError as v:
+        logger.error(str(v))
+        ui.notify('Проверьте корректность введённых сумм', color='red')
 
 async def render_form(data: dict[str, list], selected_station:dict, mode:str = 'opex'):
     inputs = {}
@@ -43,10 +48,16 @@ async def render_form(data: dict[str, list], selected_station:dict, mode:str = '
             for key, input_ in inputs.items()
         }
         logger.debug(payload)
+        if payload.get('station_id') is None:
+            ui.notify(
+                'Выберите станцию',
+                color='red'
+            )
+            return
         model = resolve_model(payload, mode)
         logger.debug(model)
 
-        
+
     with ui.element('main').classes(
         'flex-1 h-screen flex items-start justify-center pt-16'
     ):
@@ -66,6 +77,11 @@ async def render_form(data: dict[str, list], selected_station:dict, mode:str = '
             with ui.column().classes('w-full gap-1 mb-4'):
                 ui.label(f'{mode.upper()}').classes(
                     'text-2xl font-bold text-white'
+                )
+                ui.label(
+                    'Указывайте суммы только цифрами, без пробелов и текста.'
+                ).classes(
+                    'text-xs text-gray-500'
                 )
 
                 ui.label(
