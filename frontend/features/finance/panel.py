@@ -8,7 +8,7 @@ from frontend.features.finance.charts.render_charts import render_finance_charts
 
 
 from frontend.api.client import frontend_api
-
+from core.logger.logger import logger
 from frontend.features.finance.render.metrics import FINANCE_METRICS
 from frontend.features.finance.charts.cashflow import CASHFLOW_METRICS
 from frontend.features.finance.charts.break_even import BREAK_EVEN_METRICS
@@ -22,7 +22,7 @@ from frontend.features.finance.charts.tables_section import (
 from dataclasses import dataclass
 from copy import deepcopy
 from fastapi import Request
-from nicegui import ui
+from nicegui import ui, app
 
 
 
@@ -36,10 +36,14 @@ class Panel(BasePanel):
 
     
     async def render(self):
+        page = app.storage.user.setdefault('pages', {})
+        page_state = page.setdefault(self.page_key, {})
+
+        page_state.setdefault('toggle_value', 'ВСЕ')
         self.apply_filters()
-        # loaded = await self.load_data()
-        # if not loaded:
-        #     return
+        loaded = await self.load_data()
+        if not loaded:
+            return
         
         role = self.user.get('role')
 
@@ -93,3 +97,11 @@ class Panel(BasePanel):
                 rows=PNL_ROWS,
                 plan_rows=PLAN_FACT_ROWS
             )
+
+            
+    async def load_data(self):
+        logger.debug(f"{self.page_key}: зашли в load_data".upper())
+        logger.debug(f"payload: {self.payload}")
+        return True
+
+        

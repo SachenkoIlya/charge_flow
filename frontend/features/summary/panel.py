@@ -33,10 +33,7 @@ class Panel(BasePanel):
     page_key = 'summary'
 
     async def render(self):
-        page = app.storage.user.setdefault('pages', {})
-        page_state = page.setdefault(self.page_key, {})
-
-        page_state.setdefault('toggle_value', 'ВСЕ')
+       
         self.apply_filters()
         loaded = await self.load_data()
         if not loaded:
