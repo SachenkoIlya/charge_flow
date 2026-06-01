@@ -24,7 +24,6 @@ EXPENSES_MAP = {
 }
 
 SELECTED_STATION = {
-    '1': 'Все станции',
     '2': 'Станция 1',
     '3': 'Станция 2',
     '4': 'Станция 3'
@@ -38,6 +37,7 @@ def resolve_model(payload:dict, mode:str):
     except ValidationError as v:
         logger.error(str(v))
         ui.notify('Проверьте корректность введённых сумм', color='red')
+
 
 async def render_form(data: dict[str, list], selected_station:dict, mode:str = 'opex'):
     inputs = {}
@@ -70,7 +70,6 @@ async def render_form(data: dict[str, list], selected_station:dict, mode:str = '
             rounded-2xl
             gap-5
             bg-[#101923]/90
-            border border-[#1f2937]
             text-white
             '''
         ):
