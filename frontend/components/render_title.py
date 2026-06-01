@@ -7,12 +7,8 @@ from nicegui import app
 
 MAP = {
     'finance': {
-        'toggle': [
-            {'label': '6 МЕС', 'value': '6m'},
-            {'label': '1 ГОД', 'value': '1y'},
-            {'label': 'ВСЕ', 'value': 'all'},
-        ],
-        'default_value': 'all',
+        'toggle': ['6 МЕС', '1 ГОД', 'ВСЕ'],
+        'default_value': 'ВСЕ',
     },
       'investments_and_expenses': {
         'toggle': ['CAPEX', 'OPEX'],
@@ -85,9 +81,6 @@ async def render_title(
                     new_value = e.args[1].get('label')
                 else:
                     new_value = raw_value
-                    
-                logger.debug(f"old_value: {old_value}")
-                logger.debug(f"new_value: {new_value}")
 
                 if old_value == new_value:
                     return
