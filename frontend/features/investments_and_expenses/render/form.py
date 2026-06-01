@@ -64,16 +64,16 @@ async def render_form(data: dict[str, list], selected_station:dict, mode:str = '
 
 
     with ui.element('main').classes(
-        'flex-1 h-screen flex items-start justify-center pt-6'
+        'flex-1 h-screen flex items-start justify-center pt-3'
     ):
         with ui.card().classes(
             '''
             w-full
-            max-w-2xl
+            max-w-1xl
             p-8
             shadow-xl
-            rounded-2xl
-            gap-5
+            rounded-1xl
+            gap-3
             bg-[#101923]/90
             text-white
             '''
