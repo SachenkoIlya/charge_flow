@@ -26,7 +26,6 @@ class Panel(BasePanel):
         if page_state.get('toggle_value') is None:
             page_state['toggle_value'] = 'CAPEX'
         
-        self.toggle_value = page_state.get('toggle_value')
         
         self.apply_filters()
         loaded = await self.load_data()
@@ -64,7 +63,10 @@ class Panel(BasePanel):
 
     async def render_content(self):
         
-
+        page = app.storage.user.get('pages', {})
+        page_state = page.get(self.page_key, {})
+        toggle_value = page_state.get('toggle_value', 'CAPEX')
+        
         with ui.element('div').style('zoom: 1'):
             await render_title(
                 label='CAPEX & OPEX',
@@ -74,8 +76,8 @@ class Panel(BasePanel):
             )
             
             logger.debug(f"перед render_form {self.page_key} проверяем")
-            logger.debug(f"toggle_value = {self.toggle_value}")
-            render_form(EXPENSES_MAP, self.toggle_value.lower())
+            logger.debug(f"toggle_value = {toggle_value}")
+            render_form(EXPENSES_MAP, toggle_value.lower())
             
     async def load_data(self):
         payload = deepcopy(self.payload)

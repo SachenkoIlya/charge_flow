@@ -1,7 +1,7 @@
 from nicegui import  ui
 from frontend.components.layouts.register_form import RegisterForm
 from frontend.components.setup_theme import setup_theme
-
+from frontend.utils.config import screen_background
 
 
 @ui.page('/register')
