@@ -2,8 +2,7 @@ from nicegui import ui
 from frontend.utils.utils import utils
 from frontend.api.client import frontend_api
 
-from ..header import  get_header
-from ..drawer import get_drawer
+from frontend.components.drawer import render_sidebar
 from dataclasses import dataclass
 from fastapi import Request
 
@@ -13,12 +12,27 @@ class ConnectOperatorForm:
     user: dict
     request: Request
     endpoints_name = 'operators_connect'
+    page_ky = 'operators_connect'
 
 
     async def render(self):
         role = self.user.get('role')
-        drawer = get_drawer(role=role)
-        await get_header(drawer=drawer, role=role, request=self.request)
+
+        with ui.element('div').classes(
+            """
+                w-screen
+                h-screen
+                flex
+                bg-gradient-to-br
+                from-[#050b12]
+                via-[#08111b]
+                to-[#0b1724]
+                text-white
+                overflow-hidden
+            """
+        ):
+            render_sidebar(role=role)
+
         with ui.element('div').classes(
             # 'w-full h-screen flex items-center justify-center'
             'w-full h-screen flex items-start justify-center pt-20'
