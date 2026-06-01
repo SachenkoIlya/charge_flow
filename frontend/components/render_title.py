@@ -53,6 +53,8 @@ async def render_title(
             page_state = page.setdefault(page_key, {})
             
             toggle = data.get('toggle')
+            current_value = page_state.get('toggle_value')
+
             if current_value not in toggle:
                 current_value = data.get('default_value')
                 page_state['toggle_value'] = current_value
