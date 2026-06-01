@@ -76,6 +76,7 @@ async def render_form(data: dict[str, list], selected_station:dict, mode:str = '
             shadow-xl
             rounded-2xl
             gap-5
+            border
             border-green-500/40
             bg-[#101923]/90
             text-white
