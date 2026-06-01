@@ -15,12 +15,12 @@ MAP = {
         'default_value': 'all',
     },
     'investments_and_expenses': {
-        'toggle': [
-            {'label': 'CAPEX', 'value': 'capex'},
-            {'label': 'OPEX', 'value': 'opex'},
-        ],
-        'default_value': 'capex',
-    },
+        'toggle': {
+            'capex': 'CAPEX',
+            'opex': 'OPEX',
+        },
+        'default_value': 'capex'
+    }
 }
 
 
