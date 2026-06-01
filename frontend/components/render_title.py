@@ -14,12 +14,10 @@ MAP = {
         ],
         'default_value': 'all',
     },
-    'investments_and_expenses': {
-        'toggle': {
-            'capex': 'CAPEX',
-            'opex': 'OPEX',
-        },
-        'default_value': 'capex'
+      'investments_and_expenses': {
+        'toggle': ['CAPEX', 'OPEX'],
+        'default_value': 'CAPEX',
+    
     }
 }
 
@@ -58,11 +56,12 @@ async def render_title(
 
         if data:
             toggle = data.get('toggle')
+            current_value = page_state.get('toggle_value')
             
-            current_value = page_state.get(
-                'toggle_value',
-                data.get('default_value')
-            )
+            if current_value not in toggle:
+                current_value = data.get('default_value')
+                page_state['toggle_value'] = current_value
+
             period_toggle = ui.toggle(
                 toggle,
                 value=current_value,
