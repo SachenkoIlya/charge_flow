@@ -69,11 +69,11 @@ async def render_form(data: dict[str, list], selected_station:dict, mode:str = '
         with ui.card().classes(
             '''
             w-full
-            max-w-1xl
+            max-w-2xl
             p-8
             shadow-xl
-            rounded-1xl
-            gap-3
+            rounded-2xl
+            gap-5
             bg-[#101923]/90
             text-white
             '''
