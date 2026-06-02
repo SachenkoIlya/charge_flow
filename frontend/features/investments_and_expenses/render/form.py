@@ -92,7 +92,7 @@ async def render_form(data: dict[str, list], request: Request, mode:str = 'opex'
             return 
         
         station_label = selected_station.get(str(model.station_id))
-        with ui.dialog() as dialog, ui.card().classes('bg-[#101923] text-white w-[500px]'):
+        with ui.dialog() as dialog, ui.card().classes('bg-[#101923] text-white w-[720px] max-w-[90vw] p-6'):
             ui.label('Подтвердите данные').classes('text-xl font-bold')
 
             ui.separator()
@@ -111,7 +111,7 @@ async def render_form(data: dict[str, list], request: Request, mode:str = 'opex'
                     on_click=lambda: final_submit(model)
                 ).classes('bg-green-600 text-white')
             dialog.open()
-            
+
     with ui.element('main').classes(
         'flex-1 h-screen flex items-start justify-center pt-10 pr-24'
     ):
