@@ -45,11 +45,11 @@ async def get_selected_station(
 
 
 
-async def render_form(data: dict[str, list], selected_station:dict, mode:str = 'opex'):
+async def render_form(data: dict[str, list], selected_station:dict, request: Request, mode:str = 'opex'):
     inputs = {}
     category = data.get(mode)
 
-    selected_station_t = await get_selected_station()
+    selected_station_t = await get_selected_station(request=request)
 
     logger.debug(f"selected_station_t: {selected_station_t}")
 

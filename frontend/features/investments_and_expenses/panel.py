@@ -82,6 +82,7 @@ class Panel(BasePanel):
             logger.debug(f"перед render_form {self.page_key} проверяем")
             logger.debug(f"toggle_value = {toggle_value}")
             await render_form(
+                request=self.request,
                 data=EXPENSES_MAP, 
                 selected_station=SELECTED_STATION, 
                 mode=toggle_value.lower()
