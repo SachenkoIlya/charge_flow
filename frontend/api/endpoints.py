@@ -23,7 +23,7 @@ class Endpoints:
         },
         'stations': {
             'url': 'stations/stations',
-            'method': 'post'
+            'method': 'get'
         }
     }
     
