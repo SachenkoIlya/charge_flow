@@ -6,11 +6,13 @@ from backend.api.routers.dashboard.manager import ManagerMetrics
 from backend.database.get_manager import get_current_token, get_merics
 from backend.core.valid_id import get_valid_id  
 from core.logger.logger import logger
+
+
 ENDPOINT = '/station'
-router = APIRouter(prefix='/dashboard', tags=['station'])
+router = APIRouter(prefix='/stations', tags=['station'])
 
 
-@router.post(ENDPOINT, response_model=list[StationSchemas])
+@router.get(ENDPOINT, response_model=list[StationSchemas])
 async def station(
     data: DashboardFilterSchema,
     metrics: ManagerMetrics=Depends(get_merics),
@@ -20,14 +22,6 @@ async def station(
     logger.debug(data)
     logger.debug(payload)
     
-    role = payload.get('role')
     user_id = payload.get('user_id')
-    requested_id = get_valid_id(
-        role=role,
-        data=data,
-        user_id=user_id
-    )
-
-
     
-    return await metrics.station_info.get_stations(requested_id)
+    return await metrics.station_info.get_stations(user_id)
