@@ -8,18 +8,17 @@ from backend.core.valid_id import get_valid_id
 from core.logger.logger import logger
 
 
-ENDPOINT = '/station'
-router = APIRouter(prefix='/stations', tags=['station'])
+ENDPOINT = '/stations'
+router = APIRouter(prefix='/stations', tags=['stations'])
 
 
 @router.get(ENDPOINT, response_model=list[StationSchemas])
 async def station(
-    data: DashboardFilterSchema,
+    # data: DashboardFilterSchema,
     metrics: ManagerMetrics=Depends(get_merics),
     payload = Depends(get_current_token),
 ):
     
-    logger.debug(data)
     logger.debug(payload)
     
     user_id = payload.get('user_id')
