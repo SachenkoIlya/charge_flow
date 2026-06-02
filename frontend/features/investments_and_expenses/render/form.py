@@ -1,7 +1,9 @@
 from nicegui import ui
 from core.logger.logger import logger
-from frontend.features.investments_and_expenses.schemas.schemas import schemas
-from pydantic import ValidationError
+from frontend.features.investments_and_expenses.schemas.schemas import resolve_model
+from frontend.api.client import frontend_api
+from fastapi import Request
+
 
 EXPENSES_MAP = {
     'opex': {
@@ -31,19 +33,26 @@ SELECTED_STATION = {
     '4': 'Станция 3'
 }
 
+async def get_selected_station(
+    request: Request, 
+    endpoint_name:str='stations'
+) -> list[dict]:
+    
+    return  await frontend_api(
+        endpoint_name=endpoint_name,
+        request=request,
+    )
 
-def resolve_model(payload:dict, mode:str):
-    schema = schemas.get(mode)
-    try:
-        return schema.model_validate(payload)
-    except ValidationError as v:
-        logger.error(str(v))
-        ui.notify('Проверьте корректность введённых сумм', color='red')
 
 
 async def render_form(data: dict[str, list], selected_station:dict, mode:str = 'opex'):
     inputs = {}
     category = data.get(mode)
+
+    selected_station_t = await get_selected_station()
+
+    logger.debug(f"selected_station_t: {selected_station_t}")
+
     async def submit():
         payload = {
             key: input_.value
@@ -101,6 +110,7 @@ async def render_form(data: dict[str, list], selected_station:dict, mode:str = '
             ui.separator().classes('bg-[#1f2937]')
 
             with ui.column().classes('w-full gap-3') as container:
+                
                 inputs['station_id'] = ui.select(
                     selected_station,
                     label='Cтанция',

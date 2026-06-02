@@ -1,6 +1,7 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ValidationError
 from typing import Optional
-
+from nicegui import ui
+from core.logger.logger import logger
 
 class OpexSchema(BaseModel):
     station_id: int
@@ -28,3 +29,12 @@ schemas = {
     'opex': OpexSchema,
     'capex': CapexSchema
 }
+
+
+def resolve_model(payload:dict, mode:str):
+    schema = schemas.get(mode)
+    try:
+        return schema.model_validate(payload)
+    except ValidationError as v:
+        logger.error(str(v))
+        ui.notify('Проверьте корректность введённых сумм', color='red')

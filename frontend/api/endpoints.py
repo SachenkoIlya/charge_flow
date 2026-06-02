@@ -21,6 +21,10 @@ class Endpoints:
             'url': 'auth/login',
             'method': 'post'
         },
+        'stations': {
+            'url': 'stations/stations',
+            'method': 'post'
+        }
     }
     
     @classmethod
