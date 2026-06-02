@@ -78,11 +78,6 @@ async def render_form(data: dict[str, list], request: Request, mode:str = 'opex'
                 color='red'
             )
             return
-        if len(payload.get('comment')) >= 250:
-            ui.notify(
-                'Комментарий не должен превышать 250 символов',
-                color='red'
-            )
         model = resolve_model(payload, mode)
         logger.debug(model)
 
