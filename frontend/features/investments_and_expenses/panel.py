@@ -84,7 +84,6 @@ class Panel(BasePanel):
             await render_form(
                 request=self.request,
                 data=EXPENSES_MAP, 
-                selected_station=SELECTED_STATION, 
                 mode=toggle_value.lower()
                 )
             

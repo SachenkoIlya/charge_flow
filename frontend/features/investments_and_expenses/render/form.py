@@ -33,32 +33,45 @@ SELECTED_STATION = {
     '4': 'Станция 3'
 }
 
+async def prepare_station(selected_station):
+    return  {
+        str(station_id): f"{s['label']} · {station_key}"
+        for s in selected_station
+        for station_id, station_key 
+        in zip(
+            s['station_ids'],
+            s['station_keys']
+        )
+    }
+
 async def get_selected_station(
     request: Request, 
     endpoint_name:str='stations'
 ) -> list[dict]:
     
-    return  await frontend_api(
+    selected_station = await frontend_api(
         endpoint_name=endpoint_name,
         request=request,
     )
+    return prepare_station(selected_station)
 
 
 
-async def render_form(data: dict[str, list], selected_station:dict, request: Request, mode:str = 'opex'):
+
+async def render_form(data: dict[str, list], request: Request, mode:str = 'opex'):
     inputs = {}
     category = data.get(mode)
 
-    selected_station_t = await get_selected_station(request=request)
+    selected_station = await get_selected_station(request=request)
 
-    logger.debug(f"selected_station_t: {selected_station_t}")
+    
+    logger.debug(f"selected_station_t: {selected_station}")
 
     async def submit():
         payload = {
             key: input_.value
             for key, input_ in inputs.items()
         }
-        logger.debug(payload)
         if payload.get('station_id') is None:
             ui.notify(
                 'Выберите станцию',
