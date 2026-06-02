@@ -33,7 +33,7 @@ SELECTED_STATION = {
     '4': 'Станция 3'
 }
 
-async def prepare_station(selected_station):
+def prepare_station(selected_station: list[dict]) -> dict:
     return  {
         str(station_id): f"{s['label']} · {station_key}"
         for s in selected_station
