@@ -66,6 +66,14 @@ async def render_form(data: dict[str, list], request: Request, mode:str = 'opex'
 
     
     logger.debug(f"selected_station_t: {selected_station}")
+    async def final_submit(model):
+        logger.debug(f'final submit: {model}')
+
+        # тут отправка на backend
+        # await api.post('/investments_and_expenses', json=model.model_dump())
+
+        ui.notify('Данные успешно сохранены', color='green')
+        ui.navigate.reload()
 
     async def submit():
         payload = {
@@ -79,9 +87,31 @@ async def render_form(data: dict[str, list], request: Request, mode:str = 'opex'
             )
             return
         model = resolve_model(payload, mode)
-        logger.debug(model)
+        
+        if not model:
+            return 
+        
+        station_label = selected_station.get(str(model.station_id))
+        with ui.dialog() as dialog, ui.card().classes('bg-[#101923] text-white w-[500px]'):
+            ui.label('Подтвердите данные').classes('text-xl font-bold')
 
+            ui.separator()
+            ui.label(f'Станция: {station_label}')
+            ui.label(f'Режим: {mode.upper()}')
 
+            for key, value in model.model_dump().items():
+                if key in ('station_id', 'comment'):
+                    continue
+                label = category.get(key, key)
+                ui.label(f'{label}: {value}')
+            with ui.row().classes('w-full justify-end gap-3 mt-4'):
+                ui.button('Отмена', on_click=dialog.close).props('flat')
+                ui.button(
+                    'Подтвердить',
+                    on_click=lambda: final_submit(model)
+                ).classes('bg-green-600 text-white')
+            dialog.open()
+            
     with ui.element('main').classes(
         'flex-1 h-screen flex items-start justify-center pt-10 pr-24'
     ):
