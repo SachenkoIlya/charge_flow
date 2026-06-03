@@ -25,7 +25,7 @@ class Endpoints:
             'url': 'stations/stations',
             'method': 'get'
         },
-        'c': {
+        'investments': {
             'url': 'finance/investments-and-expenses',
             'method': 'post'
         }
