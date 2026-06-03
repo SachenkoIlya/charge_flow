@@ -28,6 +28,10 @@ async def run_all_endpoints(run_mode: str, operator: str, delay:int=60):
         type_methods =  ReportConfig.TYPE_METHODS.get(operator, [])
         for idx, type_method in enumerate(type_methods):
             
+            if type_method == 'charging_sessions':
+                logger.debug(f"Пропускаем тестово {type_method}")
+                continue
+            
             data = await main(
                 type_method=type_method,
                 run_mode=config.run_mode,

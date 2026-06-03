@@ -1,4 +1,5 @@
 
+from core.http.services.normalize_error import normalize_error
 from core.http.services.auth_type import AuthType
 from core.http.services.exception import (
     APIError,
@@ -73,14 +74,15 @@ async def error_handling(resp: aiohttp.ClientResponse, attempt:int, tries:int, b
         }
     
     text = await resp.text()
+    short_text = normalize_error(text=text, status=resp.status)
     if resp.status == 401:
-        raise UnauthorizedError(text)
+        raise UnauthorizedError(short_text)
     if resp.status == 403:
-        raise ForbiddenError(text)
+        raise ForbiddenError(short_text)
     if resp.status == 404:
-        raise NotFoundError(text)
+        raise NotFoundError(short_text)
     if resp.status >= 500:
-        raise ServerError(text)
+        raise ServerError(short_text)
 
 class MethodEnum:
     GET:str = 'get'
@@ -165,6 +167,7 @@ class BaseAiohttpClient:
         if use_rate_limit:
             async with get_lock(token):
                 await respect_min_gap(token)
+              
                 return await self.with_retry(
                     request_method,
                     url,
