@@ -6,10 +6,11 @@ from frontend.features.base.panel import BasePanel
 from fastapi import Request
 from nicegui import ui, app
 from copy import deepcopy
+from dataclasses import dataclass
 from frontend.features.system_monitoring.render.tables import render_table
 
 
-
+@dataclass
 class Panel(BasePanel):
     user: dict
     request: Request
