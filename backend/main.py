@@ -2,7 +2,8 @@ from fastapi import FastAPI
 from core.base_db import Base
 from backend.database.manager import Manager
 from fastapi.middleware.cors import  CORSMiddleware
-from backend.api.routers.dashboard.manager import ManagerMetrics
+from backend.api.routers.dashboard.manager import ManagerMetrics, ManagerFinance
+
 from core.security.settings import settings
 from contextlib import asynccontextmanager
 import httpx
@@ -22,6 +23,7 @@ async def lifespan(app: FastAPI):
     db_manager = Manager(db)
     app.state.db_manager = db_manager   
     app.state.metrics = ManagerMetrics(db)
+    app.state.investment = ManagerFinance(db)
     try:
         app.state.client = httpx.AsyncClient(base_url="http://localhost:8001")
         logger.info(f"client created".upper())

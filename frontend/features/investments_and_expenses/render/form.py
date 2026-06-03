@@ -1,9 +1,12 @@
 from nicegui import ui
 from core.logger.logger import logger
-from frontend.features.investments_and_expenses.schemas.schemas import resolve_model
+from frontend.features.investments_and_expenses.schemas.schemas import (
+    resolve_model, 
+    CapexSchema, 
+    OpexSchema
+)
 from frontend.api.client import frontend_api
 from fastapi import Request
-
 
 EXPENSES_MAP = {
     'opex': {
@@ -56,6 +59,34 @@ async def get_selected_station(
     return prepare_station(selected_station)
 
 
+def resolve_expense_fields(payload: dict):
+    expense_fields = [
+        key for key in payload.keys()
+        if key not in ('station_id', 'comment')
+    ]
+    has_values = any(
+        payload.get(field) not in (None, '', 0, '0')
+        for field in expense_fields
+    )
+    return has_values
+
+
+
+async def final_submit(
+    model: CapexSchema | OpexSchema, 
+    mode:str, 
+    request: Request, 
+    endpoint_name: str ='investments'
+    ):
+
+    payload = model.model_dump()
+    payload['mode'] = mode
+
+    return await frontend_api(
+        request=request,
+        endpoint_name=endpoint_name,
+        payloads=payload
+    )
 
 
 async def render_form(data: dict[str, list], request: Request, mode:str = 'opex'):
@@ -64,16 +95,10 @@ async def render_form(data: dict[str, list], request: Request, mode:str = 'opex'
 
     selected_station = await get_selected_station(request=request)
 
-    
-    logger.debug(f"selected_station_t: {selected_station}")
-    async def final_submit(model):
-        logger.debug(f'final submit: {model}')
+   
 
-        # тут отправка на backend
-        # await api.post('/investments_and_expenses', json=model.model_dump())
-
-        ui.notify('Данные успешно сохранены', color='green')
-        ui.navigate.reload()
+        # ui.notify('Данные успешно сохранены', color='green')
+        # ui.navigate.reload()
 
     async def submit():
         payload = {
@@ -86,6 +111,15 @@ async def render_form(data: dict[str, list], request: Request, mode:str = 'opex'
                 color='red'
             )
             return
+        has_value = resolve_expense_fields(payload)
+        if not has_value:
+            ui.notify(
+                'Минимум одно поле должно быть заполнено',
+                color='orange',
+                position='top',
+            )
+            return
+        
         model = resolve_model(payload, mode)
         
         if not model:
@@ -108,7 +142,7 @@ async def render_form(data: dict[str, list], request: Request, mode:str = 'opex'
                 ui.button('Отмена', on_click=dialog.close).props('flat')
                 ui.button(
                     'Подтвердить',
-                    on_click=lambda: final_submit(model)
+                    on_click=lambda: final_submit(model=model, mode=mode, request=request)
                 ).classes('bg-green-600 text-white')
             dialog.open()
 
