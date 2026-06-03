@@ -146,9 +146,9 @@ async def render_form(data: dict[str, list], request: Request, mode:str = 'opex'
                 if key in ('station_id', 'comment'):
                     continue
                 label = category.get(key, key)
-                value = value if value else 0
-                
-                ui.label(f'{label}: {value}')
+                if value:
+                    ui.label(f'{label}: {value}')
+            
             with ui.row().classes('w-full justify-end gap-3 mt-4'):
                 ui.button('Отмена', on_click=dialog.close).props('flat')
                 ui.button(
