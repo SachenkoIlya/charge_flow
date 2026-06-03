@@ -36,6 +36,32 @@ SELECTED_STATION = {
     '4': 'Станция 3'
 }
 
+def build_paylaod(
+    mode:str, 
+    comment_input, 
+    model: CapexSchema | OpexSchema
+):
+    model.comment = comment_input.value
+    payload = model.model_dump()
+    payload['mode'] = mode
+    return payload
+
+
+async def final_submit(
+    payload: dict,
+    request: Request, 
+    endpoint_name: str ='investments'
+):
+    response = await frontend_api(
+        request=request,
+        endpoint_name=endpoint_name,
+        payloads=payload
+    )
+    if response is None:
+        return None
+    return response
+    
+
 def prepare_station(selected_station: list[dict]) -> dict:
     return  {
         str(station_id): f"{s['label']} · {station_key}"
@@ -72,40 +98,12 @@ def resolve_expense_fields(payload: dict):
 
 
 
-async def final_submit(
-    model: CapexSchema | OpexSchema, 
-    mode:str, 
-    request: Request, 
-    endpoint_name: str ='investments'
-    ):
-
-    payload = model.model_dump()
-    payload['mode'] = mode
-
-    response = await frontend_api(
-        request=request,
-        endpoint_name=endpoint_name,
-        payloads=payload
-    )
-    if response is None:
-        return
-    
-    ui.notify(
-        response.get('message', 'Успешно сохранено'),
-        color='positive'
-    )
-    ui.navigate.reload()
 
 async def render_form(data: dict[str, list], request: Request, mode:str = 'opex'):
     inputs = {}
     category = data.get(mode)
 
     selected_station = await get_selected_station(request=request)
-
-   
-
-        # ui.notify('Данные успешно сохранены', color='green')
-        # ui.navigate.reload()
 
     async def submit():
         payload = {
@@ -135,6 +133,7 @@ async def render_form(data: dict[str, list], request: Request, mode:str = 'opex'
             return 
         
         station_label = selected_station.get(str(model.station_id))
+
         with ui.dialog() as dialog, ui.card().classes('bg-[#101923] text-white w-[720px] max-w-[90vw] p-6'):
             ui.label('Подтвердите данные').classes('text-xl font-bold')
 
@@ -149,11 +148,41 @@ async def render_form(data: dict[str, list], request: Request, mode:str = 'opex'
                 if value:
                     ui.label(f'{label}: {value}')
             
+            comment_input = ui.textarea(
+                label='Комментарий',
+                placeholder='Необязательный комментарий'
+            ).props(
+                'filled counter max_length=150'
+            ).classes('w-full')
+            
+            async def on_confirm():
+                allowed_payload = build_paylaod(
+                    mode=mode,
+                    comment_input=comment_input,
+                    model=model
+                )
+
+                response = await final_submit(
+                    payload=allowed_payload,
+                    request=request 
+                )
+                if response is None:
+                    return
+                
+                dialog.close()
+
+                ui.notify(
+                    response.get('message', 'Успешно сохранено'),
+                    color='positive'
+                )
+                ui.navigate.reload()
+            
+            
             with ui.row().classes('w-full justify-end gap-3 mt-4'):
                 ui.button('Отмена', on_click=dialog.close).props('flat')
                 ui.button(
                     'Подтвердить',
-                    on_click=lambda: final_submit(model=model, mode=mode, request=request)
+                    on_click=on_confirm
                 ).classes('bg-green-600 text-white')
             dialog.open()
 
