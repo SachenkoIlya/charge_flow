@@ -109,7 +109,9 @@ async def render_form(data: dict[str, list], request: Request, mode:str = 'opex'
 
     async def submit():
         payload = {
-            key: input_.value
+            key: (
+                None if input_.value == '' else input_.value
+            )
             for key, input_ in inputs.items()
         }
         if payload.get('station_id') is None:
