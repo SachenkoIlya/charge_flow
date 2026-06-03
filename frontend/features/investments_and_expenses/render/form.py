@@ -82,12 +82,19 @@ async def final_submit(
     payload = model.model_dump()
     payload['mode'] = mode
 
-    return await frontend_api(
+    response = await frontend_api(
         request=request,
         endpoint_name=endpoint_name,
         payloads=payload
     )
-
+    if response is None:
+        return
+    
+    ui.notify(
+        response.get('message', 'Успешно сохранено'),
+        color='positive'
+    )
+    ui.navigate.reload()
 
 async def render_form(data: dict[str, list], request: Request, mode:str = 'opex'):
     inputs = {}
