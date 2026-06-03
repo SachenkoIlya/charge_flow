@@ -1,5 +1,5 @@
 from fastapi import Request
-from backend.api.routers.dashboard.manager import ManagerMetrics, ManagerFinance
+from backend.api.routers.dashboard.manager import ManagerMetrics, ManagerFinance, ManagerSystem
 from backend.database.manager import Manager
 from typing import cast
 from fastapi import Depends
@@ -31,3 +31,7 @@ def get_merics(request: Request) -> ManagerMetrics:
 
 def get_merics_investment(request: Request) -> ManagerFinance:
     return cast(ManagerFinance, request.app.state.investment)
+
+
+def get_system(request: Request) -> ManagerSystem:
+    return cast(ManagerSystem, request.app.state.system)

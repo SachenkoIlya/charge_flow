@@ -14,6 +14,11 @@ MAP = {
         'toggle': ['CAPEX', 'OPEX'],
         'default_value': 'CAPEX',
     
+    },
+    'system': {
+        'toggle': ['etl_run', 'bi_exports'],
+        'default_value': 'etl_run',
+    
     }
 }
 
@@ -41,7 +46,7 @@ async def render_title(
             ui.label(label_aggre).classes(
                 'text-sm text-gray-400 mt-1'
             )
-        
+               
         data = get_data_from_map(page_key)
 
         if data:

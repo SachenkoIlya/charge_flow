@@ -28,8 +28,13 @@ class Endpoints:
         'investments': {
             'url': 'finance/investments-and-expenses',
             'method': 'post'
+        },
+        'system': {
+            'url': 'system/monitoring',
+            'method': 'post'
         }
     }
+    
     
     @classmethod
     def get_data_endpoints(cls, endpoint_name):

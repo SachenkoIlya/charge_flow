@@ -1,39 +1,29 @@
 
 from frontend.components.drawer import render_sidebar
-
-from frontend.features.base.panel import BasePanel
-from frontend.features.summary.render.tables_section import (
-    render_tables_section, 
-    TOP_ROWS, 
-    REVERS_ROWS
-)
-from frontend.features.summary.render.charts import (
-    render_chart, 
-    CHART_METRICS
-)
-from core.logger.logger import logger
-from frontend.features.summary.render.metrics import METRICS
-from frontend.components.metric_card import render_metrics 
 from frontend.api.client import frontend_api
 from frontend.components.render_title import render_title
-from frontend.components.metric_card import render_metrics 
-
-from dataclasses import dataclass
-from copy import deepcopy
+from frontend.features.base.panel import BasePanel 
 from fastapi import Request
 from nicegui import ui, app
+from copy import deepcopy
+from frontend.features.system_monitoring.render.tables import render_table
 
 
 
-@dataclass
 class Panel(BasePanel):
     user: dict
     request: Request
-    endpoints_name: str = 'summary'
-    page_key = 'summary'
+    endpoint_name: str = 'system'
+    page_key = 'system'
+
 
     async def render(self):
-       
+        page = app.storage.user.setdefault('pages', {})
+        page_state = page.setdefault(self.page_key, {})
+        
+        if page_state.get('toggle_value') is None:
+            page_state['toggle_value'] = 'CAPEX'
+        
         self.apply_filters()
         loaded = await self.load_data()
         if not loaded:
@@ -55,7 +45,6 @@ class Panel(BasePanel):
             """
         ):
             render_sidebar(role=role)
-
             with ui.element('main').classes(
                 """
                     flex-1
@@ -70,21 +59,34 @@ class Panel(BasePanel):
 
 
     async def render_content(self):
-        with ui.element('div').style('zoom: 0.8'):
-            await render_title(
-                label='Общая сводка по сети',
-                label_aggre='Executive Dashboard',
-                page_key=self.page_key,
-                on_date_change=self.on_date_change,
-            )
-            render_metrics(metrics=METRICS, columns=5)
-            render_chart(CHART_METRICS)
-            render_tables_section(TOP_ROWS, REVERS_ROWS)
+        page = app.storage.user.get('pages', {})
+        page_state = page.get(self.page_key, {})
+        
+        toggle_value = page_state.get('toggle_value', 'etl_run')
+
+        await render_title(
+            label='Мониторинг системы',
+            label_aggre='system monitoring',
+            page_key=self.page_key,
+            on_date_change=self.on_date_change,
+        )
+        render_table(
+            mode=toggle_value,
+
+        )
 
     async def load_data(self):
         payload = deepcopy(self.payload)
-        logger.debug(f"{self.page_key}: зашли в load_data".upper())
-        logger.debug(f"payload: {payload}")
-        return True
-
+        payload['mode'] = payload.pop('toggle_value', None)
         
+        data = await frontend_api(
+            endpoint_name=self.endpoint_name,
+            payloads=payload,
+        )
+        
+        if data is None:
+            self.data = {}
+            return False
+        
+        self.data = data
+        return True

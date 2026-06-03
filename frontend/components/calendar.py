@@ -1,8 +1,6 @@
 from nicegui import ui, app
 from datetime import datetime
-from core.logger.logger import make_logger
 
-# logger = make_logger(__name__, use_telegram=False)
 
 
 async def get_calendar(page_key:str, on_change_date=None):

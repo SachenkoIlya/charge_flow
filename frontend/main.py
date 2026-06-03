@@ -10,6 +10,7 @@ import frontend.pages.trends
 import frontend.pages.summary
 import frontend.pages.finance
 import frontend.pages.investments_and_expenses
+import frontend.pages.system_monitoring
 
 
 

@@ -1,0 +1,21 @@
+from pydantic import BaseModel
+from datetime import datetime
+
+
+class SystemSchema(BaseModel):
+    mode: str
+
+
+class EtlRunSchema(BaseModel):
+    user_id: int
+    type_method: str
+    run_mode: str
+    operator: str
+    status: str
+    last_success_at: datetime | None = None
+    created_at: datetime | None = None
+    run_id: str | None = None
+
+
+class EtlRunsResponseSchema(BaseModel):
+    rows: list[EtlRunSchema]
