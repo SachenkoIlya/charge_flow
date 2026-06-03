@@ -16,7 +16,7 @@ class SystemReposytory:
     
     
     async def determine_type(self, mode: str):
-        if mode == 'etl_runs':
+        if mode == 'etl_run':
             await self.get_etl_runs()
 
 

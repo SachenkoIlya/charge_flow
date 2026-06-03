@@ -8,6 +8,7 @@ from backend.api.routers.dashboard.companies.router import router as companies_r
 from backend.api.routers.dashboard.station.router import  router as station_router
 from backend.api.routers.investments.investments_and_expenses.router import router as investments_router
 from backend.api.routers.system.router import router as system_router
+
 api_router = APIRouter()
 
 api_router.include_router(auth_router)
