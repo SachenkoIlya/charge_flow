@@ -23,7 +23,7 @@ class Panel(BasePanel):
         page_state = page.setdefault(self.page_key, {})
         
         if page_state.get('toggle_value') is None:
-            page_state['toggle_value'] = 'CAPEX'
+            page_state['toggle_value'] = 'etl_runs'
         
         self.apply_filters()
         loaded = await self.load_data()
@@ -83,6 +83,7 @@ class Panel(BasePanel):
         data = await frontend_api(
             endpoint_name=self.endpoint_name,
             payloads=payload,
+            request=self.request
         )
         
         if data is None:
