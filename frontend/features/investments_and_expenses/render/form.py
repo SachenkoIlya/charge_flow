@@ -140,13 +140,13 @@ async def render_form(data: dict[str, list], request: Request, mode:str = 'opex'
 
             ui.separator()
             ui.label(f'Станция: {station_label}')
-            ui.label(f'Режим: {mode.upper()}')
+            ui.label(f'Тип расходов: {mode.upper()}')
 
             for key, value in model.model_dump().items():
                 if key in ('station_id', 'comment'):
                     continue
                 label = category.get(key, key)
-                ui.label(f'{label}: {value}')
+                ui.label(f'{label}: {value if value else ''}')
             with ui.row().classes('w-full justify-end gap-3 mt-4'):
                 ui.button('Отмена', on_click=dialog.close).props('flat')
                 ui.button(
