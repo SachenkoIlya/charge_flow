@@ -76,14 +76,13 @@ class Panel(BasePanel):
         render_table(
             mode=toggle_value,
             rows=self.data.get('rows', []),
-            height=350
+            height=700
         )
 
     async def load_data(self):
         payload = deepcopy(self.payload)
         payload['mode'] = payload.pop('toggle_value', None)
         
-        logger.debug(payload)
 
         data = await frontend_api(
             endpoint_name=self.endpoint_name,

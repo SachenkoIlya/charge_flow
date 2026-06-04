@@ -12,7 +12,6 @@ etl_run_columns = [
 ]
 
 def render_table(mode:str, rows: dict, height:int):
-    logger.debug(rows)
 
     CELL_CLASS = 'min-w-[180px] shrink-0'
     with ui.card().classes(
@@ -66,8 +65,10 @@ def render_table(mode:str, rows: dict, height:int):
                     ):
                         
                         for key in columns:
-                            ui.label(key).classes(f'{CELL_CLASS} font-semibold')
-                                 
-                            #     ui.label(str(value)).classes(f'{CELL_CLASS} font-bold {color}')
-                            # else:
-                            #     ui.label(str(value)).classes(f'{CELL_CLASS} text-gray-200')
+                            value = row.get(key) or '-'
+
+                            if key == 'status':
+                                color = 'text-green-400' if value == 'success' else 'text-red-400'
+                                ui.label(str(value)).classes(f'{CELL_CLASS} font-bold {color}')
+                            else:
+                                ui.label(str(value)).classes(f'{CELL_CLASS} text-gray-200')
