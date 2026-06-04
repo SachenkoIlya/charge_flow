@@ -10,7 +10,7 @@ class SystemReposytory:
         self.db = SystemDb(base_db)
 
     @staticmethod
-    def normalize_etl_run(rows):
+    def normalize_monnitoring(rows):
         normaliized =  [
             EtlRunSchema.model_validate(dict(row))
             for row in rows
@@ -23,7 +23,13 @@ class SystemReposytory:
             rows = await self.get_etl_runs()
             logger.debug(f"[{mode.upper()}]{rows}")
             return rows
+        elif mode == 'bi_exports':
+            rows = await self.get_bi_exports_runs()
         
     async def get_etl_runs(self):
         rows = await self.db.get_data_etl_run()
-        return self.normalize_etl_run(rows)
+        return self.normalize_monnitoring(rows)
+    
+    async def get_bi_exports_runs(self):
+        rows = await self.db.get_data_bi_exports()
+        return self.normalize_monnitoring(rows)

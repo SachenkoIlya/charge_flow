@@ -24,3 +24,23 @@ class SystemDb:
             """
         async with self.db.pool.acquire() as conn:
             return await conn.fetch(q)
+        
+
+    async def get_data_bi_exports(self):
+        q = """
+            SELECT
+                user_id,
+                type_method,
+                run_mode,
+                operator,
+                status,
+                last_success_at,
+                created_at,
+                run_id,
+                error
+            FROM bi_exports
+            ORDER BY created_at DESC
+            LIMIT 30;
+            """
+        async with self.db.pool.acquire() as conn:
+            return await conn.fetch(q)

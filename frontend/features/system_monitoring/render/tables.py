@@ -2,16 +2,33 @@ from nicegui import ui
 from core.logger.logger import logger
 from datetime import datetime
 
-etl_run_columns = [
-    'user_id',
-    'type_method',
-    'run_mode',
-    'operator',
-    'status',
-    'last_success_at',
-    'created_at',
-    'run_id',
-]
+COLUMNS_MAP = {
+    'etl_run': [
+        'user_id',
+        'type_method',
+        'run_mode',
+        'operator',
+        'status',
+        'last_success_at',
+        'created_at',
+        'run_id',
+    ],
+    'bi_exports': [
+        'user_id',
+        'type_method',
+        'run_mode',
+        'operator',
+        'status',
+        'last_success_at',
+        'created_at',
+        'updated_at',
+        'processed_at',
+        'run_id',
+    ]
+}
+
+def choose_columns(mode:str):
+    return COLUMNS_MAP.get(mode, [])
 
 
 def format_dt(value):
@@ -25,6 +42,7 @@ def format_dt(value):
     except Exception:
         return str(value)
     
+
 
 
 def render_table(mode:str, rows: dict, height:int):
@@ -50,10 +68,8 @@ def render_table(mode:str, rows: dict, height:int):
             with ui.element('div').classes(
                 'min-w-[1500px]'
             ):
-                columns = None
-                if mode == 'etl_run':
-                    columns = etl_run_columns
-
+                columns = choose_columns(mode)
+                
                 with ui.row().classes(
                     '''
                     min-w-[1400px]
@@ -83,7 +99,7 @@ def render_table(mode:str, rows: dict, height:int):
                         for key in columns:
                             value = row.get(key) or '-'
 
-                            if key in ('created_at', 'last_success_at'):
+                            if key in ('created_at', 'last_success_at', 'updated_at', 'processed_at'):
                                 value = format_dt(value)
 
                             if key == 'status':
