@@ -17,14 +17,13 @@ class SystemReposytory:
         ]
         return EtlRunsResponseSchema(rows=normaliized)
     
-    
     async def determine_type(self, mode: str):
         if mode == 'etl_run':
-            rows = await self.get_etl_runs()
-            return rows
+            return await self.get_etl_runs()
         if mode == 'bi_exports':
-            rows = await self.get_bi_exports_runs()
-        
+            return await self.get_bi_exports_runs()
+    
+    
     async def get_etl_runs(self):
         rows = await self.db.get_data_etl_run()
         return self.normalize_monnitoring(rows)

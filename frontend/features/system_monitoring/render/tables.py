@@ -60,7 +60,7 @@ def render_table(mode:str, rows: dict, height:int):
         overflow-hidden
         '''
     ):
-        # ui.label('P&L по станциям').classes('text-base font-bold mb-3')
+        ui.label(mode.title()).classes('text-base font-bold mb-3')
         with ui.element('div').classes(
             'w-full overflow-x-auto'
         ):
