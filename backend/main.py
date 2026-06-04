@@ -24,7 +24,7 @@ async def lifespan(app: FastAPI):
     app.state.db_manager = db_manager   
     app.state.metrics = ManagerMetrics(db)
     app.state.investment = ManagerFinance(db)
-    app.state.monitoring  = ManagerSystem(db)
+    app.state.system  = ManagerSystem(db)
     try:
         app.state.client = httpx.AsyncClient(base_url="http://localhost:8001")
         logger.info(f"client created".upper())
