@@ -8,7 +8,7 @@ from nicegui import ui, app
 from copy import deepcopy
 from dataclasses import dataclass
 from frontend.features.system_monitoring.render.tables import render_table
-
+from core.logger.logger import logger
 
 @dataclass
 class Panel(BasePanel):
@@ -81,6 +81,8 @@ class Panel(BasePanel):
     async def load_data(self):
         payload = deepcopy(self.payload)
         payload['mode'] = payload.pop('toggle_value', None)
+        
+        logger.debug(payload)
         
         data = await frontend_api(
             endpoint_name=self.endpoint_name,
