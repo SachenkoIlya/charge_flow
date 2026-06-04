@@ -48,7 +48,7 @@ def format_dt(value):
 
 
 def render_table(mode:str, rows: dict, height:int):
-
+    logger.debug(f"[{mode.upper()}]: {rows}")
     CELL_CLASS = 'min-w-[180px] shrink-0'
     with ui.card().classes(
         f'''
