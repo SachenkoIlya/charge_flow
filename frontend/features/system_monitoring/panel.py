@@ -60,7 +60,7 @@ class Panel(BasePanel):
 
 
     async def render_content(self):
-        rows = self.data
+        
 
         page = app.storage.user.get('pages', {})
         page_state = page.get(self.page_key, {})
@@ -75,7 +75,7 @@ class Panel(BasePanel):
         )
         render_table(
             mode=toggle_value,
-            rows=rows,
+            rows=self.data.get('rows', []),
             height=350
         )
 
