@@ -10,7 +10,7 @@ class SystemReposytory:
         self.db = SystemDb(base_db)
 
     @staticmethod
-    def normalize_monnitoring(rows):
+    def normalize_monitoring(rows):
         normaliized =  [
             MonitoringSchema.model_validate(dict(row))
             for row in rows
@@ -26,8 +26,8 @@ class SystemReposytory:
     
     async def get_etl_runs(self):
         rows = await self.db.get_data_etl_run()
-        return self.normalize_monnitoring(rows)
+        return self.normalize_monitoring(rows)
     
     async def get_bi_exports_runs(self):
         rows = await self.db.get_data_bi_exports()
-        return self.normalize_monnitoring(rows)
+        return self.normalize_monitoring(rows)

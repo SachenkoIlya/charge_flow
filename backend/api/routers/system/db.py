@@ -35,6 +35,8 @@ class SystemDb:
                 operator,
                 status,
                 created_at,
+                updated_at,
+                processed_at,
                 run_id,
                 error
             FROM bi_exports
