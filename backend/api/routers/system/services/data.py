@@ -1,7 +1,7 @@
 
 from core.base_db import Base
 from backend.api.routers.system.db import SystemDb
-from backend.api.routers.system.schemas import EtlRunSchema, EtlRunsResponseSchema
+from backend.api.routers.system.schemas import MonitoringSchema, EtlRunsResponseSchema
 from core.logger.logger import logger
 
 
@@ -12,7 +12,7 @@ class SystemReposytory:
     @staticmethod
     def normalize_monnitoring(rows):
         normaliized =  [
-            EtlRunSchema.model_validate(dict(row))
+            MonitoringSchema.model_validate(dict(row))
             for row in rows
         ]
         return EtlRunsResponseSchema(rows=normaliized)
