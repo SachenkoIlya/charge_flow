@@ -1,5 +1,5 @@
 from nicegui import ui
-
+from core.logger.logger import logger
 etl_run_columns = [
     'user_id',
     'type_method',
@@ -12,6 +12,8 @@ etl_run_columns = [
 ]
 
 def render_table(mode:str, rows: dict, height:int):
+    logger.debug(rows)
+    
     CELL_CLASS = 'min-w-[180px] shrink-0'
     with ui.card().classes(
         f'''
