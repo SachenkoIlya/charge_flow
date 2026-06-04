@@ -34,6 +34,9 @@ def format_dt(value):
     if not value or value == '-':
         return '-'
     try:
+        if isinstance(value, datetime):
+            return value.strftime('%d.%m.%Y %H:%M:%S')
+        
         dt = datetime.fromisoformat(
             value.replace('Z', '+00:00')
         )
