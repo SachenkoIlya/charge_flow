@@ -12,20 +12,21 @@ etl_run_columns = [
 ]
 
 def render_table(mode:str, rows: dict, height:int):
-       with ui.card().classes(
+    CELL_CLASS = 'min-w-[180px] shrink-0'
+    with ui.card().classes(
         f'''
-            w-full
-            h-[{height}px]
-            bg-[#101923]/90
-            border border-[#1f2937]
-            rounded-xl
-            shadow-xl
-            p-3
-            text-white
-            overflow-hidden
+        w-full
+        h-[{height}px]
+        bg-[#101923]/90
+        border border-[#1f2937]
+        rounded-xl
+        shadow-xl
+        p-3
+        text-white
+        overflow-hidden
         '''
     ):
-        ui.label('P&L по станциям').classes('text-base font-bold mb-3')
+        # ui.label('P&L по станциям').classes('text-base font-bold mb-3')
         with ui.element('div').classes(
             'w-full overflow-x-auto'
         ):
@@ -61,10 +62,18 @@ def render_table(mode:str, rows: dict, height:int):
                         items-center
                         '''
                     ):
-                        for key, _, width in columns:
+                        
+                        for key in columns:
                             value = row.get(key) or '-'
+
                             if key == 'status':
-                                color = 'text-green-400' if value == 'success' else 'text-red-400'
-                                ui.label(str(value)).classes(f'{width} shrink-0 font-bold {color}')
+                                if value == 'success':
+                                    color = 'text-green-400'
+                                elif value == 'empty':
+                                    color = 'text-blue-400'
+                                else:
+                                    color = 'text-red-400'
+                                 
+                                ui.label(str(value)).classes(f'{CELL_CLASS} font-bold {color}')
                             else:
-                                ui.label(str(value)).classes(f'{width} shrink-0 text-gray-200')
+                                ui.label(str(value)).classes(f'{CELL_CLASS} text-gray-200')
