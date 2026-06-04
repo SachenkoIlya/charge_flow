@@ -34,7 +34,6 @@ class SystemDb:
                 run_mode,
                 operator,
                 status,
-                last_success_at,
                 created_at,
                 run_id,
                 error

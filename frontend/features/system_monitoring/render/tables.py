@@ -19,7 +19,6 @@ COLUMNS_MAP = {
         'run_mode',
         'operator',
         'status',
-        'last_success_at',
         'created_at',
         'updated_at',
         'processed_at',
@@ -69,7 +68,7 @@ def render_table(mode:str, rows: dict, height:int):
                 'min-w-[1500px]'
             ):
                 columns = choose_columns(mode)
-                
+
                 with ui.row().classes(
                     '''
                     min-w-[1400px]

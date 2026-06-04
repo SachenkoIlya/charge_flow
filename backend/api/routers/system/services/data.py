@@ -21,9 +21,8 @@ class SystemReposytory:
     async def determine_type(self, mode: str):
         if mode == 'etl_run':
             rows = await self.get_etl_runs()
-            logger.debug(f"[{mode.upper()}]{rows}")
             return rows
-        elif mode == 'bi_exports':
+        if mode == 'bi_exports':
             rows = await self.get_bi_exports_runs()
         
     async def get_etl_runs(self):
