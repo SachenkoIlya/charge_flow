@@ -5,7 +5,8 @@ from backend.api.routers.system.schemas import SystemSchema, EtlRunsResponseSche
 from backend.database.get_manager import get_current_token, get_system
 from fastapi import APIRouter
 from fastapi import Depends
-
+from backend.services.admin_required import admin_required
+from core.logger.logger import logger
 
 
 
@@ -16,10 +17,10 @@ router = APIRouter(prefix='/system', tags=['system'])
 @router.post('/monitoring', response_model=EtlRunsResponseSchema)
 async def create(
     data: SystemSchema,
-    payload = Depends(get_current_token),
-    system:  ManagerSystem=Depends(get_system)
+    _: None = Depends(admin_required),
+    system :  ManagerSystem=Depends(get_system)
 ):
-    user_id = payload.get('user_id')
+    # тут редис дергаем апи если в редис есть то отдаем кеш если нет дергаем
+    return await system.monitoring.determine_type(data.mode)
 
-    
-    return await system.system.determine_type(data.mode)
+    # еслои прошли сюда сохраняем в кеш

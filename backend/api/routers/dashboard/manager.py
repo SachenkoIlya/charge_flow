@@ -19,4 +19,4 @@ class ManagerFinance:
 
 class ManagerSystem:
     def __init__(self, base_db: "Base"):
-        self.system = SystemReposytory(base_db)
+        self.monitoring  = SystemReposytory(base_db)

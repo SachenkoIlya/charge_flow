@@ -11,10 +11,9 @@ from backend.api.routers.dashboard.manager import (
 from core.security.settings import settings
 from contextlib import asynccontextmanager
 import httpx
-from core.logger.logger import make_logger
+from core.logger.logger import logger
 from backend.api.router import api_router
 
-logger = make_logger(__name__, use_telegram=False)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -25,7 +24,7 @@ async def lifespan(app: FastAPI):
     app.state.db_manager = db_manager   
     app.state.metrics = ManagerMetrics(db)
     app.state.investment = ManagerFinance(db)
-    app.state.system = ManagerSystem(db)
+    app.state.monitoring  = ManagerSystem(db)
     try:
         app.state.client = httpx.AsyncClient(base_url="http://localhost:8001")
         logger.info(f"client created".upper())
