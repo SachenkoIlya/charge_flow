@@ -1,5 +1,7 @@
 from nicegui import ui
 from core.logger.logger import logger
+from datetime import datetime
+
 etl_run_columns = [
     'user_id',
     'type_method',
@@ -10,6 +12,20 @@ etl_run_columns = [
     'created_at',
     'run_id',
 ]
+
+
+def format_dt(value):
+    if not value or value == '-':
+        return '-'
+    try:
+        dt = datetime.fromisoformat(
+            value.replace('Z', '+00:00')
+        )
+        return dt.strftime('%d.%m.%Y %H:%M:%S')
+    except Exception:
+        return str(value)
+    
+
 
 def render_table(mode:str, rows: dict, height:int):
 
@@ -67,8 +83,16 @@ def render_table(mode:str, rows: dict, height:int):
                         for key in columns:
                             value = row.get(key) or '-'
 
+                            if key in ('created_at', 'last_success_at'):
+                                value = format_dt(value)
+
                             if key == 'status':
-                                color = 'text-green-400' if value == 'success' else 'text-red-400'
+                                if value == 'success':
+                                    color = 'text-green-400'
+                                elif value == 'empty':
+                                    color = 'text-blue-400'
+                                else:
+                                    color = 'text-red-400'
                                 ui.label(str(value)).classes(f'{CELL_CLASS} font-bold {color}')
                             else:
                                 ui.label(str(value)).classes(f'{CELL_CLASS} text-gray-200')

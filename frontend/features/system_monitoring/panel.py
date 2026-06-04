@@ -76,7 +76,7 @@ class Panel(BasePanel):
         render_table(
             mode=toggle_value,
             rows=self.data.get('rows', []),
-            height=700
+            height=800
         )
 
     async def load_data(self):
