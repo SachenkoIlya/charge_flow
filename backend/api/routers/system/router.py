@@ -13,7 +13,6 @@ from core.logger.logger import logger
 router = APIRouter(prefix='/system', tags=['system'])
 
 
-
 @router.post('/monitoring', response_model=EtlRunsResponseSchema)
 async def create(
     data: SystemSchema,
