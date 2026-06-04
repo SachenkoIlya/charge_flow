@@ -1,14 +1,14 @@
 from nicegui import ui
 
 etl_run_columns = [
-    ('user_id', 'User', 'w-[80px]'),
-    ('type_method', 'Тип', 'w-[180px]'),
-    ('run_mode', 'Режим', 'w-[100px]'),
-    ('operator', 'Оператор', 'w-[120px]'),
-    ('status', 'Статус', 'w-[100px]'),
-    ('last_success_at', 'Последний успех', 'w-[220px]'),
-    ('created_at', 'Создано', 'w-[220px]'),
-    ('run_id', 'Run ID', 'w-[260px]'),
+    'user_id',
+    'type_method',
+    'run_mode',
+    'operator',
+    'status',
+    'last_success_at',
+    'created_at',
+    'run_id',
 ]
 
 def render_table(mode:str, rows: dict, height:int):
@@ -45,8 +45,10 @@ def render_table(mode:str, rows: dict, height:int):
                     flex-nowrap
                     '''
                 ):
-                    for _, label, width in columns:
-                        ui.label(label).classes(f'{width} shrink-0 font-semibold')
+                    for column in columns:
+                        ui.label(column).classes(
+                            'min-w-[180px] shrink-0 font-semibold'
+                        )
 
                 for row in rows:
                     with ui.row().classes(
