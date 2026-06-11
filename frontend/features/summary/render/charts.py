@@ -87,7 +87,7 @@ def get_chart_metrics(data:dict):
                 {
                     "name": "Выручка",
                     "type": "line",
-                    "smooth": True,
+                    "smooth": False,
                     "data": series["revenue"],
                     "yAxisIndex": 0,
                     "lineStyle": {"width": 3},
@@ -98,7 +98,7 @@ def get_chart_metrics(data:dict):
                 {
                     "name": "Сессии",
                     "type": "line",
-                    "smooth": True,
+                    "smooth": False,
                     "data": series["sessions"],
                     "yAxisIndex": 1,
                     "lineStyle": {"width": 3},
@@ -109,7 +109,7 @@ def get_chart_metrics(data:dict):
                 {
                     "name": "Загрузка",
                     "type": "line",
-                    "smooth": True,
+                    "smooth": False,
                     "data": series["utilisation"],
                     "yAxisIndex": 1,
                     "lineStyle": {"width": 3},
