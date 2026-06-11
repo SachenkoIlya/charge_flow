@@ -23,7 +23,7 @@ router = APIRouter(prefix='/v1/system', tags=['system'])
 
 @router.post(
     ENDPOINT, 
-    monitoring="Получить данные мониторинга системы",
+    summary="Получить данные мониторинга системы",
     description=DESCRIPTIONS,
     response_model=EtlRunsResponseSchema
 )
