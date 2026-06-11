@@ -75,7 +75,7 @@ class Panel(BasePanel):
 
             render_metrics(data=self.data, columns=5)
             render_chart(data=self.data)
-            render_tables_section(TOP_ROWS, REVERS_ROWS)
+            # render_tables_section(TOP_ROWS, REVERS_ROWS)
 
     
         
