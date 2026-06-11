@@ -1,6 +1,6 @@
 
 from frontend.components.drawer import render_sidebar
-
+from datetime import datetime, timedelta
 from frontend.features.base.panel import BasePanel
 from frontend.features.summary.render.tables_section import (
     render_tables_section, 
@@ -66,8 +66,19 @@ class Panel(BasePanel):
 
     async def render_content(self):
         comparable_period = self.data['comparable_period']
-        comparable_from = comparable_period['date_from'].split(' ')[0]
-        comparable_to = comparable_period['date_to'].split(' ')[0]
+
+        comparable_from = datetime.strptime(
+            comparable_period['date_from'],
+            '%Y-%m-%d %H:%M:%S'
+        ).strftime('%d.%m.%Y')
+
+        comparable_to = (
+            datetime.strptime(
+                comparable_period['date_to'],
+                '%Y-%m-%d %H:%M:%S'
+            ) - timedelta(days=1)
+        ).strftime('%d.%m.%Y')
+
         label_aggre = (
             f"Сравниваемый период: "
             f"{comparable_from} — {comparable_to}"

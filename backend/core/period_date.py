@@ -111,7 +111,7 @@ def comparable_period(
             and date_to.day == 1
             and date_to == date_from + relativedelta(months=1)
         )
-
+        logger.debug(f"is_full_month: {is_full_month}")
         if is_full_month:
             comparable_from = date_from - relativedelta(months=1)
             comparable_to = date_from
@@ -119,7 +119,7 @@ def comparable_period(
             period = date_to - date_from
             comparable_to = date_from
             comparable_from = comparable_to - period
-
+        
         return comparable_from, comparable_to
     
     
