@@ -1,7 +1,7 @@
 from nicegui import ui
 from frontend.features.summary.render.metrics import METRICS, get_delta_class, get_metric_value, get_metric_delta
 
-def render_metrics(data: dict, columns:int):
+def render_metrics(data: dict, columns:int, on_top_click=None):
     with ui.grid(columns=columns).classes(
         'w-full gap-4 mt-6'
     ):
@@ -9,12 +9,17 @@ def render_metrics(data: dict, columns:int):
             key = metric.get('key', '')
             value = get_metric_value(key, data)
             delta = get_metric_delta(key, data)
-            metric_card(metric, value, delta)
+            metric_card(
+                metric, 
+                value, 
+                delta,
+                on_details_click=on_top_click if key == 'total_revenue' else None,
+            )
 
 
 
 
-def metric_card(metric: dict, value:str, delta:str):
+def metric_card(metric: dict, value:str, delta:str, on_details_click=None):
     with ui.card().classes(
         '''
         bg-[#101923]/90 border border-[#1f2937] rounded-xl shadow-xl
@@ -36,7 +41,18 @@ def metric_card(metric: dict, value:str, delta:str):
             ):
                 ui.label(metric['title']).classes('text-sm text-white font-semibold')
                 ui.label(metric['subtitle']).classes('text-xs text-gray-400')
-
+            if on_details_click:
+                ui.icon('leaderboard').classes(
+                '''
+                cursor-pointer
+                text-gray-400
+                hover:text-white
+                text-lg
+                '''
+            ).on(
+                'click',
+                lambda: on_details_click()
+            )
         # ui.space()
 
         with ui.row().classes('w-full items-end justify-between'):

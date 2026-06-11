@@ -29,11 +29,6 @@ def get_chart_metrics(data:dict):
     charts = data['requested_metrics']['charts']
     x_axis = charts['xAxis']
     series = charts['series']
-    logger.debug(f'x_axis len={len(x_axis)}: {x_axis}')
-    logger.debug(f'revenue len={len(series["revenue"])}: {series["revenue"]}')
-    logger.debug(f'sessions len={len(series["sessions"])}: {series["sessions"]}')
-    logger.debug(f'utilisation len={len(series["utilisation"])}: {series["utilisation"]}')
-    
     return {
             'backgroundColor': 'transparent',
 
