@@ -65,10 +65,19 @@ class Panel(BasePanel):
 
 
     async def render_content(self):
+        page = app.storage.user.get('pages', {})
+        page_state = page.get(self.page_key)
+        date_from = page_state.get('date_from')
+        date_to = page_state.get('date_to')
+        
+        label_aggre = (
+            f"Сравниваемый период:\n"
+            f"{date_from} — {date_to}"
+        )
         with ui.column().classes('w-full max-w-[1600px] mx-auto gap-5'):
             await render_title(
                 label='Общая сводка по сети',
-                # label_aggre='Executive Dashboard',
+                label_aggre=label_aggre,
                 page_key=self.page_key,
                 on_date_change=self.on_date_change,
             )
