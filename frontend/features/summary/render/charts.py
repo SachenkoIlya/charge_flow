@@ -1,4 +1,6 @@
 from nicegui import ui
+from core.logger.logger import logger
+
 
 def render_chart(data:dict):
     metrics = get_chart_metrics(data)
@@ -28,7 +30,8 @@ def get_chart_metrics(data:dict):
     charts = data['requested_metrics']['charts']
     x_axis = charts['xAxis']
     series = charts['series']
-
+    logger.debug(series)
+    
     return {
             'backgroundColor': 'transparent',
 
