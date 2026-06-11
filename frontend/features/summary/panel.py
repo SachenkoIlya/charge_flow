@@ -1,8 +1,9 @@
 
 from frontend.components.drawer import render_sidebar
 from datetime import datetime, timedelta
-from frontend.components.render_top_table import render_top_tables_dialog
+
 from frontend.features.base.panel import BasePanel
+from frontend.features.summary.render.render_top_table import render_top_tables_dialog
 from frontend.features.summary.render.tables_section import (
     render_tables_section, 
     TOP_ROWS, 

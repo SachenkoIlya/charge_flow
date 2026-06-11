@@ -1,5 +1,7 @@
 from nicegui import ui
 
+from frontend.features.summary.render.tables_section import render_tables_section
+
 def render_top_tables_dialog(rows, reversed_rows):
     dialog = ui.dialog()
 
