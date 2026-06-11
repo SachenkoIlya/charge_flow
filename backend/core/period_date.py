@@ -1,6 +1,6 @@
 from datetime import datetime
 from core.logger.logger import logger
-
+from dateutil.relativedelta import relativedelta
 
 def get_period_days(
     date_from:datetime, 
@@ -106,9 +106,20 @@ def comparable_period(
             Результат:
                 2025-01-04 → 2025-02-01
         """
-        period = date_to - date_from
-        comparable_to = date_from
-        comparable_from = comparable_to - period
+        is_full_month = (
+            date_from.day == 1
+            and date_to.day == 1
+            and date_to == date_from + relativedelta(months=1)
+        )
+
+        if is_full_month:
+            comparable_from = date_from - relativedelta(months=1)
+            comparable_to = date_from
+        else:
+            period = date_to - date_from
+            comparable_to = date_from
+            comparable_from = comparable_to - period
+
         return comparable_from, comparable_to
     
     
