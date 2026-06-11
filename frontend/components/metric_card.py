@@ -40,9 +40,9 @@ def metric_card(metric: dict, value:str, delta:str):
         # ui.space()
 
         with ui.row().classes('w-full items-end justify-between'):
-            ui.label(metric[value]).classes(
+            ui.label(value).classes(
                 f"{metric.get('value_class', 'text-xl')} font-bold leading-tight"
             )
-            ui.label(metric[delta]).classes(
+            ui.label(delta).classes(
                 'text-xs text-green-400 font-semibold text-right'
             )
