@@ -22,7 +22,7 @@ def render_chart(data:dict):
         )
 
         ui.echart(metrics).classes(
-            'w-full h-[250px]'
+            'w-full h-[450px]'
         )
 
 
