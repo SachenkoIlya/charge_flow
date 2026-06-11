@@ -8,15 +8,14 @@ def render_top_tables_dialog(rows, reversed_rows):
     with dialog:
         with ui.card().classes(
             '''
-            w-[68vw]
-            max-w-[1350px]
-            min-w-[1000px]
-            bg-[#071019]
-            border border-[#1f2937]
-            rounded-2xl
-            p-5
-            text-white
-            shadow-2xl
+                w-[90vw]
+                h-[70vh]
+                max-w-none
+                bg-[#071019]
+                border border-[#1f2937]
+                rounded-2xl
+                p-5
+                text-white
             '''
         ):
             with ui.row().classes('w-full items-center justify-between mb-4'):
