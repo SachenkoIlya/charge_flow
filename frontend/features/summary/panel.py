@@ -53,10 +53,11 @@ class Panel(BasePanel):
             with ui.element('main').classes(
                 """
                     flex-1
-                    h-screen
-                    overflow-hidden
-                    px-10
-                    py-2
+                    min-h-screen
+                    overflow-y-auto
+                    overflow-x-hidden
+                    px-6
+                    py-5
                 """
             ) as self.container:
                 await self.render_content()
@@ -64,7 +65,7 @@ class Panel(BasePanel):
 
 
     async def render_content(self):
-        with ui.element('div').classes('text-[80%]'):
+        with ui.column().classes('w-full max-w-[1600px] mx-auto gap-5'):
             await render_title(
                 label='Общая сводка по сети',
                 label_aggre='Executive Dashboard',
