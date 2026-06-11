@@ -66,10 +66,10 @@ class Panel(BasePanel):
 
     async def render_content(self):
         comparable_period = self.data['comparable_period']
-        comparable_from = comparable_period['date_from'].split(' ')[-1]
-        comparable_to = comparable_period['date_to'].split(' ')[-1]
+        comparable_from = comparable_period['date_from'].split(' ')[0]
+        comparable_to = comparable_period['date_to'].split(' ')[0]
         label_aggre = (
-            f"Сравниваемый период:\n"
+            f"Сравниваемый период: "
             f"{comparable_from} — {comparable_to}"
         )
 
