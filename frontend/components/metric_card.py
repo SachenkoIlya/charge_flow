@@ -43,6 +43,7 @@ def metric_card(metric: dict, value:str, delta:str):
             ui.label(value).classes(
                 f"{metric.get('value_class', 'text-xl')} font-bold leading-tight"
             )
-            ui.label(delta).classes(
-                f'text-xs font-semibold text-right {get_delta_class(delta)}'
-            )
+            if metric['key'] not in {'stations'}:
+                ui.label(delta).classes(
+                    f'text-xs font-semibold text-right {get_delta_class(delta)}'
+                )
