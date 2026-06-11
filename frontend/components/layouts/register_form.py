@@ -104,7 +104,6 @@ class RegisterForm:
         await self.load_data()
     
     async def load_data(self):
-        utils.logger.debug(self.data)
         data = await frontend_api(
             endpoint_name=self.endpoints_name,
             payloads=self.data,

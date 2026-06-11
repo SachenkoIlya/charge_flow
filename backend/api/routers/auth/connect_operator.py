@@ -1,5 +1,5 @@
 from backend.schemas.connect_operator import ConnectOperator
-from backend.database.get_manager import get_manager, get_current_token
+from backend.dependencies.get_manager import get_manager, get_current_token
 from backend.database.manager import Manager
 from core.logger.logger import make_logger
 from core.security import security

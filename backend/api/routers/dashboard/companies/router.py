@@ -1,4 +1,4 @@
-from backend.database.get_manager import get_merics
+from backend.dependencies.get_manager import get_merics
 from backend.services.admin_required import admin_required
 from core.logger.logger import logger
 from backend.api.routers.dashboard.manager import ManagerMetrics

@@ -1,14 +1,25 @@
 
 from core.base_db import Base
 from backend.api.routers.system.db import SystemDb
-from backend.api.routers.system.schemas import MonitoringSchema, EtlRunsResponseSchema
-from core.logger.logger import logger
+from backend.api.routers.system.schemas import (
+    MonitoringSchema, 
+    EtlRunsResponseSchema
+)
 
 
 class SystemReposytory:
     def __init__(self, base_db: "Base"):
         self.db = SystemDb(base_db)
 
+    def get_map_func(self, mode: str):
+        MAPPING = {
+            'etl_run': self.get_etl_runs,
+            'bi_exports': self.get_bi_exports_runs,
+        }
+        if mode not in MAPPING:
+            raise ValueError(f'Unknown mode: {mode}')
+        return MAPPING[mode]
+    
     @staticmethod
     def normalize_monitoring(rows):
         normaliized =  [
@@ -18,12 +29,8 @@ class SystemReposytory:
         return EtlRunsResponseSchema(rows=normaliized)
     
     async def determine_type(self, mode: str):
-        if mode == 'etl_run':
-            return await self.get_etl_runs()
-        if mode == 'bi_exports':
-            return await self.get_bi_exports_runs()
-    
-    
+        return await self.get_map_func(mode)()
+
     async def get_etl_runs(self):
         rows = await self.db.get_data_etl_run()
         return self.normalize_monitoring(rows)

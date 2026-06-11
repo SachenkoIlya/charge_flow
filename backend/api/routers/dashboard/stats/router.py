@@ -1,6 +1,7 @@
 from backend.api.routers.dashboard.manager import ManagerMetrics
-from backend.api.routers.dashboard.stats.schemas import DashboardFilterSchema, StatsResponseSchema
-from backend.database.get_manager import get_current_token, get_merics
+from backend.api.routers.dashboard.stats.schemas import StatsResponseSchema
+from backend.dependencies.get_manager import get_current_token, get_merics
+from backend.core.schemas import DashboardFilterSchema
 from backend.core.valid_id import get_valid_id  
 from backend.core.date_insurance import date_insurance
 from core.logger.logger import logger

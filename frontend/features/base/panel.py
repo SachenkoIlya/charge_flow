@@ -2,10 +2,14 @@ from abc import ABC, abstractmethod
 from core.logger.logger import logger
 from nicegui import app
 from datetime import datetime
+from copy import deepcopy
+
+from frontend.api.client import frontend_api
 
 
 class BasePanel(ABC):
     page_key = str
+    endpoints_name = str
     container = None
     
     def __post_init__(self):
@@ -74,3 +78,18 @@ class BasePanel(ABC):
         loaded = await self.load_data()
         if loaded:
             await self.refresh()
+    
+    async def load_data(self):
+        payload = deepcopy(self.payload)
+        logger.debug(f"{self.page_key}: зашли в load_data".upper())
+        logger.debug(f"payload: {payload}")
+        response = await frontend_api(
+            endpoint_name=self.endpoints_name,
+            payloads=payload,
+            request=self.request
+        )
+        if response is None:
+            self.data = {}
+            return False
+        self.data = response
+        return True

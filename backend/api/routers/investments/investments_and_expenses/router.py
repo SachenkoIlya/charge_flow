@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 from backend.api.routers.dashboard.manager import ManagerFinance
-from backend.database.get_manager import get_current_token, get_merics_investment
+from backend.dependencies.get_manager import get_current_token, get_merics_investment
 from backend.api.routers.investments.investments_and_expenses.schemas import InvestmentExpenseCreateSchema
 from fastapi import APIRouter
 from fastapi import Depends

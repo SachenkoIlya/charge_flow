@@ -1,12 +1,21 @@
 from fastapi import Request
-from backend.api.routers.dashboard.manager import ManagerMetrics, ManagerFinance, ManagerSystem
+from backend.api.routers.dashboard.manager import (
+    ManagerMetrics, 
+    ManagerFinance, 
+    ManagerSystem,
+    ManagerDashboardMetrics
+)
+
 from backend.database.manager import Manager
 from typing import cast
 from fastapi import Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from core.security.security import security
 
+
 security_http = HTTPBearer()
+
+
 def get_current_token(
     credentials: HTTPAuthorizationCredentials = Depends(security_http) 
 ):
@@ -27,6 +36,9 @@ def get_manager(request: Request) -> Manager:
 
 def get_merics(request: Request) -> ManagerMetrics:
     return cast(ManagerMetrics, request.app.state.metrics)
+
+def get_dashboard(request: Request) -> ManagerDashboardMetrics:
+    return cast(ManagerDashboardMetrics, request.app.state.dashboard)
 
 
 def get_merics_investment(request: Request) -> ManagerFinance:

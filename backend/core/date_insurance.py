@@ -1,8 +1,8 @@
-from backend.api.routers.dashboard.stats.schemas import DashboardFilterSchema
+from backend.core.schemas import DashboardFilterSchema
 from datetime import datetime, timezone, timedelta
 
 
-def date_insurance(data: DashboardFilterSchema) -> tuple[str, str]:
+def date_insurance(data: DashboardFilterSchema) -> tuple[datetime, datetime]:
     today = datetime.now()
     if not data.date_from:
         data.date_from = today.strftime('%d.%m.%Y')

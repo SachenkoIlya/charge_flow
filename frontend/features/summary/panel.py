@@ -14,12 +14,10 @@ from frontend.features.summary.render.charts import (
 from core.logger.logger import logger
 from frontend.features.summary.render.metrics import METRICS
 from frontend.components.metric_card import render_metrics 
-from frontend.api.client import frontend_api
 from frontend.components.render_title import render_title
 from frontend.components.metric_card import render_metrics 
 
 from dataclasses import dataclass
-from copy import deepcopy
 from fastapi import Request
 from nicegui import ui, app
 
@@ -70,6 +68,7 @@ class Panel(BasePanel):
 
 
     async def render_content(self):
+        logger.debug(self.data)
         with ui.element('div').style('zoom: 0.8'):
             await render_title(
                 label='Общая сводка по сети',
@@ -81,10 +80,5 @@ class Panel(BasePanel):
             render_chart(CHART_METRICS)
             render_tables_section(TOP_ROWS, REVERS_ROWS)
 
-    async def load_data(self):
-        payload = deepcopy(self.payload)
-        logger.debug(f"{self.page_key}: зашли в load_data".upper())
-        logger.debug(f"payload: {payload}")
-        return True
-
+    
         

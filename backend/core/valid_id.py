@@ -1,4 +1,4 @@
-from backend.api.routers.dashboard.stats.schemas import DashboardFilterSchema
+from backend.core.schemas import DashboardFilterSchema
 from core.logger.logger import logger
 
 def get_valid_id(role:str, data: DashboardFilterSchema, user_id: int) -> int:

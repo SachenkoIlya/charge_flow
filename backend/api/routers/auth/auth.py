@@ -1,4 +1,4 @@
-from backend.database.get_manager import get_manager
+from backend.dependencies.get_manager import get_manager
 from backend.schemas.users import UserCreate
 from backend.database.manager import Manager
 

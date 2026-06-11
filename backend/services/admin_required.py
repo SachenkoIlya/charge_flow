@@ -1,5 +1,4 @@
-from backend.database.get_manager import get_current_token
-from core.security import security
+from backend.dependencies.get_manager import get_current_token
 from fastapi import Depends, HTTPException
 
 

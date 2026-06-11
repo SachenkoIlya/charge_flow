@@ -30,7 +30,11 @@ class Endpoints:
             'method': 'post'
         },
         'system': {
-            'url': 'system/monitoring',
+            'url': 'v1/system/monitoring',
+            'method': 'post'
+        },
+        'summary': {
+            'url':'v1/dashboard/summary',
             'method': 'post'
         }
     }

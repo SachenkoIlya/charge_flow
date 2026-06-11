@@ -5,7 +5,8 @@ from fastapi.middleware.cors import  CORSMiddleware
 from backend.api.routers.dashboard.manager import (
     ManagerMetrics, 
     ManagerFinance, 
-    ManagerSystem
+    ManagerSystem,
+    ManagerDashboardMetrics
 )
 
 from core.security.settings import settings
@@ -25,6 +26,7 @@ async def lifespan(app: FastAPI):
     app.state.metrics = ManagerMetrics(db)
     app.state.investment = ManagerFinance(db)
     app.state.system  = ManagerSystem(db)
+    app.state.dashboard = ManagerDashboardMetrics(db)
     try:
         app.state.client = httpx.AsyncClient(base_url="http://localhost:8001")
         logger.info(f"client created".upper())

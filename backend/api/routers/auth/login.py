@@ -2,7 +2,7 @@ from typing import Optional
 
 from fastapi import Depends, APIRouter, Response, Form
 from fastapi.responses import RedirectResponse
-from backend.database.get_manager import get_manager
+from backend.dependencies.get_manager import get_manager
 from core.logger.logger import make_logger
 from core.security.security import security
 from backend.database.manager import Manager
