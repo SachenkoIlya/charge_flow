@@ -84,7 +84,7 @@ class Panel(BasePanel):
             f"{comparable_from} — {comparable_to}"
         )
 
-        with ui.column().classes('w-full max-w-[1600px] mx-auto gap-5'):
+        with ui.column().classes('w-full max-w-[1600px] mx-auto gap-3'):
             await render_title(
                 label='Общая сводка по сети',
                 label_aggre=label_aggre,

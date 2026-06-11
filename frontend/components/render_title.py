@@ -36,7 +36,7 @@ async def render_title(
     on_date_change=None,
 
 ):
-    with ui.row().classes('w-full items-start justify-between mb-6'):
+    with ui.row().classes('w-full items-start justify-between mb-0'):
 
         with ui.column().classes('gap-0'):
             ui.label(label).classes(
