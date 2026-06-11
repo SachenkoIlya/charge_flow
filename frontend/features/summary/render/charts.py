@@ -8,12 +8,11 @@ def render_chart(data:dict):
     with ui.card().classes(
         '''
         w-full
-        mt-5
         bg-[#101923]/90
         border border-[#1f2937]
         rounded-xl
         shadow-xl
-        p-4
+        px-4 pt-3 pb-1
         '''
     ):
 
@@ -22,7 +21,7 @@ def render_chart(data:dict):
         )
 
         ui.echart(metrics).classes(
-            'w-full h-[420px]'
+              'w-full h-[450px]'
         )
 
 
