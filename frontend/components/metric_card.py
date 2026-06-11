@@ -1,5 +1,5 @@
 from nicegui import ui
-from frontend.features.summary.render.metrics import METRICS, get_metric_value, get_metric_delta
+from frontend.features.summary.render.metrics import METRICS, get_delta_class, get_metric_value, get_metric_delta
 
 def render_metrics(data: dict, columns:int):
     with ui.grid(columns=columns).classes(
@@ -44,5 +44,5 @@ def metric_card(metric: dict, value:str, delta:str):
                 f"{metric.get('value_class', 'text-xl')} font-bold leading-tight"
             )
             ui.label(delta).classes(
-                'text-xs text-green-400 font-semibold text-right'
+                f'text-xs font-semibold text-right {get_delta_class(delta)}'
             )

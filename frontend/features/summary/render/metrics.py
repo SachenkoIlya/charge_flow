@@ -182,3 +182,11 @@ def get_metric_delta(key:str, data:dict) -> str:
         )
 
     return "—"
+
+
+def get_delta_class(delta: str) -> str:
+    if delta.startswith('-'):
+        return "text-red-400"
+    if delta == '_':
+        return "text-gray-500"
+    return "text-green-400"
