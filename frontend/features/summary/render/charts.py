@@ -32,12 +32,9 @@ def get_chart_metrics(data:dict):
     return {
             'backgroundColor': 'transparent',
 
-            'tooltip': {
+           'tooltip': {
                 'trigger': 'axis',
-                'axisPointer': {
-                    'type': 'line',
-                    'snap': True,
-                },
+                'triggerOn': 'click',
             },
 
             'legend': {
@@ -91,7 +88,8 @@ def get_chart_metrics(data:dict):
                     "data": series["revenue"],
                     "yAxisIndex": 0,
                     "lineStyle": {"width": 3},
-                    "symbolSize": 8,
+                    'showSymbol': True,
+                    "symbolSize": 10,
                     "color": "#22c55e",
                 },
                 {
@@ -101,7 +99,8 @@ def get_chart_metrics(data:dict):
                     "data": series["sessions"],
                     "yAxisIndex": 1,
                     "lineStyle": {"width": 3},
-                    "symbolSize": 8,
+                    'showSymbol': True,
+                    "symbolSize": 10,
                     "color": "#3b82f6",
                 },
                 {
@@ -111,7 +110,8 @@ def get_chart_metrics(data:dict):
                     "data": series["utilisation"],
                     "yAxisIndex": 1,
                     "lineStyle": {"width": 3},
-                    "symbolSize": 8,
+                    'showSymbol': True,
+                    "symbolSize": 10,
                     "color": "#a855f7",
                 },
             ]
