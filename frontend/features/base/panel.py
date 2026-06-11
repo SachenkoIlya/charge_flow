@@ -35,7 +35,15 @@ class BasePanel(ABC):
         self.payload = page_state
         self.company_id = context.get('company_id')
   
+    def reset_page_dates(self):
+        today = datetime.now().strftime("%d.%m.%Y")
+        pages = app.storage.user.setdefault('pages', {})
+        page_state = pages.setdefault(self.page_key, {})
+        page_state['date_from'] = today
+        page_state['date_to'] = today
 
+        app.storage.user['pages'] = pages
+    
     @abstractmethod
     async def render_content(self):
         """

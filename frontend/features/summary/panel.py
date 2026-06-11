@@ -27,7 +27,7 @@ class Panel(BasePanel):
     page_key = 'summary'
 
     async def render(self):
-       
+        self.reset_page_dates()
         self.apply_filters()
         loaded = await self.load_data()
         if not loaded:
