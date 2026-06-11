@@ -68,7 +68,7 @@ class Panel(BasePanel):
         with ui.column().classes('w-full max-w-[1600px] mx-auto gap-5'):
             await render_title(
                 label='Общая сводка по сети',
-                label_aggre='Executive Dashboard',
+                # label_aggre='Executive Dashboard',
                 page_key=self.page_key,
                 on_date_change=self.on_date_change,
             )

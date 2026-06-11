@@ -31,7 +31,7 @@ def get_data_from_map(page_key: str):
 
 async def render_title(
     label: str, 
-    label_aggre: str,
+    # label_aggre: str,
     page_key: str,
     on_date_change=None,
 
@@ -43,9 +43,9 @@ async def render_title(
                 'text-3xl font-bold text-white leading-tight'
             )
 
-            ui.label(label_aggre).classes(
-                'text-sm text-gray-400 mt-1'
-            )
+            # ui.label(label_aggre).classes(
+            #     'text-sm text-gray-400 mt-1'
+            # )
                
         data = get_data_from_map(page_key)
 
