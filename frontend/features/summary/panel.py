@@ -65,15 +65,14 @@ class Panel(BasePanel):
 
 
     async def render_content(self):
-        page = app.storage.user.get('pages', {})
-        page_state = page.get(self.page_key)
-        date_from = page_state.get('date_from')
-        date_to = page_state.get('date_to')
-        
+        comparable_period = self.data['comparable_period']
+        comparable_from = comparable_period['date_from'].split(' ')[-1]
+        comparable_to = comparable_period['date_to'].split(' ')[-1]
         label_aggre = (
             f"Сравниваемый период:\n"
-            f"{date_from} — {date_to}"
+            f"{comparable_from} — {comparable_to}"
         )
+
         with ui.column().classes('w-full max-w-[1600px] mx-auto gap-5'):
             await render_title(
                 label='Общая сводка по сети',
