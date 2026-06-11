@@ -24,9 +24,9 @@ def render_top_table(title: str, title_class: str, rows: list):
                 'w-full text-sm text-gray-200 py-2 border-t border-[#1f2937]'
             ):
                 ui.label(str(i)).classes('text-gray-400')
-                ui.label(row['station'])
+                ui.label(row['station_name'])
                 ui.label(row['revenue'])
-                ui.label(row['load'])
+                ui.label(row['utilisation'])
 
 
 

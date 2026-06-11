@@ -5,7 +5,10 @@ from frontend.components.render_top_table import  render_top_table
 
 
 
-def render_tables_section(rows: list[dict], reversed_rows:list[dict]):
+def render_tables_section(station_rating):
+    top_stations = station_rating['top_stations']
+    worst_stations = station_rating['worst_stations']
+
     with ui.grid(columns=2).classes(
         """
         w-full
@@ -13,8 +16,8 @@ def render_tables_section(rows: list[dict], reversed_rows:list[dict]):
         gap-4
         """
     ):
-        render_top_table('Топ-5 станций по выручке', 'text-green-400', rows)
-        render_top_table('Топ-5 худших станций по выручке', 'text-orange-400', reversed_rows)
+        render_top_table('Топ-5 станций по выручке', 'text-green-400', top_stations)
+        render_top_table('Топ-5 худших станций по выручке', 'text-orange-400', worst_stations)
 
 
 TOP_ROWS = [

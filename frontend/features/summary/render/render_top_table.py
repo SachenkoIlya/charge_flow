@@ -2,7 +2,9 @@ from nicegui import ui
 
 from frontend.features.summary.render.tables_section import render_tables_section
 
-def render_top_tables_dialog(rows, reversed_rows):
+def render_top_tables_dialog(data: dict):
+    station_rating = data['requested_metrics']['station_rating']
+
     dialog = ui.dialog()
 
     with dialog:
@@ -26,6 +28,6 @@ def render_top_tables_dialog(rows, reversed_rows):
                     on_click=dialog.close,
                 ).props('flat dense round color=grey')
 
-            render_tables_section(rows, reversed_rows)
+            render_tables_section(station_rating)
 
     return dialog

@@ -93,7 +93,7 @@ class Panel(BasePanel):
                 page_key=self.page_key,
                 on_date_change=self.on_date_change,
             )
-            top_dialog = render_top_tables_dialog(TOP_ROWS, REVERS_ROWS)
+            top_dialog = render_top_tables_dialog(self.data)
             render_metrics(data=self.data, columns=5,  on_top_click=top_dialog.open)
             render_chart(data=self.data)
             # render_tables_section(TOP_ROWS, REVERS_ROWS)
