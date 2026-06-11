@@ -7,10 +7,7 @@ from frontend.features.summary.render.tables_section import (
     TOP_ROWS, 
     REVERS_ROWS
 )
-from frontend.features.summary.render.charts import (
-    render_chart, 
-    CHART_METRICS
-)
+from frontend.features.summary.render.charts import render_chart
 from core.logger.logger import logger
 
 from frontend.components.metric_card import render_metrics 
