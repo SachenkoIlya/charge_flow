@@ -1,16 +1,16 @@
-from frontend.components.metric_card import metric_card
+# from frontend.components.metric_card import metric_card
 from nicegui import ui
 
 
 
-def render_metrics(metrics: list):
+# def render_metrics(metrics: list):
 
-    with ui.grid(columns=5).classes(
-        'w-full gap-4 mt-6'
-    ):
+#     with ui.grid(columns=5).classes(
+#         'w-full gap-4 mt-6'
+#     ):
 
-        for metric in metrics:
-            metric_card(metric)
+#         for metric in metrics:
+#             metric_card(metric)
 
 
 
