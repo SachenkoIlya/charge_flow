@@ -2,7 +2,7 @@ from nicegui import ui
 
 def render_chart(data:dict):
     metrics = get_chart_metrics(data)
-    
+
     with ui.card().classes(
         '''
         w-full
@@ -62,46 +62,53 @@ def get_chart_metrics(data:dict):
                 }
             },
 
-            'yAxis': {
-                'type': 'value',
-                'axisLine': {
-                    'lineStyle': {'color': '#374151'}
+            "yAxis": [
+                {
+                    "type": "value",
+                    "name": "₽",
+                    "position": "left",
+                    "axisLabel": {"color": "#9ca3af"},
+                    "splitLine": {"lineStyle": {"color": "#1f2937"}},
                 },
-                'splitLine': {
-                    'lineStyle': {'color': '#1f2937'}
+                {
+                    "type": "value",
+                    "name": "% / шт",
+                    "position": "right",
+                    "axisLabel": {"color": "#9ca3af"},
+                    "splitLine": {"show": False},
                 },
-                'axisLabel': {
-                    'color': '#9ca3af'
-                }
-            },
+            ],
 
             'series': [
                 {
-                    'name': 'Выручка',
-                    'type': 'line',
-                    'smooth': True,
-                    'data': series['revenue'],
-                    'lineStyle': {'width': 3},
-                    'symbolSize': 8,
-                    'color': '#22c55e',
+                    "name": "Выручка",
+                    "type": "line",
+                    "smooth": True,
+                    "data": series["revenue"],
+                    "yAxisIndex": 0,
+                    "lineStyle": {"width": 3},
+                    "symbolSize": 8,
+                    "color": "#22c55e",
                 },
                 {
-                    'name': 'Сессии',
-                    'type': 'line',
-                    'smooth': True,
-                    'data': series['sessions'],
-                    'lineStyle': {'width': 3},
-                    'symbolSize': 8,
-                    'color': '#3b82f6',
+                    "name": "Сессии",
+                    "type": "line",
+                    "smooth": True,
+                    "data": series["sessions"],
+                    "yAxisIndex": 1,
+                    "lineStyle": {"width": 3},
+                    "symbolSize": 8,
+                    "color": "#3b82f6",
                 },
                 {
-                    'name': 'Загрузка',
-                    'type': 'line',
-                    'smooth': True,
-                    'data': series['utilisation'],
-                    'lineStyle': {'width': 3},
-                    'symbolSize': 8,
-                    'color': '#a855f7',
+                    "name": "Загрузка",
+                    "type": "line",
+                    "smooth": True,
+                    "data": series["utilisation"],
+                    "yAxisIndex": 1,
+                    "lineStyle": {"width": 3},
+                    "symbolSize": 8,
+                    "color": "#a855f7",
                 },
             ]
         }
