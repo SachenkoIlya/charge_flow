@@ -30,7 +30,10 @@ def get_chart_metrics(data:dict):
     charts = data['requested_metrics']['charts']
     x_axis = charts['xAxis']
     series = charts['series']
-    logger.debug(x_axis)
+    logger.debug(f'x_axis len={len(x_axis)}: {x_axis}')
+    logger.debug(f'revenue len={len(series["revenue"])}: {series["revenue"]}')
+    logger.debug(f'sessions len={len(series["sessions"])}: {series["sessions"]}')
+    logger.debug(f'utilisation len={len(series["utilisation"])}: {series["utilisation"]}')
     
     return {
             'backgroundColor': 'transparent',
@@ -87,7 +90,7 @@ def get_chart_metrics(data:dict):
                 {
                     "name": "Выручка",
                     "type": "line",
-                    "smooth": False,
+                    "smooth": True,
                     "data": series["revenue"],
                     "yAxisIndex": 0,
                     "lineStyle": {"width": 3},
@@ -98,7 +101,7 @@ def get_chart_metrics(data:dict):
                 {
                     "name": "Сессии",
                     "type": "line",
-                    "smooth": False,
+                    "smooth": True,
                     "data": series["sessions"],
                     "yAxisIndex": 1,
                     "lineStyle": {"width": 3},
@@ -109,7 +112,7 @@ def get_chart_metrics(data:dict):
                 {
                     "name": "Загрузка",
                     "type": "line",
-                    "smooth": False,
+                    "smooth": True,
                     "data": series["utilisation"],
                     "yAxisIndex": 1,
                     "lineStyle": {"width": 3},
