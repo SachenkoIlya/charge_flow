@@ -103,14 +103,9 @@ def calc_delta(current: float, previous: float) -> str:
     delta = (current - previous) / previous * 100
     if delta > 0:
         sign = "+"
-    elif delta < 0:
-        sign = "-"
     else:
         sign = ''
-
-    final = f"{sign}{delta:.1f}%"
-    logger.debug(final)
-    return final
+    return f"{sign}{delta:.1f}%"
 
 def get_metric_value(key:str, data:dict) -> str:
     requested = data['requested_metrics']
