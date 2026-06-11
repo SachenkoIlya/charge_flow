@@ -69,7 +69,7 @@ def render_sidebar(role: str):
             overflow-hidden
         """
     ):
-        ui.label('Меню').classes('text-xl font-bold text-white mb-4 pl-4')
+        ui.label('Меню').classes('text-xl font-bold text-white mb-10 pl-4')
 
         with ui.column().classes('w-full gap-2'):
             # nav_item('dashboard', 'Общая сводка', '/control_panel', active=True)
@@ -90,7 +90,7 @@ def render_sidebar(role: str):
 
         ui.space()
 
-        with ui.column().classes('w-full gap-2 mb-[40px]'):
+        with ui.column().classes('w-full gap-2 mb-[30px]'):
             nav_item('contacts', 'Контакты', '/contacts')
 
             with ui.row().classes(
