@@ -34,6 +34,10 @@ def get_chart_metrics(data:dict):
 
             'tooltip': {
                 'trigger': 'axis',
+                'axisPointer': {
+                    'type': 'line',
+                    'snap': True,
+                },
             },
 
             'legend': {
