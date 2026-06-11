@@ -30,7 +30,7 @@ def get_chart_metrics(data:dict):
     charts = data['requested_metrics']['charts']
     x_axis = charts['xAxis']
     series = charts['series']
-    logger.debug(series)
+    logger.debug(x_axis)
     
     return {
             'backgroundColor': 'transparent',
