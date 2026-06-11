@@ -15,7 +15,6 @@ from core.logger.logger import logger
 
 from frontend.components.metric_card import render_metrics 
 from frontend.components.render_title import render_title
-from frontend.components.metric_card import render_metrics 
 
 from dataclasses import dataclass
 from fastapi import Request

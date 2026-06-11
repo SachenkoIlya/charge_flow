@@ -2,7 +2,6 @@ from nicegui import ui
 from frontend.features.summary.render.metrics import METRICS, get_metric_value, get_metric_delta
 
 def render_metrics(data: dict, columns:int):
-    
     with ui.grid(columns=columns).classes(
         'w-full gap-4 mt-6'
     ):
