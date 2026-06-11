@@ -17,6 +17,7 @@ def render_metrics(metrics: list):
 METRICS = [
     {
         'icon': 'ev_station',
+        'key': 'stations',
         'icon_bg': 'bg-blue-600',
         'title': 'ЭЭС в сети',
         'subtitle': 'активных / в работе',
@@ -25,6 +26,7 @@ METRICS = [
     },
     {
         'icon': 'currency_ruble',
+        'key': 'total_revenue',
         'icon_bg': 'bg-green-600',
         'title': 'Выручка за период',
         'subtitle': 'суммарная',
@@ -33,6 +35,7 @@ METRICS = [
     },
     {
         'icon': 'bolt',
+        'key': 'total_energy_kwh',
         'icon_bg': 'bg-yellow-600',
         'title': 'Отпущено электроэнергии',
         'subtitle': 'суммарно',
@@ -41,6 +44,7 @@ METRICS = [
     },
     {
         'icon': 'pie_chart',
+        'key': 'utilisation',
         'icon_bg': 'bg-purple-600',
         'title': 'Средняя загрузка',
         'subtitle': 'utilisation rate',
@@ -48,15 +52,8 @@ METRICS = [
         'delta': '+3.6 п.п.',
     },
     {
-        'icon': 'monitor_heart',
-        'icon_bg': 'bg-cyan-600',
-        'title': 'Total доступность',
-        'subtitle': 'uptime (взвеш.)',
-        'value': '98.36%',
-        'delta': '+0.42 п.п.',
-    },
-    {
         'icon': 'ev_station',
+        'key': 'total_sessions',
         'icon_bg': 'bg-indigo-600',
         'title': 'Зарядных сессий',
         'subtitle': 'всего',
@@ -65,6 +62,7 @@ METRICS = [
     },
     {
         'icon': 'currency_ruble',
+        'key': 'avg_revenue_per_station',
         'icon_bg': 'bg-green-600',
         'title': 'Средняя выручка',
         'subtitle': 'на одну ЭЭС',
@@ -73,6 +71,7 @@ METRICS = [
     },
     {
         'icon': 'person',
+        'key': 'avg_revenue_per_session',
         'icon_bg': 'bg-violet-600',
         'title': 'Средняя выручка',
         'subtitle': 'на одну сессию',
@@ -81,6 +80,7 @@ METRICS = [
     },
     {
         'icon': 'percent',
+        'key': 'partner_pct',
         'icon_bg': 'bg-orange-600',
         'title': 'Маржинальность сети',
         'subtitle': 'contribution margin',
@@ -89,10 +89,96 @@ METRICS = [
     },
     {
         'icon': 'savings',
+        'key': 'net_profit',
         'icon_bg': 'bg-lime-600',
         'title': 'Чистая прибыль',
         'subtitle': 'после всех OPEX и налогов',
         'value': '12 745 980 ₽',
         'delta': '+20.3%',
     },
+    {
+        'icon': 'monitor_heart',
+        'key': 'availability',
+        'icon_bg': 'bg-cyan-600',
+        'title': 'Total доступность',
+        'subtitle': 'uptime (взвеш.)',
+        'value': '98.36%',
+        'delta': '+0.42 п.п.',
+    },
 ]
+
+def calc_delta(current: float, previous: float) -> str:
+    if previous in (None, 0):
+        return "—"
+    delta = (current - previous) / previous * 100
+    if delta > 0:
+        sign = "+"
+    elif delta < 0:
+        sign = "-"
+    else:
+        sign = ''
+    return f"{sign}{delta:.1f}%"
+
+def get_metric_value(key:str, data:dict) -> str:
+    requested = data['requested_metrics']
+    metrics = requested["metrics"]
+    
+    if key == "stations":
+        station = requested["station"]
+        return f'{station["connected_stations"]} / {station["total_station"]}'
+    if key == "total_revenue":
+        return f'{metrics["total_revenue"]:,.0f} ₽'.replace(",", " ")
+    if key == "total_sessions":
+        return f'{metrics["total_sessions"]:,.0f}'.replace(",", " ")
+    if key == 'avg_revenue_per_station':
+        return f'{metrics["avg_revenue_per_station"]:,.0f}'.replace(",", " ")
+    if key == 'total_energy_kwh':
+        return f'{metrics["total_energy_kwh"]:,.0f}'.replace(",", " ")
+    if key == "utilisation":
+        return f'{requested["utilisation"]:.1f}%'
+    if key == "partner_pct":
+        return f'{requested["margin"]["partner_pct"]:.1f}%'
+    if key == "avg_revenue_per_session":
+        return f'{metrics["avg_revenue_per_session"]:,.0f} ₽'.replace(",", " ")
+    if key == 'availability':
+        return '-'
+    if key == 'net_profit':
+        '-'
+    return "-"
+
+
+
+def get_metric_delta(key:str, data:dict) -> str:
+    requested = data["requested_metrics"]
+    comparable = data["comparable_metrics"]
+    requested_metrics = requested["metrics"]
+    comparable_metrics = comparable["metrics"]
+
+    if key == "stations":
+        return str(
+            requested["station"]["connected_stations"]
+            - comparable["station"]["connected_stations"]
+        )
+    if key in (
+        "total_revenue",
+        "total_sessions",
+        "avg_revenue_per_station",
+        "avg_revenue_per_session",
+        "total_energy_kwh",
+    ):
+        return calc_delta(
+            requested_metrics[key],
+            comparable_metrics[key]
+        )
+    if key == 'utilisation':
+        return calc_delta(
+            requested["utilisation"],
+            comparable["utilisation"],
+        )
+    if key == "partner_pct":
+        return calc_delta(
+            requested["margin"]["partner_pct"],
+            comparable["margin"]["partner_pct"],
+        )
+
+    return "—"

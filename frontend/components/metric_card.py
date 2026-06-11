@@ -1,18 +1,21 @@
 from nicegui import ui
+from frontend.features.summary.render.metrics import METRICS, get_metric_value, get_metric_delta
 
-
-def render_metrics(metrics: list, columns:int):
-
+def render_metrics(data: dict, columns:int):
+    
     with ui.grid(columns=columns).classes(
         'w-full gap-4 mt-6'
     ):
-        for metric in metrics:
-            metric_card(metric)
+        for metric in METRICS:
+            key = metric.get('key', '')
+            value = get_metric_value(key, data)
+            delta = get_metric_delta(key, data)
+            metric_card(metric, value, delta)
 
 
 
 
-def metric_card(metric: dict):
+def metric_card(metric: dict, value:str, delta:str):
     with ui.card().classes(
         '''
         bg-[#101923]/90 border border-[#1f2937] rounded-xl shadow-xl
@@ -38,10 +41,9 @@ def metric_card(metric: dict):
         # ui.space()
 
         with ui.row().classes('w-full items-end justify-between'):
-            ui.label(metric['value']).classes(
+            ui.label(metric[value]).classes(
                 f"{metric.get('value_class', 'text-xl')} font-bold leading-tight"
             )
-
-            ui.label(metric['delta']).classes(
+            ui.label(metric[delta]).classes(
                 'text-xs text-green-400 font-semibold text-right'
             )
