@@ -1,16 +1,6 @@
-# from frontend.components.metric_card import metric_card
 from nicegui import ui
+from core.logger.logger import logger
 
-
-
-# def render_metrics(metrics: list):
-
-#     with ui.grid(columns=5).classes(
-#         'w-full gap-4 mt-6'
-#     ):
-
-#         for metric in metrics:
-#             metric_card(metric)
 
 
 
@@ -117,7 +107,10 @@ def calc_delta(current: float, previous: float) -> str:
         sign = "-"
     else:
         sign = ''
-    return f"{sign}{delta:.1f}%"
+
+    final = f"{sign}{delta:.1f}%"
+    logger.debug(final)
+    return final
 
 def get_metric_value(key:str, data:dict) -> str:
     requested = data['requested_metrics']
