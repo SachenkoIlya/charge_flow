@@ -64,7 +64,7 @@ class Panel(BasePanel):
 
 
     async def render_content(self):
-        with ui.element('div').style('zoom: 0.8'):
+        with ui.element('div').classes('text-[80%]'):
             await render_title(
                 label='Общая сводка по сети',
                 label_aggre='Executive Dashboard',
