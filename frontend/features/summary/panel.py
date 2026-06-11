@@ -75,7 +75,7 @@ class Panel(BasePanel):
                 on_date_change=self.on_date_change,
             )
             render_metrics(data=self.data, columns=5)
-            render_chart(CHART_METRICS)
+            render_chart(data=self.data)
             render_tables_section(TOP_ROWS, REVERS_ROWS)
 
     
