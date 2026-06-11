@@ -64,8 +64,8 @@ def render_sidebar(role: str):
             bg-[#071019]
             border-r border-[#1f2937]
             px-4
-            pt-4
-            pb-4
+            pt-[28px]
+            pb-[28px]
             overflow-hidden
         """
     ):
@@ -90,7 +90,7 @@ def render_sidebar(role: str):
 
         ui.space()
 
-        with ui.column().classes('w-full gap-2'):
+        with ui.column().classes('w-full gap-2 mb-[56px]'):
             nav_item('contacts', 'Контакты', '/contacts')
 
             with ui.row().classes(
