@@ -52,7 +52,7 @@ class Panel(BasePanel):
                     h-screen
                     overflow-hidden
                     px-10
-                    py-2
+                    py-6
                 """
             ) as self.container:
                 await self.render_content()
@@ -66,18 +66,18 @@ class Panel(BasePanel):
         page_state = page.get(self.page_key, {})
         
         toggle_value = page_state.get('toggle_value', 'etl_run')
-
-        await render_title(
-            label='Мониторинг системы',
-            label_aggre='system monitoring',
-            page_key=self.page_key,
-            on_date_change=self.on_date_change,
-        )
-        render_table(
-            mode=toggle_value,
-            rows=self.data.get('rows', []),
-            height=800
-        )
+        with ui.column().classes('w-full gap-4'):
+            await render_title(
+                label='Мониторинг системы',
+                label_aggre='system monitoring',
+                page_key=self.page_key,
+                on_date_change=self.on_date_change,
+            )
+            render_table(
+                mode=toggle_value,
+                rows=self.data.get('rows', []),
+                height=800
+            )
 
     async def load_data(self):
         payload = deepcopy(self.payload)
