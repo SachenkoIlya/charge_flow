@@ -85,7 +85,7 @@ class Panel(BasePanel):
                 on_date_change=self.on_date_change 
             )
             render_metrics(
-                metrics=FINANCE_METRICS, 
+                data=FINANCE_METRICS, 
                 columns=len(FINANCE_METRICS)
             )
             
