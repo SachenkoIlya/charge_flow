@@ -88,6 +88,9 @@ class BasePanel(ABC):
             await self.refresh()
     
     async def load_data(self):
+        if self.endpoints_name == 'investments':
+            return True
+        
         if self.page_key in {'finance', 'system'}:
             payload = {
                 'toggle_value': self.payload.get('toggle_value')

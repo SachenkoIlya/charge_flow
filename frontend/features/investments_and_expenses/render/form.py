@@ -1,5 +1,6 @@
 from nicegui import ui
 from core.logger.logger import logger
+from datetime import datetime
 from frontend.features.investments_and_expenses.schemas.schemas import (
     resolve_model, 
     CapexSchema, 
@@ -230,9 +231,28 @@ async def render_form(data: dict[str, list], request: Request, mode:str = 'opex'
                     with_input=True
                 ).props('dense').classes('w-full')
 
-                inputs['expense_date'] = ui.date().props(
-                    'mask=DD.MM.YYYY'
-                )
+                inputs['expense_date'] = ui.input(
+                    label='Дата расхода',
+                    value=datetime.now().strftime('%d.%m.%Y'),
+                ).props(
+                    'dense mask=##.##.####'
+                ).classes('w-full')
+
+                with inputs['expense_date'].add_slot('append'):
+                    ui.icon('event').classes('cursor-pointer')
+                with ui.menu().props('no-parent-event') as menu:
+                    ui.date(
+                        value=datetime.now().strftime('%Y-%m-%d'),
+                        on_change=lambda e: (
+                            inputs['expense_date'].set_value(
+                                datetime.strptime(e.value, '%Y-%m-%d').strftime('%d.%m.%Y')
+                            ),
+                            menu.close(),
+                        ),
+                    )
+                inputs['expense_date'].on('click', lambda: menu.open())
+
+
                 placeholder='Введите сумму'
                 for key, label in category.items():
                     inputs[key] = ui.input(
