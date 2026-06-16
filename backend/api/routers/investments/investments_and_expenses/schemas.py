@@ -7,7 +7,7 @@ class InvestmentExpenseCreateSchema(BaseModel):
     mode: Literal['capex', 'opex']
 
     station_id: int
-
+    expense_date: str | None = None
     # CAPEX
     location_search: float | None = None
     equipment_purchase: float | None = None
