@@ -231,6 +231,7 @@ async def render_form(data: dict[str, list], request: Request, mode:str = 'opex'
                     with_input=True
                 ).props('dense').classes('w-full')
 
+
                 inputs['expense_date'] = ui.input(
                     label='Дата расхода',
                     value=datetime.now().strftime('%d.%m.%Y'),
@@ -240,7 +241,7 @@ async def render_form(data: dict[str, list], request: Request, mode:str = 'opex'
 
                 with inputs['expense_date'].add_slot('append'):
                     ui.icon('event').classes('cursor-pointer')
-                with ui.menu().props('no-parent-event') as menu:
+                with ui.menu().props('no-parent-event anchor=bottom left self=top left') as menu:
                     ui.date(
                         value=datetime.now().strftime('%Y-%m-%d'),
                         on_change=lambda e: (
