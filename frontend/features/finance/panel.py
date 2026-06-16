@@ -1,6 +1,6 @@
 
 from frontend.components.drawer import render_sidebar
-from frontend.components.render_title import render_title
+from frontend.components.render_title import get_data_from_map, render_title
 from frontend.components.metric_card import render_metrics 
 from frontend.features.base.panel import BasePanel
 
@@ -38,9 +38,11 @@ class Panel(BasePanel):
     async def render(self):
         page = app.storage.user.setdefault('pages', {})
         page_state = page.setdefault(self.page_key, {})
-
-        if page_state.get('toggle_value') is None:
-            page_state['toggle_value'] = 'ВСЕ'
+        
+        data = get_data_from_map(self.page_key)
+        if data and page_state.get('toggle_value') is None:
+            page_state['toggle_value'] = data['default_value']
+       
         self.apply_filters()
         loaded = await self.load_data()
         if not loaded:
