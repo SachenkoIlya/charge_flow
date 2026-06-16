@@ -234,20 +234,23 @@ async def render_form(data: dict[str, list], request: Request, mode:str = 'opex'
                 inputs['expense_date'] = ui.input(
                     label='Дата расхода',
                     value=datetime.now().strftime('%d.%m.%Y'),
-                ).props('readonly').classes('w-full')
+                ).props('readonly dense').classes('w-full')
 
-                with ui.menu().props('no-parent-event') as menu:
-                    ui.date(
-                        value=datetime.now().strftime('%Y-%m-%d'),
-                        on_change=lambda e: (
-                            inputs['expense_date'].set_value(
-                                datetime.strptime(e.value, '%Y-%m-%d').strftime('%d.%m.%Y')
+                with inputs['expense_date']:
+                    with ui.element('q-popup-proxy').props(
+                        'anchor="bottom left" self="top left" transition-show=scale transition-hide=scale'
+                    ) as popup:
+                        ui.date(
+                            value=datetime.now().strftime('%Y-%m-%d'),
+                            on_change=lambda e: (
+                                inputs['expense_date'].set_value(
+                                    datetime.strptime(e.value, '%Y-%m-%d').strftime('%d.%m.%Y')
+                                ),
+                                popup.run_method('hide'),
                             ),
-                            menu.close(),
-                        ),
-                    )
+                        )
 
-                inputs['expense_date'].on('click', menu.open)
+                inputs['expense_date'].on('click', lambda: popup.run_method('show'))
                 
                 placeholder='Введите сумму'
                 for key, label in category.items():
