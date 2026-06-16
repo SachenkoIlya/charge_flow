@@ -235,23 +235,22 @@ async def render_form(data: dict[str, list], request: Request, mode:str = 'opex'
                 inputs['expense_date'] = ui.input(
                     label='Дата расхода',
                     value=datetime.now().strftime('%d.%m.%Y'),
-                ).props(
-                    'dense mask=##.##.####'
-                ).classes('w-full')
+                ).props('dense mask=##.##.####').classes('w-full')
 
                 with inputs['expense_date'].add_slot('append'):
-                    ui.icon('event').classes('cursor-pointer')
-                    with ui.menu().props('anchor=bottom left self=top left') as menu:
-                        ui.date(
-                            value=datetime.now().strftime('%Y-%m-%d'),
-                            on_change=lambda e: (
-                                inputs['expense_date'].set_value(
-                                    datetime.strptime(e.value, '%Y-%m-%d').strftime('%d.%m.%Y')
+                    with ui.element('q-icon').props('name=event').classes('cursor-pointer'):
+                        with ui.element('q-popup-proxy').props(
+                            'cover transition-show=scale transition-hide=scale'
+                        ) as popup:
+                            ui.date(
+                                value=datetime.now().strftime('%Y-%m-%d'),
+                                on_change=lambda e: (
+                                    inputs['expense_date'].set_value(
+                                        datetime.strptime(e.value, '%Y-%m-%d').strftime('%d.%m.%Y')
+                                    ),
+                                    popup.run_method('hide'),
                                 ),
-                                menu.close(),
-                            ),
-                        )
-                inputs['expense_date'].on('click', lambda: menu.open())
+                            )
 
 
                 placeholder='Введите сумму'
