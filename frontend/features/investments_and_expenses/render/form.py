@@ -17,6 +17,7 @@ EXPENSES_MAP = {
         'taxes': 'Налоги',
         'insurance': 'Страхование',
         'service_maintenance': 'Сервисное обслуживание',
+        'expense_date': 'дата расходов',
         'other_expenses': 'Прочие расходы',
         # 'comment': 'Комментарий'
     },
@@ -25,6 +26,7 @@ EXPENSES_MAP = {
         'location_search': 'Поиск и согласование локации',
         'equipment_purchase': 'Приобретение оборудования (ЭЗС)',
         'construction_and_installation': 'СМР и пусконаладочные работы',
+        'expense_date': 'дата расходов',
         'other_capex': 'Прочие капитальные расходы',
         # 'comment': 'Комментарий'
     },
@@ -118,6 +120,7 @@ async def render_form(data: dict[str, list], request: Request, mode:str = 'opex'
                 color='red'
             )
             return
+        
         has_value = resolve_expense_fields(payload)
         if not has_value:
             ui.notify(
@@ -228,25 +231,21 @@ async def render_form(data: dict[str, list], request: Request, mode:str = 'opex'
                     label='Cтанция',
                     with_input=True
                 ).props('dense').classes('w-full')
-    
+
+                inputs['expense_date'] = ui.date().props(
+                    'mask=DD.MM.YYYY'
+                )
+                placeholder='Введите сумму'
                 for key, label in category.items():
                     inputs[key] = ui.input(
                         label=label,
-                        placeholder='Введите сумму'
+                        placeholder=placeholder
+                        
                     ).classes(
                         'w-full'
                     ).props(
                         'dense'
                     )
-
-                # inputs['comment'] = ui.textarea(
-                #     label='Комментарий',
-                #     placeholder='Необязательный комментарий',
-                # ).props(
-                #     'filled counter max_length=250'
-                # ).classes(
-                #     'w-full'
-                # )
 
                 ui.button(
                     'Применить',

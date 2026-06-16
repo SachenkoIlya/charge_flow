@@ -2,9 +2,11 @@ from pydantic import BaseModel, ValidationError
 from typing import Optional
 from nicegui import ui
 from core.logger.logger import logger
+from datetime import date
 
 class OpexSchema(BaseModel):
     station_id: int
+    expense_date: Optional[date] = None
     electricity_compensation: Optional[float] = None
     rent_payment: Optional[float] = None
     operator_commission: Optional[float] = None
@@ -13,11 +15,13 @@ class OpexSchema(BaseModel):
     insurance: Optional[float] = None
     service_maintenance: Optional[float] = None
     other_expenses: Optional[float] = None
+    
     comment: Optional[str] = None
 
 
 class CapexSchema(BaseModel):
     station_id: int
+    expense_date: Optional[date] = None
     location_search: Optional[float] = None
     equipment_purchase: Optional[float] = None
     construction_and_installation: Optional[float] = None

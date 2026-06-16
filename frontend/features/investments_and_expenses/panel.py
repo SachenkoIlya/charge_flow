@@ -69,7 +69,7 @@ class Panel(BasePanel):
         
         page = app.storage.user.get('pages', {})
         page_state = page.get(self.page_key, {})
-        toggle_value = page_state.get('toggle_value', 'CAPEX')
+        toggle_value = page_state.get('toggle_value', 'capex')
         
         with ui.element('div').style('zoom: 1'):
             await render_title(
@@ -87,10 +87,5 @@ class Panel(BasePanel):
                 mode=toggle_value.lower()
                 )
             
-    async def load_data(self):
-        payload = deepcopy(self.payload)
-        logger.debug(f"{self.page_key}: зашли в load_data".upper())
-        logger.debug(f"payload: {payload}")
-        return True
-
+   
         
