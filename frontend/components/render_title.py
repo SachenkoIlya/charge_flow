@@ -29,6 +29,15 @@ FILTER_MAP = {
         'default_value': 'etl_run',
     }
 }
+def get_selected_label(e):
+    raw_value = e.args
+    if isinstance(raw_value, list) and len(raw_value) > 1:
+        payload = raw_value[1]
+    if isinstance(payload, dict):
+        return payload.get('label')    
+    if isinstance(raw_value, str):
+        return raw_value
+    return None
 
 def resolve_toggle_value(data: dict, event_value: str) -> str | None:
     toggle_options = {
@@ -106,16 +115,20 @@ async def render_title(
                 '''
             )
             async def handle_toggle(e):
+                logger.debug(f'toggle e.args: {e.args}')
                 page = app.storage.user.setdefault('pages', {})
                 page_state = page.setdefault(page_key, {})
-
-                new_value = resolve_toggle_value(data, e.value)
-
+                
+                selected_label = get_selected_label(e)
+                new_value = resolve_toggle_value(data, selected_label)
+                
+                if new_value is None:
+                    return
                 if page_state.get('toggle_value') == new_value:
                     return
 
                 page_state['toggle_value'] = new_value
-
+                app.storage.user['pages'] = page
                 if on_date_change:
                     await on_date_change()
 
