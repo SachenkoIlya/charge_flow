@@ -17,8 +17,6 @@ def render_metrics(data: dict, columns:int, on_top_click=None):
             )
 
 
-
-
 def metric_card(metric: dict, value:str, delta:str, on_details_click=None):
     with ui.card().classes(
         '''

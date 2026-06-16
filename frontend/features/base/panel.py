@@ -88,7 +88,13 @@ class BasePanel(ABC):
             await self.refresh()
     
     async def load_data(self):
-        payload = deepcopy(self.payload)
+        if self.page_key in {'finance', 'system'}:
+            payload = {
+                'toggle_value': self.payload.get('toggle_value')
+            }
+        else:
+            payload = deepcopy(self.payload)
+        
         logger.debug(f"{self.page_key}: зашли в load_data".upper())
         logger.debug(f"payload: {payload}")
         response = await frontend_api(

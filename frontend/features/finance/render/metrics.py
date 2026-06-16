@@ -1,3 +1,12 @@
+
+#   'icon': 'ev_station',
+#         'key': 'stations',
+#         'icon_bg': 'bg-blue-600',
+#         'title': 'ЭЭС в сети',
+#         'subtitle': 'активных / в работе',
+#         'value': '246 / 231',
+#         'delta': '+12',
+
 FINANCE_METRICS = [
     {
         'icon': 'payments',

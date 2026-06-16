@@ -1,7 +1,7 @@
 
 from frontend.components.drawer import render_sidebar
 from frontend.api.client import frontend_api
-from frontend.components.render_title import render_title
+from frontend.components.render_title import get_data_from_map, render_title
 from frontend.features.base.panel import BasePanel 
 from fastapi import Request
 from nicegui import ui, app
@@ -22,8 +22,9 @@ class Panel(BasePanel):
         page = app.storage.user.setdefault('pages', {})
         page_state = page.setdefault(self.page_key, {})
         
-        if page_state.get('toggle_value') is None:
-            page_state['toggle_value'] = 'etl_run'
+        data = get_data_from_map(self.page_key)
+        if data and page_state.get('toggle_value') is None:
+            page_state['toggle_value'] = data['default_value']
         
         self.apply_filters()
         loaded = await self.load_data()
