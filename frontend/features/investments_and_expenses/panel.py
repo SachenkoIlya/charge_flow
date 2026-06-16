@@ -18,7 +18,7 @@ from frontend.features.investments_and_expenses.render.form import (
 class Panel(BasePanel):
     user: dict
     request: Request
-    endpoints_name: str = 'investments_and_expenses'
+    endpoints_name: str = 'investments'
     page_key = 'investments_and_expenses'
 
     
