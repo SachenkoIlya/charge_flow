@@ -6,7 +6,7 @@ from datetime import date
 
 class OpexSchema(BaseModel):
     station_id: int
-    expense_date: Optional[date] = None
+    expense_date: Optional[str] = None
     electricity_compensation: Optional[float] = None
     rent_payment: Optional[float] = None
     operator_commission: Optional[float] = None
@@ -21,7 +21,7 @@ class OpexSchema(BaseModel):
 
 class CapexSchema(BaseModel):
     station_id: int
-    expense_date: Optional[date] = None
+    expense_date: Optional[str] = None
     location_search: Optional[float] = None
     equipment_purchase: Optional[float] = None
     construction_and_installation: Optional[float] = None
