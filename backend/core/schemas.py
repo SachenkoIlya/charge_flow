@@ -11,7 +11,6 @@ class DashboardFilterSchema(BaseModel):
         description="Дата окончания периода в формате DD.MM.YYYY",
         examples=["30.04.2026"],
     )
-
-
+  
 
     # company_id: Optional[int] = None

@@ -18,6 +18,7 @@ EXPENSES_MAP = {
         'taxes': 'Налоги',
         'insurance': 'Страхование',
         'service_maintenance': 'Сервисное обслуживание',
+        'expense_date': 'Дата расхода',
         'other_expenses': 'Прочие расходы',
         # 'comment': 'Комментарий'
     },
@@ -27,7 +28,7 @@ EXPENSES_MAP = {
         'equipment_purchase': 'Приобретение оборудования (ЭЗС)',
         'construction_and_installation': 'СМР и пусконаладочные работы',
         'other_capex': 'Прочие капитальные расходы',
-        # 'comment': 'Комментарий'
+        'expense_date': 'Дата расхода',
     },
 }
 
@@ -254,6 +255,8 @@ async def render_form(data: dict[str, list], request: Request, mode:str = 'opex'
                 
                 placeholder='Введите сумму'
                 for key, label in category.items():
+                    if key in {'expense_date'}:
+                        continue
                     inputs[key] = ui.input(
                         label=label,
                         placeholder=placeholder

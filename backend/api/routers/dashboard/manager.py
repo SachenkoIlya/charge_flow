@@ -1,4 +1,5 @@
 from backend.api.routers.dashboard.companies.service.metrics import UserRepositoryMetrics
+from backend.api.routers.dashboard.finance.service.metrics import MetricFinance
 from backend.api.routers.dashboard.station.service.metrics import StationInfo
 from backend.api.routers.dashboard.stats.service.metrics import MetricStats
 from backend.api.routers.dashboard.summary.service.metrics import MetricSummary
@@ -10,6 +11,7 @@ from core.base_db import Base
 class ManagerDashboardMetrics:
     def __init__(self, base_db: "Base"):
         self.summary = MetricSummary(base_db)
+        self.finance = MetricFinance(base_db)
         
 class ManagerMetrics:
     def __init__(self, base_db: "Base"):

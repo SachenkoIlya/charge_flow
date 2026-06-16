@@ -3,7 +3,6 @@ from backend.api.routers.dashboard.summary.schemas import SummaryResponseModel
 from backend.dependencies.get_manager import get_current_token, get_dashboard
 from backend.core.date_insurance import date_insurance
 from backend.core.schemas import DashboardFilterSchema
-from core.logger.logger import logger
 from backend.api.routers.dashboard.manager import ManagerDashboardMetrics
 
 ENDPOINT = '/summary'

@@ -9,6 +9,8 @@ from backend.api.routers.dashboard.station.router import  router as station_rout
 from backend.api.routers.investments.investments_and_expenses.router import router as investments_router
 from backend.api.routers.system.router import router as system_router
 from backend.api.routers.dashboard.summary.router import router as summary_router
+from backend.api.routers.dashboard.finance.router import router as finance_router
+
 api_router = APIRouter()
 
 api_router.include_router(auth_router)
@@ -20,3 +22,4 @@ api_router.include_router(station_router)
 api_router.include_router(investments_router)
 api_router.include_router(system_router)
 api_router.include_router(summary_router)
+api_router.include_router(finance_router)

@@ -137,3 +137,15 @@ def _calc_utilisation(
         charging_minutes / available_minutes * 100, 
         2
     )
+
+
+
+def get_date_range_from_period(period: str) -> tuple[datetime|None, datetime|None]:
+    date_to = datetime.now()
+    if period == 'all':
+        return None, None
+    if period == '6m':
+        return date_to - relativedelta(months=6), date_to
+    if period == '1y':
+        return date_to - relativedelta(years=1), date_to
+    raise ValueError(f'Unknown toggle value: {period}')
