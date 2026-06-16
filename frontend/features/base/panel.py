@@ -97,6 +97,8 @@ class BasePanel(ABC):
         
         logger.debug(f"{self.page_key}: зашли в load_data".upper())
         logger.debug(f"payload: {payload}")
+        if self.endpoints_name == 'investments':
+            return 
         response = await frontend_api(
             endpoint_name=self.endpoints_name,
             payloads=payload,
