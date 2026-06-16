@@ -241,16 +241,16 @@ async def render_form(data: dict[str, list], request: Request, mode:str = 'opex'
 
                 with inputs['expense_date'].add_slot('append'):
                     ui.icon('event').classes('cursor-pointer')
-                with ui.menu().props('anchor=bottom left self=top left') as menu:
-                    ui.date(
-                        value=datetime.now().strftime('%Y-%m-%d'),
-                        on_change=lambda e: (
-                            inputs['expense_date'].set_value(
-                                datetime.strptime(e.value, '%Y-%m-%d').strftime('%d.%m.%Y')
+                    with ui.menu().props('anchor=bottom left self=top left') as menu:
+                        ui.date(
+                            value=datetime.now().strftime('%Y-%m-%d'),
+                            on_change=lambda e: (
+                                inputs['expense_date'].set_value(
+                                    datetime.strptime(e.value, '%Y-%m-%d').strftime('%d.%m.%Y')
+                                ),
+                                menu.close(),
                             ),
-                            menu.close(),
-                        ),
-                    )
+                        )
                 inputs['expense_date'].on('click', lambda: menu.open())
 
 
