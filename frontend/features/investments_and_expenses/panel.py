@@ -87,5 +87,10 @@ class Panel(BasePanel):
                 mode=toggle_value.lower()
                 )
             
-   
+    async def load_data(self):
+        payload = deepcopy(self.payload)
+        logger.debug(f"{self.page_key}: зашли в load_data".upper())
+        logger.debug(f"payload: {payload}")
+        return True
+
         
