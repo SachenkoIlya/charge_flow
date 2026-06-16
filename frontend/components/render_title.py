@@ -5,26 +5,41 @@ from core.logger.logger import logger
 from nicegui import app
 
 
-MAP = {
+FILTER_MAP = {
     'finance': {
-        'toggle': ['6 МЕС', '1 ГОД', 'ВСЕ'],
-        'default_value': 'ВСЕ',
+        'toggle': [
+            {'label': '6 МЕС', 'value': '6m'},
+            {'label': '1 ГОД', 'value': '1y'},
+            {'label': 'ВСЕ', 'value': 'all'},
+        ],
+        'default_value': 'all',
     },
-      'investments_and_expenses': {
-        'toggle': ['CAPEX', 'OPEX'],
-        'default_value': 'CAPEX',
-    
+    'investments_and_expenses': {
+        'toggle': [
+            {'label': 'CAPEX', 'value': 'capex'},
+            {'label': 'OPEX', 'value': 'opex'},
+        ],
+        'default_value': 'capex',
     },
     'system': {
-        'toggle': ['etl_run', 'bi_exports'],
+        'toggle': [
+            {'label': 'etl_run', 'value': 'etl_run'},
+            {'label': 'bi_exports', 'value': 'bi_exports'},
+        ],
         'default_value': 'etl_run',
-    
     }
 }
 
+def resolve_toggle_value(data: dict, event_value: str) -> str | None:
+    toggle_options = {
+        item['label']: item['value']
+        for item in data['toggle']
+    }
+    return toggle_options.get(event_value)
+
 
 def get_data_from_map(page_key: str):
-    data = MAP.get(page_key, None)
+    data = FILTER_MAP.get(page_key, None)
     if not data: 
         return None
     return data
@@ -55,17 +70,29 @@ async def render_title(
             page = app.storage.user.get('pages', {})
             page_state = page.setdefault(page_key, {})
             
-            toggle = data.get('toggle')
+            toggle_items = data.get('toggle')
+
+            options = {
+                item['label']: item['value']
+                for item in toggle_items
+            }
+            allowed_values = set(options.values())
+
             current_value = page_state.get('toggle_value')
 
-            if current_value not in toggle:
+            if current_value not in allowed_values:
                 current_value = data.get('default_value')
                 page_state['toggle_value'] = current_value
             
+            value_to_label = {
+                item['value']: item['label']
+                for item in toggle_items
+            }
+            current_label = value_to_label.get(current_value)
             
             period_toggle = ui.toggle(
-                toggle,
-                value=current_value,
+                list(options.keys()),
+                value=current_label,
             ).props(
                 'unelevated toggle-color=green'
             ).classes(
@@ -82,18 +109,12 @@ async def render_title(
                 page = app.storage.user.setdefault('pages', {})
                 page_state = page.setdefault(page_key, {})
 
-                old_value = page_state.get('toggle_value')
-                raw_value = e.args
-                if isinstance(raw_value, list) and len(raw_value) > 1:
-                    new_value = e.args[1].get('label')
-                else:
-                    new_value = raw_value
+                new_value = resolve_toggle_value(data, e.value)
 
-                if old_value == new_value:
+                if page_state.get('toggle_value') == new_value:
                     return
 
                 page_state['toggle_value'] = new_value
-                app.storage.user['pages'] = page
 
                 if on_date_change:
                     await on_date_change()
