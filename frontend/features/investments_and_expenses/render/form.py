@@ -17,7 +17,6 @@ EXPENSES_MAP = {
         'taxes': 'Налоги',
         'insurance': 'Страхование',
         'service_maintenance': 'Сервисное обслуживание',
-        'expense_date': 'дата расходов',
         'other_expenses': 'Прочие расходы',
         # 'comment': 'Комментарий'
     },
@@ -26,7 +25,6 @@ EXPENSES_MAP = {
         'location_search': 'Поиск и согласование локации',
         'equipment_purchase': 'Приобретение оборудования (ЭЗС)',
         'construction_and_installation': 'СМР и пусконаладочные работы',
-        'expense_date': 'дата расходов',
         'other_capex': 'Прочие капитальные расходы',
         # 'comment': 'Комментарий'
     },
@@ -90,7 +88,7 @@ async def get_selected_station(
 def resolve_expense_fields(payload: dict):
     expense_fields = [
         key for key in payload.keys()
-        if key not in ('station_id', 'comment')
+        if key not in ('station_id', 'comment', 'expense_date')
     ]
     has_values = any(
         payload.get(field) not in (None, '', 0, '0')
