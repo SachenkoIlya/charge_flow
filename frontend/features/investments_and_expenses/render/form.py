@@ -231,32 +231,24 @@ async def render_form(data: dict[str, list], request: Request, mode:str = 'opex'
                     with_input=True
                 ).props('dense').classes('w-full')
 
+                inputs['expense_date'] = ui.input(
+                    label='Дата расхода',
+                    value=datetime.now().strftime('%d.%m.%Y'),
+                ).props('readonly').classes('w-full')
 
-                # inputs['expense_date'] = ui.input(
-                #     label='Дата расхода',
-                #     value=datetime.now().strftime('%d.%m.%Y'),
-                # ).props('dense mask=##.##.####').classes('w-full')
+                with ui.menu().props('no-parent-event') as menu:
+                    ui.date(
+                        value=datetime.now().strftime('%Y-%m-%d'),
+                        on_change=lambda e: (
+                            inputs['expense_date'].set_value(
+                                datetime.strptime(e.value, '%Y-%m-%d').strftime('%d.%m.%Y')
+                            ),
+                            menu.close(),
+                        ),
+                    )
 
-                # with inputs['expense_date'].add_slot('append'):
-                #     with ui.element('q-icon').props('name=event').classes('cursor-pointer'):
-                #         with ui.element('q-popup-proxy').props(
-                #             'cover transition-show=scale transition-hide=scale'
-                #         ) as popup:
-                #             ui.date(
-                #                 value=datetime.now().strftime('%Y-%m-%d'),
-                #                 on_change=lambda e: (
-                #                     inputs['expense_date'].set_value(
-                #                         datetime.strptime(e.value, '%Y-%m-%d').strftime('%d.%m.%Y')
-                #                     ),
-                #                     popup.run_method('hide'),
-                #                 ),
-                #             )
-                with ui.input(label='Дата расхода').props('readonly') as date_input:
-                    with ui.menu().props('no-parent-event') as menu:
-                        ui.date().bind_value(date_input)
-
-                date_input.on('click', menu.open)
-
+                inputs['expense_date'].on('click', menu.open)
+                
                 placeholder='Введите сумму'
                 for key, label in category.items():
                     inputs[key] = ui.input(
