@@ -12,6 +12,7 @@ class InvestmentsDB:
         mode: str,
         amount_type: str,
         amount: float,
+        expense_date: str,
         comment: str = None
     ):
         q = """
@@ -21,6 +22,7 @@ class InvestmentsDB:
                 mode,
                 amount_type,
                 amount,
+                expense_date,
                 comment
             )
             VALUES ($1, $2, $3, $4, $5, $6)
@@ -33,5 +35,6 @@ class InvestmentsDB:
                 mode,
                 amount_type,
                 amount,
+                expense_date,
                 comment
             )
