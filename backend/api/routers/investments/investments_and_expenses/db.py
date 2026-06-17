@@ -25,7 +25,7 @@ class InvestmentsDB:
                 expense_date,
                 comment
             )
-            VALUES ($1, $2, $3, $4, $5, $6)
+            VALUES ($1, $2, $3, $4, $5, $6, $7)
             """
         async with self.db.pool.acquire() as conn:
             await conn.execute(
