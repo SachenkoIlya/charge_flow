@@ -1,13 +1,14 @@
 from core.base_db import Base
+from asyncpg import Record
 
-class ConnectOperator:
+class ConnectOperatorDB:
     def __init__(self, base_db: "Base"):
         self.db = base_db
 
 
 
     @Base.with_retries(retries=3, delay=1.5, msg_prefix='[ConnectOperator.check_user_existence]')
-    async def check_user_existence(self, email: str):
+    async def check_user_existence(self, email: str)-> Record:
         q = """
             select id, company from users_new
             WHERE email = $1 

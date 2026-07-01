@@ -1,3 +1,4 @@
+from backend.api.routers.auth.register.schemas import RegisterUserResponse
 from backend.dependencies.get_manager import get_manager, get_user_create
 from backend.schemas.users import UserCreateRequest
 # from backend.database.manager import Manager
@@ -22,15 +23,13 @@ router = APIRouter(
 
 @router.post(
     ENDPOINT,
-    status_code=status.HTTP_201_CREATED,
+    response_model=RegisterUserResponse,
     summary="Регистрация пользователя",
     description=(
         "Создаёт нового пользователя. "
         "Email должен быть уникальным, пароль сохраняется только в виде хеша."
     ),
 )
-
-
 async def register(
     data: UserCreateRequest,
     auth: UserAuthManager=Depends(get_user_create),

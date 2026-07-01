@@ -35,7 +35,7 @@ def get_manager(request: Request) -> Manager:
     return cast(Manager, request.app.state.db_manager)
 
 def get_user_create(request: Request) -> UserAuthManager:
-    return cast(UserAuthManager, request.app.state.auth_user)
+    return cast(UserAuthManager, request.app.state.auth)
 
 def get_merics(request: Request) -> ManagerMetrics:
     return cast(ManagerMetrics, request.app.state.metrics)

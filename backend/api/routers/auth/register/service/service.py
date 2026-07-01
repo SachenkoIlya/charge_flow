@@ -1,7 +1,7 @@
 from backend.schemas.users import UserCreateRequest
 from core.security.security import security
 from core.base_db import Base
-from backend.database.users import Users
+from backend.api.routers.auth.users import Users
 from core.logger.logger import logger
 from fastapi import HTTPException, status
 import asyncpg
@@ -21,8 +21,8 @@ class RegistrationService:
     - создание verification token;
     - отправка письма подтверждения.
     """
-    def __init__(self, db: "Base"):
-        self.db = Users(db)
+    def __init__(self, user_db: "Users"):
+        self.db = user_db
 
     async def create(self, data: UserCreateRequest):
         """
