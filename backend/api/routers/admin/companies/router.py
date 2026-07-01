@@ -2,7 +2,7 @@ from backend.dependencies.get_manager import get_merics
 from backend.services.admin_required import admin_required
 from core.logger.logger import logger
 from backend.api.routers.dashboard.manager import ManagerMetrics
-from backend.api.routers.dashboard.companies.schemas import CompanySchema
+from backend.api.routers.admin.companies.schemas import CompanySchema
 from fastapi import APIRouter
 from fastapi import Depends
 

@@ -12,11 +12,15 @@ import asyncpg
 
 logger = make_logger(__name__, use_telegram=False)
 
+ENDPOINT = '/register'
 
-router = APIRouter(prefix='/auth', tags=['auth'])
+router = APIRouter(
+    prefix="/v1/user/auth",
+    tags=["user"],
+)
 
 
-@router.post("/register", status_code=status.HTTP_201_CREATED)
+@router.post(ENDPOINT, status_code=status.HTTP_201_CREATED)
 async def register(user: UserCreate, db_manager: Manager=Depends(get_manager)):
     # region DOC: register
     """

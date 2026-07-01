@@ -4,10 +4,10 @@ from backend.api.routers.auth.login import router as login_router
 from backend.api.routers.auth.auth import router as auth_router
 from backend.api.routers.auth.connect_operator import router as router_operator
 from backend.api.routers.dashboard.stats.router import router as stats_router
-from backend.api.routers.dashboard.companies.router import router as companies_router
-from backend.api.routers.dashboard.station.router import  router as station_router
+from backend.api.routers.admin.companies.router import router as companies_router
+from backend.api.routers.user.stations.router import  router as station_router
 from backend.api.routers.investments.investments_and_expenses.router import router as investments_router
-from backend.api.routers.system.router import router as system_router
+from backend.api.routers.admin.system.router import router as system_router
 from backend.api.routers.dashboard.summary.router import router as summary_router
 from backend.api.routers.dashboard.finance.router import router as finance_router
 

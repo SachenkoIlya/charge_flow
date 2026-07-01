@@ -4,7 +4,6 @@ from backend.api.routers.dashboard.finance.schemas import FinanceFilterSchema
 from backend.dependencies.get_manager import get_current_token, get_dashboard
 from backend.api.routers.dashboard.manager import ManagerDashboardMetrics
 
-from core.logger.logger import logger
 
 ENDPOINT = '/finance'
 DESCRIPTION = (

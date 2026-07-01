@@ -10,8 +10,8 @@ class FinanceDB:
     async def get_metrics(
         self, 
         user_id:int, 
+        date_from:datetime=None,
         date_to: datetime=None, 
-        date_from:datetime=None
     ) -> Record:
         q = """
             SELECT 
@@ -33,9 +33,8 @@ class FinanceDB:
         self, 
         user_id: int, 
         mode: str,
-        date_to: datetime | None=None, 
         date_from: datetime | None=None,
-         
+        date_to: datetime | None=None
     ) -> list[Record]:
         q = """
             SELECT 
@@ -48,8 +47,106 @@ class FinanceDB:
             AND mode = $2
             AND ($3::timestamp IS NULL OR f.created_at >= $3)
             AND ($4::timestamp IS NULL OR f.created_at < $4)
-            
             ORDER BY f.id
             """ 
         async with self.db.pool.acquire() as conn:
             return await conn.fetch(q, user_id, mode, date_from, date_to)
+
+    async def get_investment_v2(
+        self, 
+        user_id: int, 
+        date_from: datetime | None=None,
+        date_to: datetime | None=None, 
+    ) -> list[Record]:
+        q = """
+            SELECT 
+                f.mode,
+                COUNT(*) as operations_count,
+                COALESCE(
+                    SUM(f.amount),
+                    0
+                ) as total_amount
+            FROM finance_operations f
+            WHERE user_id = $1
+                AND ($2::timestamp IS NULL or f.expense_date >= $2)
+                AND ($3::timestamp IS NULL or f.expense_date < $3)
+            GROUP BY f.mode
+            """
+        async with self.db.pool.acquire() as conn:
+            return await conn.fetch(
+                q,
+                user_id,
+                date_from,
+                date_to
+            )
+        
+    async def get_network_cost_structure(
+        self, 
+        user_id: int, 
+        date_from: datetime | None=None,
+        date_to: datetime | None=None, 
+        mode:str = 'opex'
+    ) -> list[Record]:
+        q = """
+            SELECT 
+                COALESCE(
+                    SUM(f.amount) FILTER(
+                        WHERE f.amount_type = 'electricity_compensation'
+                    )
+                    , 0
+                ) as electricity_compensation
+                ,
+                COALESCE(
+                    SUM(f.amount) FILTER(
+                        WHERE f.amount_type = 'rent_payment'
+                    )
+                    , 0
+                ) as rent_payment
+                ,
+                COALESCE(
+                    SUM(f.amount) FILTER(
+                        WHERE f.amount_type = 'operator_commission'
+                    )
+                    , 0
+                ) as operator_commission
+                ,
+                COALESCE(
+                    SUM(f.amount) FILTER(
+                        WHERE f.amount_type = 'service_maintenance'
+                    )
+                    , 0
+                ) as service_maintenance
+                ,
+                COALESCE(
+                    SUM(f.amount) FILTER(
+                        WHERE f.amount_type = 'internet_and_connection'
+                    )
+                    , 0
+                ) as internet_and_connection
+                ,
+                COALESCE(
+                    SUM(f.amount) FILTER(
+                        WHERE f.amount_type = 'taxes'
+                    )
+                    , 0
+                ) as taxes
+
+            FROM finance_operations f
+
+            WHERE user_id = $1
+                AND ($2::timestamp IS NULL or f.expense_date >= $2)
+                AND ($3::timestamp IS NULL or f.expense_date < $3)
+                AND mode = $4
+            """
+        async with self.db.pool.acquire() as conn:
+            return await conn.fetch(
+                q,
+                user_id,
+                date_from,
+                date_to,
+                mode
+            )
+        
+
+      
+     

@@ -1,77 +1,81 @@
-from backend.api.routers.dashboard.finance.db import FinanceDB
+from backend.api.routers.dashboard.finance.service.charts import FinanceChartsService
+from backend.api.routers.dashboard.finance.service.normalize import FinanceMetricsService
 from core.base_db import Base
-from datetime import datetime, timedelta, timezone
-from dateutil.relativedelta import relativedelta
 from backend.core.gather_named import gather_named
 from backend.core.period_date import get_date_range_from_period
-from core.logger.logger import logger
 
 
 
 class MetricFinance:
-    def __init__(self, base_db: "Base"):
-        self.db = FinanceDB(base_db)
+    """
+    Сервис агрегации финансовых метрик пользователя.
 
-    async def get_normalize_metrics(self, user_id:int, date_from: datetime=None, date_to:datetime=None):
-        rows = await self.db.get_metrics(user_id, date_to, date_from)
-        return {
-            'total_revenue': round(float(rows['total_revenue']), 2)
-        }
-    
-    async def get_normalize_investment_metrics(
-        self, 
-        user_id: int, 
-        date_from: datetime=None, 
-        date_to:datetime=None,
-        mode:str='opex', 
-    ):
-        rows = await self.db.get_investment(
-            user_id=user_id,
-            date_from=date_from,
-            date_to=date_to,
-            mode=mode
-        )
-        total_investemn = sum(r['amount'] for r in rows)
-        return int(total_investemn)
+    Выполняет сбор данных из различных источников (выручка, OPEX, CAPEX),
+    рассчитывает финансовые показатели и формирует итоговый ответ
+    для отображения в интерфейсе или API.
+
+    Логика работы:
+    1. Определяет диапазон дат на основе выбранного периода.
+    2. Параллельно получает:
+        - основные финансовые метрики;
+        - операционные расходы (OPEX);
+        - капитальные расходы (CAPEX).
+    3. Объединяет результаты.
+    4. Формирует итоговый набор финансовых показателей.
+
+    Attributes:
+        metrics_service (FinanceMetricsService):
+            Сервис получения и подготовки финансовых данных.
+    """
+    def __init__(self, base_db: "Base"):
+        self.metrics_service = FinanceMetricsService(base_db)
+        self.charts = FinanceChartsService(base_db)
     
     async def get_metrics(self, user_id: int, period: str):
+        """
+        Получить финансовые показатели пользователя за указанный период.
+        Args:
+            user_id (int):
+                Идентификатор пользователя.
+
+            period (str):
+                Период выборки данных.
+                Например: 'today', 'week', 'month', 'year'.
+        Returns:
+            dict:
+                Подготовленный набор финансовых показателей, содержащий:
+                    - выручку;
+                    - OPEX;
+                    - CAPEX;
+                    - EBITDA;
+                    - чистую прибыль;
+                    - денежный поток;
+                    - информацию о выбранном периоде.
+        """
         date_from, date_to = get_date_range_from_period(period)
-       
         data = {
-            'metrics': self.get_normalize_metrics(
+            'metrics': self.metrics_service.get_metrics(
                 user_id=user_id,
                 date_from=date_from,
                 date_to=date_to
             ),
-            'opex': self.get_normalize_investment_metrics(
+            'investment': self.metrics_service.get_investment_metrics_v2(
                 user_id=user_id,
                 date_from=date_from,
                 date_to=date_to,
             ),
-            'capex': self.get_normalize_investment_metrics(
+            'charts': self.charts.get_cost_structure(
                 user_id=user_id,
                 date_from=date_from,
                 date_to=date_to,
-                mode='capex'
             )
         }
 
         result = await gather_named(data)
-        result['date_range'] = {
-            'period': period,
-            'date_from': date_from.strftime("%Y-%m-%d %H:%M:%S") if date_from else None,
-            'date_to': date_to.strftime("%Y-%m-%d %H:%M:%S") if date_to else None,
-        }
-        logger.debug(result)
-        revenue = result['metrics'].get('total_revenue', 0)
-        opex = result.pop('opex', 0)
-        capex = result.pop('capex', 0)
-
-        result['metrics'].update({
-            'opex': opex,
-            'capex': capex,
-            'ebitda': round(revenue - opex, 2),
-            'net_profit': round(revenue - opex, 2),
-            'cash_flow': round(revenue - opex - capex, 2)
-        })
-        return result
+        return self.metrics_service.build_response(
+            result=result,
+            period=period,
+            date_from=date_from,
+            date_to=date_to,
+        )
+    

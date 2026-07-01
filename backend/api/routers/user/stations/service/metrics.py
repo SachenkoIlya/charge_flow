@@ -1,5 +1,5 @@
 from core.base_db import Base
-from backend.api.routers.dashboard.station.db import StationInfoDb
+from backend.api.routers.user.stations.db import StationInfoDb
 
 
 class StationInfo:

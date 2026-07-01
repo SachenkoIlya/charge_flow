@@ -1,7 +1,7 @@
 
 from core.base_db import Base
-from backend.api.routers.system.db import SystemDb
-from backend.api.routers.system.schemas import (
+from backend.api.routers.admin.system.db import SystemDb
+from backend.api.routers.admin.system.schemas import (
     MonitoringSchema, 
     EtlRunsResponseSchema
 )
