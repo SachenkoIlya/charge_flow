@@ -32,17 +32,13 @@ class LoginService:
     async def authenticate(self, email:str, password: str) -> RedirectResponse:
         """
         Авторизует пользователя по email и паролю.
-
         Args:
             response:
                 Объект ответа FastAPI.
-
             email:
                 Email пользователя.
-
             password:
                 Пароль пользователя.
-
         Returns:
             RedirectResponse:
                 Redirect на frontend с результатом авторизации.

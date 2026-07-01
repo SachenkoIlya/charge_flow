@@ -7,7 +7,7 @@ from backend.api.routers.dashboard.manager import (
     ManagerDashboardMetrics
 )
 
-from backend.database.manager import Manager
+from backend.services.manager import Manager
 from typing import cast
 from fastapi import Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials

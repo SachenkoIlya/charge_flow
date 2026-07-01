@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from backend.api.routers.auth.manager import UserAuthManager
 from core.base_db import Base
-from backend.database.manager import Manager
+from backend.services.manager import Manager
 from fastapi.middleware.cors import  CORSMiddleware
 
 from backend.api.routers.dashboard.manager import (
