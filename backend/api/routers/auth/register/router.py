@@ -1,9 +1,9 @@
-from backend.dependencies.get_manager import get_manager
-from backend.schemas.users import UserCreate
-from backend.database.manager import Manager
-
+from backend.dependencies.get_manager import get_manager, get_user_create
+from backend.schemas.users import UserCreateRequest
+# from backend.database.manager import Manager
+from backend.api.routers.auth.manager import UserAuthManager
 from core.logger.logger import make_logger
-from core.security.security import security
+
 
 from fastapi import APIRouter, HTTPException, status
 from fastapi import Depends
@@ -16,12 +16,26 @@ ENDPOINT = '/register'
 
 router = APIRouter(
     prefix="/v1/user/auth",
-    tags=["user"],
+    tags=["user-auth"],
 )
 
 
-@router.post(ENDPOINT, status_code=status.HTTP_201_CREATED)
-async def register(user: UserCreate, db_manager: Manager=Depends(get_manager)):
+@router.post(
+    ENDPOINT,
+    status_code=status.HTTP_201_CREATED,
+    summary="Регистрация пользователя",
+    description=(
+        "Создаёт нового пользователя. "
+        "Email должен быть уникальным, пароль сохраняется только в виде хеша."
+    ),
+)
+
+
+async def register(
+    data: UserCreateRequest,
+    auth: UserAuthManager=Depends(get_user_create),
+    # db_manager: Manager=Depends(get_manager)
+):
     # region DOC: register
     """
       Args:
@@ -69,26 +83,12 @@ async def register(user: UserCreate, db_manager: Manager=Depends(get_manager)):
     
     """
     # endregion
+    """
+    Регистрирует нового пользователя.
 
-    hash_password = security.hashed_password(user.password.strip())
-    try:
-        user_id = await db_manager.users.create_user(
-            full_name=user.full_name,
-            email=user.email,
-            hash_password=hash_password,
-            company=user.company,
-            phone=user.phone,
-            country=user.country
-        )
-        return {
-            "user_id": user_id,
-            "detail": "Пользователь создан"
-        }
-    except asyncpg.exceptions.UniqueViolationError:
-        logger.warning("USER ALREADY EXISTS")
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Email уже существует"
-        )
+    Router отвечает только за приём HTTP-запроса,
+    получение зависимостей и вызов сервисного слоя.
+    """
+    return await auth.registration.create(data=data)
        
     

@@ -1,7 +1,9 @@
 from fastapi import FastAPI
+from backend.api.routers.auth.manager import UserAuthManager
 from core.base_db import Base
 from backend.database.manager import Manager
 from fastapi.middleware.cors import  CORSMiddleware
+
 from backend.api.routers.dashboard.manager import (
     ManagerMetrics, 
     ManagerFinance, 
@@ -27,6 +29,7 @@ async def lifespan(app: FastAPI):
     app.state.investment = ManagerFinance(db)
     app.state.system  = ManagerSystem(db)
     app.state.dashboard = ManagerDashboardMetrics(db)
+    app.state.auth_user = UserAuthManager(db)
     try:
         app.state.client = httpx.AsyncClient(base_url="http://localhost:8001")
         logger.info(f"client created".upper())

@@ -1,4 +1,5 @@
 from fastapi import Request
+from backend.api.routers.auth.manager import UserAuthManager
 from backend.api.routers.dashboard.manager import (
     ManagerMetrics, 
     ManagerFinance, 
@@ -33,6 +34,8 @@ def get_manager(request: Request) -> Manager:
     """
     return cast(Manager, request.app.state.db_manager)
 
+def get_user_create(request: Request) -> UserAuthManager:
+    return cast(UserAuthManager, request.app.state.auth_user)
 
 def get_merics(request: Request) -> ManagerMetrics:
     return cast(ManagerMetrics, request.app.state.metrics)
