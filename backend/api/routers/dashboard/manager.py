@@ -6,6 +6,7 @@ from backend.api.routers.dashboard.summary.service.metrics import MetricSummary
 from backend.api.routers.investments.investments_and_expenses.services.data import InvestmentsAndExpensesRepository
 from backend.api.routers.admin.system.services.data import SystemReposytory
 from backend.api.routers.widget.charts.service.service import ChartService
+from backend.api.routers.widget.tables.service.service import TableService
 from core.base_db import Base
 
 
@@ -76,5 +77,11 @@ class ManagerSystem:
     
 class ManagerWidget:
     def __init__(self, base_db: "Base"):
-        self.charts  = ChartService(base_db)
-        # тут будет еще table
+        self._charts  = ChartService(base_db)
+        self._tables = TableService(base_db)
+    @property
+    def charts(self):
+        return self._charts
+    @property
+    def tables(self):
+        return self._tables

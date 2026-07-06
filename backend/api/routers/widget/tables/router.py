@@ -1,17 +1,17 @@
 from fastapi import APIRouter, Depends
 from backend.api.routers.dashboard.manager import ManagerWidget
-from backend.api.routers.widget.charts.schemas import ChartsRequestSchema
-from backend.api.routers.widget.charts.service.service import ChartService
+from backend.api.routers.widget.tables.schemas import TablesRequestSchema
 from backend.dependencies.get_manager import get_current_token, get_widget
 
 
 
-ENDPOINT = '/charts'
+ENDPOINT = '/tables'
 DESCRIPTION = (
-    "Получение данных для графиков и чартов\n\n"
-    "Возвращает агрегированные временные ряды и метрики, специально отформатированные "
-    "для визуализации на графиках панели управления (Dashboard)."
+    "Получение данных для аналитических таблиц\n\n"
+    "Возвращает структурированные и отсортированные данные (например, рейтинги станций), "
+    "предназначенные для отображения в виде табличных отчетов на панели управления (Dashboard)."
 )
+
 router = APIRouter(
     prefix='/v1/widget', 
     tags=['widget']
@@ -23,8 +23,8 @@ router = APIRouter(
     response_model_exclude_none=True,
     response_model=''
 )
-async def charts(
-    payload: ChartsRequestSchema,
+async def tables(
+    payload: TablesRequestSchema,
     widget: ManagerWidget=Depends(get_widget),
     credentials=Depends(get_current_token),
 ):
@@ -36,5 +36,4 @@ async def charts(
     в соответствии с выбранным фильтром.
     """
     user_id = credentials.get('user_id')
-
-    # result = 
+    
