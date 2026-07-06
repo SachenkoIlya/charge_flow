@@ -24,6 +24,19 @@ class LoginService:
 
     @staticmethod
     def _redirect_error(error: str) -> RedirectResponse:
+        """Формирует HTTP-ответ для перенаправления пользователя на страницу входа с текстом ошибки.
+
+        Используется во внешних интеграциях (например, OAuth2 или вебхуках), 
+        когда вместо генерации JSON-ответа об ошибке нужно вернуть пользователя 
+        в интерфейс фронтенда и показать ему уведомление.
+
+        Args:
+            error: Текст или код ошибки, который будет передан в URL.
+
+        Returns:
+            RedirectResponse: Объект ответа FastAPI с кодом 302 (Found) 
+                для перенаправления браузера.
+        """
         return RedirectResponse(
             url=f'{settings.FRONTEND_URL}/login?error={error}',
             status_code=302
