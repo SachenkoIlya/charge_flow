@@ -1,9 +1,25 @@
 from pydantic import BaseModel, Field
-from typing import Literal
 
 # для запроса метрик 
 class StationSchemas(BaseModel):
-    label: str
-    stations_count: int
-    station_ids: list[int]
-    station_keys: list[str]
+    """Схема ответа для группированных данных о станциях пользователя.
+    
+    Агрегирует информацию о количестве станций, их идентификаторах и уникальных ключах,
+    сгруппированных под определенной текстовой меткой.
+    """
+    label: str = Field(
+        description='Текстовое название или метка группы станций (например, имя компании или локация)',
+        examples=['ООО ИнвестКапитал']
+    )
+    stations_count: int = Field(
+        description='Общее количество станций, входящих в данную группу',
+        examples=[3]
+    )
+    station_ids: list[int] = Field(
+        description='Список уникальных числовых идентификаторов (ID) всех станций в группе',
+        examples=[[101, 102, 103]]
+    )
+    station_keys: list[str] = Field(
+        description='Список строковых уникальных ключей/токенов станций для технических интеграций',
+        examples=[['st_key_01', 'st_key_02', 'st_key_03']]
+    )
