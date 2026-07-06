@@ -2,6 +2,10 @@ from core.base_db import Base
 
 
 class InvestmentsDB:
+    """Низкоуровневый интерфейс базы данных для финансовых операций.
+    
+    Выполняет прямые SQL-запросы к таблице `finance_operations`.
+    """
     def __init__(self, base_db: "Base"):
         self.db = base_db
 
@@ -15,6 +19,20 @@ class InvestmentsDB:
         expense_date: str,
         comment: str = None
     ):
+        """Записывает одну финансовую операцию (категорию расхода) в базу данных.
+
+        Args:
+            user_id: Идентификатор пользователя, создавшего запись.
+            station_id: Идентификатор станции, к которой привязан расход.
+            mode: Тип финансовых затрат ('capex' или 'opex').
+            amount_type: Конкретная категория расхода (например, 'rent_payment').
+            amount: Денежная сумма операции.
+            expense_date: Дата совершения расхода.
+            comment: Необязательный текстовый комментарий. По умолчанию None.
+
+        Returns:
+            None
+        """
         q = """
             INSERT INTO finance_operations (
                 user_id,
