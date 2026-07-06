@@ -1,5 +1,4 @@
 from datetime import datetime
-from core.logger.logger import logger
 from dateutil.relativedelta import relativedelta
 
 def get_period_days(
@@ -106,20 +105,27 @@ def comparable_period(
             Результат:
                 2025-01-04 → 2025-02-01
         """
+        # Проверяем, охватывает ли выбранный диапазон ровно один полный календарный месяц
+        # (Например: с 1 числа текущего месяца по 1 число следующего месяца)
         is_full_month = (
             date_from.day == 1
             and date_to.day == 1
             and date_to == date_from + relativedelta(months=1)
         )
-        logger.debug(f"is_full_month: {is_full_month}")
         if is_full_month:
+            # Если выбран ровно полный месяц, то прошлым периодом будет 
+            # предыдущий календарный месяц (корректно учтет разное количество дней: 28, 30, 31)
             comparable_from = date_from - relativedelta(months=1)
             comparable_to = date_from
         else:
+            # Если выбран произвольный период (например, 14 дней или полгода), 
+            # то вычисляем его точную продолжительность в днях/часах
             period = date_to - date_from
+            # Конечной точкой прошлого периода становится начало текущего периода
             comparable_to = date_from
+            # Сдвигаем начальную точку прошлого периода назад на точно такую же длительность
             comparable_from = comparable_to - period
-        
+        # Возвращаем границы дат для аналогичного прошлого периода для расчета динамики (Delta)
         return comparable_from, comparable_to
     
     
@@ -129,10 +135,29 @@ def _calc_utilisation(
     date_from:datetime, 
     date_to:datetime
 ) -> float:
+    """Вычисляет коэффициент утилизации (загрузки) зарядных станций в процентах.
+
+    Формула рассчитывает отношение фактического времени зарядки к общему 
+    доступному времени работы всех коннекторов (EVSE) за указанный период.
+
+    Args:
+        charging_minutes: Фактическое суммарное время сессий зарядки в минутах.
+        evse_count: Общее количество доступных коннекторов (точек зарядки).
+        date_from: Начальная дата и время анализируемого периода.
+        date_to: Конечная дата и время анализируемого периода.
+
+    Returns:
+        float: Процент утилизации, округленный до двух знаков после запятой 
+            (например, 15.45). Если доступное время равно 0, возвращает 0.
+    """
+    # Вычисляем общую продолжительность выбранного периода в минутах
     period_minutes = (date_to - date_from).total_seconds() / 60
+    # Считаем суммарный фонд доступного времени для всех коннекторов вместе
     available_minutes = (evse_count * period_minutes)
+    # Защита от деления на ноль, если даты совпали или коннекторов 0
     if available_minutes == 0:
         return 0
+    # Рассчитываем и округляем финальный процент загрузки оборудования
     return round(
         charging_minutes / available_minutes * 100, 
         2
@@ -141,11 +166,34 @@ def _calc_utilisation(
 
 
 def get_date_range_from_period(period: str) -> tuple[datetime|None, datetime|None]:
+    """Вычисляет диапазон дат (начало и конец) на основе переданного текстового периода.
+
+    Используется для фильтрации финансовых метрик на дашборде за определенный 
+    промежуток времени относительно текущего момента.
+
+    Args:
+        period: Строковый идентификатор периода. Допустимые значения:
+            - 'all': за всё время.
+            - '6m': за последние 6 месяцев.
+            - '1y': за последний 1 год.
+
+    Returns:
+        tuple[datetime | None, datetime | None]: Кортеж из двух элементов (date_from, date_to).
+            Если выбран период 'all', возвращает (None, None), что означает отсутствие фильтра.
+
+    Raises:
+        ValueError: Если передан неизвестный или неподдерживаемый строковый период.
+    """
+    # Фиксируем текущую дату и время как конечную точку диапазона
     date_to = datetime.now()
+    # Обрабатываем выборку за всё время (границы дат не ограничиваются)
     if period == 'all':
         return None, None
+    # Вычитаем 6 месяцев от текущей даты
     if period == '6m':
         return date_to - relativedelta(months=6), date_to
+    # Вычитаем 1 год от текущей даты
     if period == '1y':
-        return date_to - relativedelta(years=1), date_to
+       return date_to - relativedelta(years=1), date_to
+     # Возбуждаем исключение, если фронтенд прислал некорректный toggle
     raise ValueError(f'Unknown toggle value: {period}')
