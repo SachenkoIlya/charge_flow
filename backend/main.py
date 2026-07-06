@@ -8,7 +8,8 @@ from backend.api.routers.dashboard.manager import (
     ManagerMetrics, 
     ManagerFinance, 
     ManagerSystem,
-    ManagerDashboardMetrics
+    ManagerDashboardMetrics,
+    ManagerWidget
 )
 
 from core.security.settings import settings
@@ -30,6 +31,7 @@ async def lifespan(app: FastAPI):
     app.state.system  = ManagerSystem(db)
     app.state.dashboard = ManagerDashboardMetrics(db)
     app.state.auth = UserAuthManager(db)
+    app.state.widget = ManagerWidget(db)
     try:
         app.state.client = httpx.AsyncClient(base_url="http://localhost:8001")
         logger.info(f"client created".upper())

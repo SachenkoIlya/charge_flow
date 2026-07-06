@@ -1,10 +1,9 @@
-from backend.api.routers.dashboard.finance.db import FinanceDB
-from core.base_db import Base
+from backend.api.routers.widget.charts.db import ChartsDB
 from datetime import datetime
 
 
 
-class FinanceChartsService:
+class NetworkCostStructureChart:
     """
     Сервис подготовки данных для финансовых графиков и диаграмм.
 
@@ -20,15 +19,16 @@ class FinanceChartsService:
         db (FinanceDB):
             Слой доступа к финансовым данным.
     """
-    def __init__(self, base_db: "Base"):
-        self.db = FinanceDB(base_db)
-
+    def __init__(self, chart_db: "ChartsDB"):
+        self.db = chart_db
+        self.chart_name: str = 'network_cost_structure'
+        
     async def get_network_cost_structure(
         self, 
         user_id:int,
         date_from:datetime=None, 
         date_to:datetime=None,
-        chart_name: str = 'network_cost_structure'
+        
     ) -> dict:
         """
         Получить структуру сетевых расходов за выбранный период.
@@ -94,7 +94,7 @@ class FinanceChartsService:
                 for key in result
             })
         return {
-            chart_name: result
+            self.chart_name: result
         }
 
     async def get_cost_structure(

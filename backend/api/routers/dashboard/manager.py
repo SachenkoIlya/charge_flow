@@ -5,6 +5,7 @@ from backend.api.routers.dashboard.stats.service.metrics import MetricStats
 from backend.api.routers.dashboard.summary.service.metrics import MetricSummary
 from backend.api.routers.investments.investments_and_expenses.services.data import InvestmentsAndExpensesRepository
 from backend.api.routers.admin.system.services.data import SystemReposytory
+from backend.api.routers.widget.charts.service.service import ChartService
 from core.base_db import Base
 
 
@@ -34,21 +35,46 @@ class ManagerDashboardMetrics:
             Сервис финансовой аналитики и визуализации данных.
     """
     def __init__(self, base_db: "Base"):
-        self.summary = MetricSummary(base_db)
-        self.finance = MetricFinance(base_db)
-        
+        self._summary = MetricSummary(base_db)
+        self._finance = MetricFinance(base_db)
+    @property
+    def summary(self):
+        return self._summary
+    @property
+    def finance(self):
+        return self._finance
+    
 class ManagerMetrics:
     def __init__(self, base_db: "Base"):
-        self.stats = MetricStats(base_db)
-        self.user_reposytory = UserRepositoryMetrics(base_db)
+        self._stats = MetricStats(base_db)
+        self._user_repository = UserRepositoryMetrics(base_db)
+    @property
+    def investments(self):
+        return self._stats
+    @property
+    def user_repository(self):
+        return self._user_repository
 
 class ManagerFinance:
     def __init__(self, base_db: "Base"):
-        self.investments_and_expenses = InvestmentsAndExpensesRepository(base_db)
-        self.station_info = StationInfo(base_db)
-
-
+        self._investments_and_expenses = InvestmentsAndExpensesRepository(base_db)
+        self._station_info = StationInfo(base_db)
+    @property
+    def investments(self):
+        return self._investments_and_expenses
+    @property
+    def station_info(self):
+        return self._station_info
+    
 
 class ManagerSystem:
     def __init__(self, base_db: "Base"):
-        self.monitoring  = SystemReposytory(base_db)
+        self._monitoring  = SystemReposytory(base_db)
+    @property
+    def monitoring(self):
+        return self._monitoring
+    
+class ManagerWidget:
+    def __init__(self, base_db: "Base"):
+        self.charts  = ChartService(base_db)
+        # тут будет еще table

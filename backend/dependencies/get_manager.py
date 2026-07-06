@@ -4,7 +4,8 @@ from backend.api.routers.dashboard.manager import (
     ManagerMetrics, 
     ManagerFinance, 
     ManagerSystem,
-    ManagerDashboardMetrics
+    ManagerDashboardMetrics,
+    ManagerWidget
 )
 
 from backend.services.manager import Manager
@@ -42,6 +43,9 @@ def get_merics(request: Request) -> ManagerMetrics:
 
 def get_dashboard(request: Request) -> ManagerDashboardMetrics:
     return cast(ManagerDashboardMetrics, request.app.state.dashboard)
+
+def get_widget(request: Request) -> ManagerWidget: 
+    return cast(ManagerWidget, request.app.state.widget)
 
 
 def get_merics_investment(request: Request) -> ManagerFinance:

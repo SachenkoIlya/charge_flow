@@ -52,7 +52,7 @@ async def create(
     """
     user_id = payload.get('user_id')
 
-    await metrics.investments_and_expenses.create_operations(
+    await metrics.investments.create_operations(
         user_id=user_id, 
         data=data
     )
