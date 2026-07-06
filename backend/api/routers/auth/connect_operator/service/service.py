@@ -60,9 +60,11 @@ class ConnectOperatorService:
         """
         user_id = user_data['id']
         auth_type = self.resolve_auth_type(data.operator)
+        
         # шифруем парооли 
         encrypt_password = security.encrypt_data(data.password)
         encrypt_login = security.encrypt_data(data.login)
+        
         # добавляем пользователя
         await self.db.upsert_user_api_keys(
             user_id=user_id,
