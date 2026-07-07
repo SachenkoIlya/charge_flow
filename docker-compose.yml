@@ -11,26 +11,43 @@ services:
     depends_on:
       - frontend
       - api
+
+  postgres_db:
+    image: postgres:16-alpine
+    container_name: chargeflow_db
+    restart: always
+
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
   api:
     build:
       context: .
       dockerfile: backend/Dockerfile
     container_name: chargeflow_api
-    # command: uvicorn backend.main:app --host 0.0.0.0 --port 8000
-    command: uvicorn backend.main:app --host 127.0.0.1 --port 8000
-    network_mode: host
+    restart: always
+    # command: uvicorn backend.main:app --host 127.0.0.1 --port 8000
+    command: uvicorn backend.main:app --host 0.0.0.0 --port 8000
     env_file:
       - .env
+    depends_on:
+      - postgres_db
+
     environment:
       - TZ=Europe/Moscow
-    volumes:
-      - /var/run/postgresql:/var/run/postgresql
 
   frontend:
     build:
       context: .
       dockerfile: frontend/Dockerfile
     container_name: chargeflow_frontend
+    restart: always
     command: python -m frontend.main
     ports:
       - "127.0.0.1:8080:8080"
@@ -45,10 +62,13 @@ services:
       dockerfile: etl/Dockerfile
     container_name: etl_run
     command: sleep infinity
-    network_mode: host
+    # network_mode: host
     env_file:
       - .env
+    depends_on:
+      - postgres_db
     environment:
       - TZ=Europe/Moscow
-    volumes:
-      - /var/run/postgresql:/var/run/postgresql
+
+volumes:
+  pgdata:
