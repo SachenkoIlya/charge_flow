@@ -25,18 +25,6 @@ class BaseVoltApi:
         
         while True:
             try:
-                logger.debug(f'[VOLT URL] {self.url}')
-                logger.debug(f'[VOLT PARAMS] {body}')
-                logger.debug(f'[VOLT AUTH] auth_type={run_ctx.user.auth_type}')
-                ctx.logger.debug(
-                    f"[VOLT REQUEST] user={run_ctx.user.id}/{run_ctx.user.full_name}\n"
-                    f"type={ctx.type_method}\n"
-                    f"from={body.get('from')}\n"
-                    f"to={body.get('to')}\n"
-                    f"offset={body.get('offset')}\n"
-                    f"limit={body.get('limit')}"
-                )
-
                 if self.method == 'get':
                     response = await ctx.aiohttp_client.get(
                         auth_type=run_ctx.user.auth_type,
