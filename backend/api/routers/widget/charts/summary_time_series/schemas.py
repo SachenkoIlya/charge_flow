@@ -1,4 +1,5 @@
 from pydantic import BaseModel, Field, model_validator
+from datetime import date
 
 class PeriodParams(BaseModel):
     """
@@ -8,16 +9,16 @@ class PeriodParams(BaseModel):
     модельную валидацию, предотвращающую передачу некорректного диапазона, 
     где дата начала превышает дату конца.
     """
-    date_from: str = Field(
+    date_from: date = Field(
         description="Начальная дата периода (включительно) в формате YYYY-MM-DD",
         examples=["2026-04-01"]
     )
-    date_to: str = Field(
+    date_to: date = Field(
         description="Конечная дата периода (включительно) в формате YYYY-MM-DD",
         examples=["2026-05-01"]
     )
     @model_validator(mode='after')
-    def validate_ranfe(self):
+    def validate_range(self):
         """
         Проверяет, что начальная дата не позже конечной даты.
 

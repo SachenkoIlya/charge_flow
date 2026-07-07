@@ -1,6 +1,6 @@
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
-
+from core.logger.logger import logger
 def get_period_days(
     date_from:datetime, 
     date_to:datetime
@@ -9,13 +9,16 @@ def get_period_days(
     Определяет уровень агрегации данных в зависимости от длительности периода.
     Используется для выбора оптимального интервала группировки
     временных рядов при построении отчётов и графиков.
+    
     Правила выбора:
         - до 90 дней включительно — группировка по дням (`day`);
         - от 91 до 365 дней включительно — группировка по неделям (`week`);
         - более 365 дней — группировка по месяцам (`month`).
+    
     Args:
         date_from (datetime): Начало периода.
         date_to (datetime): Конец периода.
+    
     Returns:
         str:
             Тип группировки:
@@ -184,6 +187,10 @@ def get_date_range_from_period(period: str) -> tuple[datetime|None, datetime|Non
     Raises:
         ValueError: Если передан неизвестный или неподдерживаемый строковый период.
     """
+    logger.debug(period)
+    
+    if period is None:
+        raise ValueError("Period value is missing in the payload")
     # Фиксируем текущую дату и время как конечную точку диапазона
     date_to = datetime.now()
     # Обрабатываем выборку за всё время (границы дат не ограничиваются)

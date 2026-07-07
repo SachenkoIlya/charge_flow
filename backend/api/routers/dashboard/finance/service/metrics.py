@@ -29,7 +29,7 @@ class MetricFinance:
     """
     def __init__(self, base_db: "Base"):
         self.metrics_service = FinanceMetricsService(base_db)
-        # self.charts = FinanceChartsService(base_db)
+        self.charts = FinanceChartsService(base_db)
     
     async def get_metrics(self, user_id: int, period: str):
         """

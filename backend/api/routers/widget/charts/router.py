@@ -36,11 +36,10 @@ async def charts(
     в соответствии с выбранным фильтром.
     """
     user_id = credentials.get('user_id')
-    logger.debug(f"Deploy +")
-    logger.debug(f"user_id: {user_id}")
-    # result = 
-    logger.debug(payload)
+    result = await widget.charts.resolve_charts(user_id, payload)
+
     return {
+        'result': result,
         'status': "success",
         'user_id': user_id,
         'msg': 'Подключение прошло успешно',

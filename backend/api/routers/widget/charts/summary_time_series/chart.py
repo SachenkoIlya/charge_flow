@@ -8,17 +8,16 @@ from backend.core.period_date import (
 )
 
 
-
 class SummaryTimeSeries:
     def __init__(self, chart_db: "ChartsDB"):
         self.db = chart_db
         self.chart_name: str = 'summary_time_series'
     
-    async def normalize_metrics_chart(
+    async def build(
         self, 
         user_id:int, 
-        date_from:datetime, 
-        date_to:datetime
+        period:dict,
+       
     ) -> dict:
         """
         Получает данные для графиков метрик за указанный период.
@@ -37,14 +36,25 @@ class SummaryTimeSeries:
                 Нормализованные данные для построения графиков,
                 включая временную ось и значения метрик по периодам.
         """
-       
-        group_by = get_period_days(date_from, date_to)  
+
+        period_date = period.get('period')
+        date_from = period_date.get('date_from') 
+        date_to = period_date.get('date_to')
         
+        group_by = get_period_days(date_from, date_to)  
         date_expr = get_date_expr(group_by)
+        
         rows = await self.db.get_metrics_time_series(
             user_id, 
             date_from, 
             date_to, 
             date_expr
         )
-        return _normalize_metrics_chart(group_by=group_by, rows=rows)
+        result =  _normalize_metrics_chart(group_by=group_by, rows=rows)
+        result['date_range'] = {
+            'period_mode': None,
+            'group_by': group_by,
+            'date_from': date_from.strftime("%Y-%m-%d"),
+            'date_to': date_to.strftime("%Y-%m-%d"),
+        }
+        return result 

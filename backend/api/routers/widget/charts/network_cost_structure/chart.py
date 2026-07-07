@@ -1,6 +1,7 @@
 from backend.api.routers.widget.charts.db import ChartsDB
 from datetime import datetime
-
+from backend.core.period_date import get_date_range_from_period
+from core.logger.logger import logger
 
 
 class NetworkCostStructureChart:
@@ -23,12 +24,10 @@ class NetworkCostStructureChart:
         self.db = chart_db
         self.chart_name: str = 'network_cost_structure'
         
-    async def get_network_cost_structure(
+    async def build(
         self, 
         user_id:int,
-        date_from:datetime=None, 
-        date_to:datetime=None,
-        
+        period:dict = None
     ) -> dict:
         """
         Получить структуру сетевых расходов за выбранный период.
@@ -81,7 +80,13 @@ class NetworkCostStructureChart:
             'internet_and_connection': 0,
             'taxes': 0
         }
-
+        
+        period_mode = period.get('period')
+        date_from, date_to = get_date_range_from_period(period_mode)
+        
+        logger.debug(period)
+        logger.debug(f"date_from:{date_from}, date_to: {date_to}")
+        
         rows = await self.db.get_network_cost_structure(
             user_id=user_id,
             date_from=date_from,
@@ -93,10 +98,18 @@ class NetworkCostStructureChart:
                 key: round(float(row[key] or 0), 2)
                 for key in result
             })
-        return {
-            self.chart_name: result
+        # return {
+        #     self.chart_name: result
+        # }
+        
+        result['date_range'] = {
+            'date_from': date_from.strftime("%Y-%m-%d"),
+            'date_to': date_to.strftime("%Y-%m-%d"),
+            'period_mode': period_mode,
+            'group_by': None
         }
-
+        return result   
+    
     async def get_cost_structure(
         self, 
         user_id: int, 
@@ -123,7 +136,7 @@ class NetworkCostStructureChart:
             dict:
                 Структура данных для отображения диаграммы затрат.
         """
-        return await self.get_network_cost_structure(
+        return await self.build(
             user_id=user_id,
             date_from=date_from,
             date_to=date_to

@@ -289,6 +289,7 @@ class MetricSummary:
         group_by = get_period_days(date_from, date_to)  
         
         date_expr = get_date_expr(group_by)
+        
         rows = await self.db.get_charts(
             user_id, 
             date_from, 
