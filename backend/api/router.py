@@ -12,7 +12,7 @@ from backend.api.routers.investments.investments_and_expenses.router import rout
 from backend.api.routers.admin.system.router import router as system_router
 from backend.api.routers.dashboard.summary.router import router as summary_router
 from backend.api.routers.dashboard.finance.router import router as finance_router
-
+from backend.api.routers.widget.charts.router import router as charts_router
 api_router = APIRouter()
 
 api_router.include_router(register_router)
@@ -25,3 +25,4 @@ api_router.include_router(investments_router)
 api_router.include_router(system_router)
 api_router.include_router(summary_router)
 api_router.include_router(finance_router)
+api_router.include_router(charts_router)

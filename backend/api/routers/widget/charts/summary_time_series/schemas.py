@@ -16,7 +16,7 @@ class PeriodParams(BaseModel):
         description="Конечная дата периода (включительно) в формате YYYY-MM-DD",
         examples=["2026-05-01"]
     )
-    @model_validator
+    @model_validator(mode='after')
     def validate_ranfe(self):
         """
         Проверяет, что начальная дата не позже конечной даты.

@@ -3,7 +3,7 @@ from backend.api.routers.dashboard.manager import ManagerWidget
 from backend.api.routers.widget.charts.schemas import ChartsRequestSchema
 from backend.api.routers.widget.charts.service.service import ChartService
 from backend.dependencies.get_manager import get_current_token, get_widget
-
+from core.logger.logger import logger
 
 
 ENDPOINT = '/charts'
@@ -21,7 +21,7 @@ router = APIRouter(
     ENDPOINT,
     description=DESCRIPTION,
     response_model_exclude_none=True,
-    response_model=''
+    # response_model=''
 )
 async def charts(
     payload: ChartsRequestSchema,
@@ -36,5 +36,12 @@ async def charts(
     в соответствии с выбранным фильтром.
     """
     user_id = credentials.get('user_id')
-
+    logger.debug(f"Deploy +")
+    logger.debug(f"user_id: {user_id}")
     # result = 
+    logger.debug(payload)
+    return {
+        'status': "success",
+        'user_id': user_id,
+        'msg': 'Подключение прошло успешно',
+    }

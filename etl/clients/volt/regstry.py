@@ -15,15 +15,12 @@ class Endpoints:
     @classmethod
     def get_full_url(cls, type_method: str):
         endpoint = cls.endpoints.get(type_method)
-        
         if endpoint is None:
             raise ValueError(f"Unknown endpoint: {type_method}")
-
         return f"{cls.base_url}/{endpoint}"
         
 
 class RegstryVolt:
-
     registry = {
         'chargepoints' : BaseVoltApi(
             type_method='chargepoints',
