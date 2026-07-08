@@ -1,72 +1,54 @@
+from backend.api.routers.widget.charts.core.base import BaseService
 from backend.api.routers.widget.charts.db import ChartsDB
 from backend.api.routers.widget.charts.schemas import ChartsRequestSchema
 from backend.api.routers.widget.charts.service.chart_registry import CHART_REGISTRY 
-from core.base_db import Base
 from core.logger.logger import logger
 from backend.core.gather_named import gather_named  
 import asyncio
+from typing import Any
 
-class ChartService:
-    """
-    Сервисный слой для сборки и обработки аналитических графиков (компонентов дашборда).
+class ChartService(BaseService):
+    """Сервисный слой для сборки и обработки аналитических графиков (компонентов дашборда).
 
     Использует паттерн 'Фабрика/Реестр' (Registry Pattern) для динамического 
     управления процессорами графиков. При инициализации класс кэширует экземпляры 
     всех зарегистрированных обработчиков, обеспечивая их изоляцию и переиспользование.
 
     Attributes:
+        registry (dict[str, Any]): Глобальный реестр процессоров графиков (`CHART_REGISTRY`).
+        mode (str): Идентификатор сервиса, жестко задан как `'charts'`.
         chart_db (ChartsDB): Слой работы с базой данных для аналитических запросов.
         handlers (dict[str, Any]): Реестр инициализированных объектов-обработчиков 
             (Handlers) для каждого типа графика.
     """
-    def __init__(self, base_db: "Base"):
-        """
-        Инициализирует ChartService и подготавливает пул обработчиков.
+    registry: dict[str, Any] = CHART_REGISTRY
+    mode: str = 'charts'
 
-        Args:
-            base_db (Base): Экземпляр подключения или пула базы данных.
-        """
-        self.chart_db = ChartsDB(base_db)
-        self.handlers = {
-            name: cls(self.chart_db)
-            for name, cls in CHART_REGISTRY.items()
-        }
-
-    async def resolve_charts(
+    def __init__(self, base_db):
+        """Инициализирует сервис графиков, оборачивая базовую БД в ChartsDB."""
+        super().__init__(ChartsDB(base_db))
+    
+    @property
+    def chart_db(self) -> ChartsDB:
+        """ChartsDB: Возвращает специализированный слой БД для графиков."""
+        return self.db
+    
+    async def execute(
         self, 
-        user_id: int, 
+        user_id:int, 
         payload: ChartsRequestSchema
-    ):
-        """
-        Собирает сводный аналитический экран из затребованных графиков-кубиков.
+    ) -> dict:
+            """Запускает процесс построения или обработки графика.
 
-        Метод выполняет фильтрацию входящего запроса (отсекая пустые поля через 
-        `exclude_none`), динамически сопоставляет графики с их обработчиками 
-        из пула и запускает все SQL-выборки параллельно в виде фоновых задач (Tasks). 
-        Ошибки отдельных графиков изолируются на уровне `gather_named`.
+            Args:
+                user_id (int): Идентификатор пользователя, запрашивающего данные.
+                payload (ChartsRequestSchema): Валидированные параметры запроса графика.
 
-        Args:
-            user_id (int): Идентификатор пользователя (инвестора) для фильтрации данных.
-            payload (ChartsRequestSchema): Валидированная Pydantic-схема запроса, 
-                содержащая параметры для каждого запрашиваемого виджета.
-
-        Returns:
-            dict: Словарь с корневым ключом 'charts', внутри которого лежат 
-                готовые структуры данных для фронтенда, сгруппированные по именам графиков.
-        """
-        init_cls_charts = {}
-
-        for name, value in payload.model_dump(exclude_none=True).items():
-            handler = self.handlers.get(name)  
-
-            if handler is None:
-                logger.warning(f"Обработчик для графика '{name}' не найден в реестре!")
-                continue
-            
-            init_cls_charts[name] = asyncio.create_task(
-                handler.build(user_id, value)
+            Returns:
+                dict: Результат обработки графика, готовый для отдачи клиенту.
+            """
+            return await self._execute(
+                user_id=user_id,
+                payload=payload
             )
-
-        data = await gather_named(init_cls_charts)
-        return {'charts': data}
 
