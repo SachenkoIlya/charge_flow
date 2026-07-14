@@ -29,7 +29,8 @@ class LoginForm:
         with container:
             ui.label('Вход').classes('text-xl font-bold')
             with ui.element('form').props(
-               f'method=post action=/api/auth/login'
+               f'method=post action="/v1/user/auth/login"'
+            #    https://api.opower.su/v1/user/auth/login
             ).classes('w-full'):
                 
                 ui.input('Email').props('name=email').classes('w-full')
