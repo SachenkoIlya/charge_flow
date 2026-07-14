@@ -1,8 +1,6 @@
-from dotenv import load_dotenv
 from frontend.components.setup_theme import setup_theme
+from core.security.settings import settings
 from nicegui import ui
-import os 
-load_dotenv()
 
 
 
@@ -24,12 +22,11 @@ class LoginForm:
         :return: None
         """
         setup_theme()
-        backend_url = os.getenv('BACKEND_URL')
         container = ui.column().classes('w-full max-w-sm mx-auto')
         with container:
             ui.label('Вход').classes('text-xl font-bold')
             with ui.element('form').props(
-               f'method=post action="/v1/user/auth/login"'
+               f'method=post action="{settings.BACKEND_URL}/v1/user/auth/login"'
             #    https://api.opower.su/v1/user/auth/login
             ).classes('w-full'):
                 

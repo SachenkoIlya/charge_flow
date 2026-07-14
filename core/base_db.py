@@ -218,7 +218,13 @@ class Base:
         # endregion
         
         if not self.pool or self.pool._closed:
+            logger.warning(
+                f"POOL CREATED old_pool={self.pool}"
+            )
             self.pool = await asyncpg.create_pool(dsn=self.dsn)
+            logger.info(
+                f"POOL READY size={self.pool.get_size()} idle={self.pool.get_idle_size()}"
+            )
             logger.info("📡 Подключение к БД установлено")
 
 
