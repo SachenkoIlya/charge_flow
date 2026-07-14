@@ -87,7 +87,8 @@ class LoginService:
             key="access_token",
             value=token,
             httponly=True,
-            secure=False,  #  True на проде
-            samesite="lax"
+            secure=True,  #  True на проде
+            samesite="none",
+            domain='.opower.su'
         )
         return redirect
