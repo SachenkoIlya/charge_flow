@@ -4,6 +4,7 @@ from fastapi import Depends, APIRouter, Response, Form
 from fastapi.responses import RedirectResponse
 from backend.api.routers.auth.manager import UserAuthManager
 from backend.dependencies.get_manager import get_user_create
+from core.logger.logger import logger
 
 ENDPOINT = "/login"
 router = APIRouter(

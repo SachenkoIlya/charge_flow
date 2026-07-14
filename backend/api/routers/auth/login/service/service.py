@@ -78,6 +78,7 @@ class LoginService:
                 'role': row['role'] 
             }
         )
+        logger.debug(f"CURRENT FRONTEND_URL={settings.FRONTEND_URL}")
         redirect = RedirectResponse(
             url=f'{settings.FRONTEND_URL}/summary',
             status_code=302
