@@ -1,7 +1,7 @@
 from core.http.aiohttp import BaseAiohttpClient
 from core.security.settings import settings
 from frontend.api.endpoints import Endpoints
-
+from core.logger.logger import logger   
 from fastapi import Request
 from frontend.api.error import handle_frontend_api_error
 from frontend.utils.utils import utils
@@ -43,6 +43,7 @@ async def frontend_api(
     client = BaseAiohttpClient(session=session)
 
     token = get_token_from_request(request=request)
+    logger.debug(f"token: {token}")
     url, method = Endpoints.get_data_endpoints(endpoint_name)
     try:
         if method == 'post':
