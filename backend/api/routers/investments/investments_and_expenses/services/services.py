@@ -33,25 +33,36 @@ class InvestmentsAndExpensesRepository:
             None
         """
         payload = data.model_dump()
-
+        skip = {'station_id', 'comment', 'mode', 'expense_date'}
         expense_date = datetime.strptime(data.expense_date, "%d.%m.%Y")
-        
+        records = []
+
         # Перебираем все финансовые показатели, переданные в форме
         for key, val in payload.items():
             # Пропускаем метаданные и системные поля — они не являются суммами расходов
-            if key in {'station_id', 'comment', 'mode', 'expense_date'}:
+            if key in skip or val is None:
                 continue
-            # Пропускаем незаполненные поля (те расходы, по которым не было ввода)
-            if val is None:
-                continue
-            
-            # Сохраняем каждый конкретный тип расхода (например, 'rent_payment') отдельной строкой
-            await self.db.insert(
-                user_id=user_id,
-                station_id=data.station_id,
-                mode=data.mode,
-                amount_type=key, # Имя поля из схемы становится типом расхода в БД
-                amount=val, # Значение расхода
-                comment=data.comment,
-                expense_date=expense_date
+            #   user_id, station_id, expense_date, comment, mode, amount_type, amount
+            record = (
+                user_id,
+                data.station_id,
+                expense_date,
+                data.comment,
+                data.mode,
+                key,
+                val,
+                
             )
+            records.append(record)
+        await self.db.execute_many_query(records)
+        
+            # # Сохраняем каждый конкретный тип расхода (например, 'rent_payment') отдельной строкой
+            # await self.db.insert(
+            #     user_id=user_id,
+            #     station_id=data.station_id,
+            #     mode=data.mode,
+            #     amount_type=key, # Имя поля из схемы становится типом расхода в БД
+            #     amount=val, # Значение расхода
+            #     comment=data.comment,
+            #     expense_date=expense_date
+            # )
