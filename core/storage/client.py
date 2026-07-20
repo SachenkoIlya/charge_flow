@@ -1,14 +1,10 @@
 from botocore.config import Config
-from dotenv import load_dotenv
 from io import BytesIO
 import aioboto3
 import aiohttp
-import os
 import pandas as pd
-load_dotenv()
-from core.logger.logger import make_logger
+from core.logger.logger import logger
 from core.security.settings import settings
-logger = make_logger(__name__, use_telegram=False)
 
 
 class S3Client:
