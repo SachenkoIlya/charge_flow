@@ -1,9 +1,11 @@
+from contextlib import asynccontextmanager
+from typing import AsyncGenerator
 from core.security.settings import settings
-from .logger.logger import make_logger
 import asyncpg
-import os
 import asyncio
-logger = make_logger(__name__, use_telegram=False)
+from core.logger.logger import logger
+
+
 
 class Base:
     
@@ -138,28 +140,15 @@ class Base:
         self.pool: asyncpg.Pool | None = None
 
 
+    @asynccontextmanager
+    async def get_conn(
+        self
+    ) -> AsyncGenerator[asyncpg.Connection, None]:
+        if self.pool is None:
+            raise RuntimeError("Database not connected! Call connect() first")
+        async with self.pool.acquire() as conn:
+            yield conn
 
-    
-    
-    @staticmethod
-    def _row_to_dict(row):
-        if isinstance(row, list):
-            if not row:
-                return []
-            if hasattr(row[0], 'keys'):
-                return [dict(r) for r in row]
-            return row
-        if hasattr(row, 'keys'):
-            return dict(row)
-        if isinstance(row, tuple):
-            if len(row) > 0 and hasattr(row[0], 'keys'):
-                return [dict(r) for r in row]
-            return {'value': row[0]}
-        
-        logger.warning(f"[DB:_row_to_dict] Unexpected row type: {type(row)}")
-        return None
-    
-    
     @staticmethod
     def with_retries(retries=5, delay=1.5, msg_prefix:str=None):
         def decorator(func):
@@ -204,41 +193,24 @@ class Base:
     
 
     
-    @with_retries(retries=5, delay=1.5)
     async def connect(self):
         # region DOC: connect
         """
         Создаёт пул соединений с PostgreSQL, если он отсутствует или закрыт.
         Использует asyncpg.create_pool().
-
-        Особенности:
-        - Автоматический повтор подключения (декоратор with_retries).
-        - Логирует успешный коннект.
         """
         # endregion
-        
         if not self.pool or self.pool._closed:
-            logger.warning(
-                f"POOL CREATED old_pool={self.pool}"
-            )
             self.pool = await asyncpg.create_pool(dsn=self.dsn)
-            logger.info(
-                f"POOL READY size={self.pool.get_size()} idle={self.pool.get_idle_size()}"
-            )
             logger.info("📡 Подключение к БД установлено")
 
 
 
 
-    @with_retries(retries=5, delay=1.5)
     async def close(self):
         # region DOC: close
         """
         Корректно закрывает пул соединений, если он существует и не закрыт.
-
-        Особенности:
-        - Защищено повторными попытками (with_retries).
-        - Логирует завершение соединения.
         """
         # endregion
         
