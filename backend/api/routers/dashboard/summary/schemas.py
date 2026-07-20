@@ -25,24 +25,47 @@ class MetricsModel(BaseModel):
     total_energy_kwh: Optional[float] = Field(
         description="Общий объём отпущенной энергии, кВт⋅ч"
     )
+    
 
 class StationModel(BaseModel):
     total_station: Optional[int]
     connected_stations: Optional[int]
 
+
 class MarginModel(BaseModel):
-    partner_revenue: Optional[float] = Field(
-        description="Доход владельца станции"
+    # total_revenue: Optional[float] = Field(
+    #     description="Общая выручка от зарядных сессий до распределения между владельцем станции и оператором"
+    # )
+
+    station_owner_revenue: Optional[float] = Field(
+        description="Доход владельца станции после вычета комиссии оператора"
     )
-    partner_pct: Optional[float] = Field(
-        description="Доля владельца станции в процентах"
+
+    station_owner_pct: Optional[float] = Field(
+        description="Доля владельца станции от общей выручки в процентах"
     )
+
     operator_revenue: Optional[float] = Field(
-        description="Доход оператора ChargeFlow"
+        description="Комиссионный доход оператора"
     )
-    operator_pct: Optional[float] = Field(
-        description="Доля оператора в процентах"
+
+    operator_commission_pct: Optional[float] = Field(
+        description="Комиссия оператора от общей выручки в процентах"
     )
+
+    total_opex: Optional[float] = Field(
+        description="Общая сумма операционных расходов OPEX за период (включая налоги)"
+    )
+
+    net_profit: Optional[float] = Field(
+        description="Чистая прибыль владельца станции после вычета OPEX"
+    )
+
+    net_margin_pct: Optional[float] = Field(
+        description="Чистая маржинальность владельца станции: net_profit / station_owner_revenue * 100"
+    )
+   
+
 class SeriesChartsModel(BaseModel):
     revenue: Optional[list[float]] = Field(
         default=None,

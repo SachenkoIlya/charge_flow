@@ -60,7 +60,7 @@ class MetricSummary:
             date_from=date_from,
             date_to=date_to
         )
-    
+    # get_margin_metrics
     async def get_margin_pct(self,  user_id: int, date_from: datetime, date_to:datetime):
         """
         Рассчитывает распределение выручки между партнёром и оператором
@@ -97,25 +97,45 @@ class MetricSummary:
                 "operator_pct": 25.0
             }
         """
+        
         rows = await self.db.get_margin_metrics(user_id, date_from, date_to)
-        partner_revenue = float(rows['partner_revenue'])
-        total_revenue = float(rows['total_revenue'])
-        gross_margin = float(rows['gross_margin'])
-        margin_pct = (
-            partner_revenue / total_revenue * 100 
+        
+        total_revenue = float(rows["total_revenue"])
+        station_owner_revenue = float(rows["station_owner_revenue"])
+        operator_revenue = float(rows["operator_revenue"])
+        total_opex = float(rows["total_opex"])
+        net_profit = float(rows["net_profit"])
+
+        # Доля партнёра от общей выручки.
+        # Показывает, какая часть денег клиентов уходит владельцам ЭЗС.
+        partner_share_pct = (
+            station_owner_revenue / total_revenue * 100
             if total_revenue > 0
             else 0
         )
-        operator_pct = (
-            gross_margin / total_revenue * 100
+        # Доля оператора-агрегатора от общей выручки.
+        # Показывает комиссию/доход оператора относительно всей выручки.
+        operator_share_pct = (
+            operator_revenue / total_revenue * 100
             if total_revenue > 0
             else 0
         )
+        # Операционная маржа после OPEX.
+        # Показывает, сколько прибыли остается у оператора после расходов.
+        net_margin_pct = (
+            net_profit / station_owner_revenue * 100
+                if station_owner_revenue > 0
+                else 0
+            )
         return {
-            'partner_revenue': round(partner_revenue, 2),
-            'partner_pct': round(margin_pct, 2),
-            'operator_revenue': round(gross_margin, 2),
-            'operator_pct': round(operator_pct, 2)
+            # 'total_revenue': round(total_revenue, 2),
+            'station_owner_revenue': round(station_owner_revenue, 2),
+            'station_owner_pct': round(partner_share_pct, 2),
+            'operator_revenue': round(operator_revenue, 2),
+            'operator_commission_pct': round(operator_share_pct, 2),
+            'total_opex': round(total_opex, 2),
+            'net_profit': round(net_profit, 2),
+            'net_margin_pct': round(net_margin_pct, 2),
         }
     
     async def normalize_metrics(self, user_id:int, date_from:datetime, date_to:datetime):

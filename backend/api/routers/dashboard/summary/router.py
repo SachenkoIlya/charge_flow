@@ -61,7 +61,8 @@ async def get_summary(
     """
     user_id = credentials.get('user_id')
     date_from, date_to = date_insurance(payload)
-
+    
+    print(credentials)
     return await dash.summary.get_summary_with_comparison(
         user_id=user_id,
         date_from=date_from,

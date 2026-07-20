@@ -267,7 +267,8 @@ class SummaryDB:
         self, 
         user_id, 
         date_from: datetime, 
-        date_to:datetime
+        date_to:datetime,
+        mode: str = 'opex'
     ) -> Record:
         """
         Получает агрегированные финансовые показатели за указанный период.
@@ -310,34 +311,64 @@ class SummaryDB:
         q = """
             SELECT
                 COALESCE(
-                    SUM(cs.gross_revenue) 
-                        FILTER (WHERE cs.state = 'COMPLETED')
-                        , 0
-                ) AS total_revenue
-                ,
+                    SUM(cs.gross_revenue)
+                        FILTER (WHERE cs.state = 'COMPLETED'),
+                    0
+                ) AS total_revenue,
+
                 COALESCE(
-                    SUM(cs.partner_revenue) 
-                        FILTER (WHERE cs.state = 'COMPLETED')
-                        , 0
-                ) AS partner_revenue
-                ,
-                COALESCE(
-                    SUM(cs.gross_revenue) 
-                        FILTER(WHERE cs.state = 'COMPLETED')
-                    -
                     SUM(cs.partner_revenue)
-                        FILTER(WHERE cs.state = 'COMPLETED')
-                        , 0
-                ) AS gross_margin
+                        FILTER (WHERE cs.state = 'COMPLETED'),
+                    0
+                ) AS station_owner_revenue,
+
+                COALESCE(
+                    SUM(cs.gross_revenue)
+                        FILTER (WHERE cs.state = 'COMPLETED'),
+                    0
+                )
+                -
+                COALESCE(
+                    SUM(cs.partner_revenue)
+                        FILTER (WHERE cs.state = 'COMPLETED'),
+                    0
+                ) AS operator_revenue,
+
+                MAX(opex.total_opex) AS total_opex,
+
+                COALESCE(
+                    SUM(cs.partner_revenue)
+                        FILTER (WHERE cs.state = 'COMPLETED'),
+                    0
+                )
+                -
+                MAX(opex.total_opex)
+                AS net_profit
+
             FROM charging_sessions_fact cs
-            WHERE user_id = $1
+
+            CROSS JOIN (
+                SELECT
+                    COALESCE(
+                        SUM(f.amount),
+                        0
+                    ) AS total_opex
+                FROM finance_operations f
+                WHERE f.user_id = $1
+                    AND f.mode = $4
+                    AND f.expense_date >= $2
+                    AND f.expense_date < $3
+            ) AS opex
+
+            WHERE cs.user_id = $1
                 AND cs.start_ts >= $2
                 AND cs.start_ts < $3
-            """
-        async with self.db.pool.acquire() as conn:
-            return await conn.fetchrow(q, user_id, date_from, date_to)
+        """
+        async with self.db.get_conn() as conn:
+            return await conn.fetchrow(q, user_id, date_from, date_to, mode)
 
-
+   
+        
     async def get_connected_station(self, user_id: int) -> Record:
         """
         Получает информацию о количестве зарядных станций пользователя
