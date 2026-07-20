@@ -16,29 +16,6 @@ class ResponseModel(BaseModel):
     )
 
 
-# class InvestmentExpenseCreateSchema(BaseModel):
-#     mode: Literal['capex', 'opex']
-
-#     station_id: int
-#     expense_date: str | None = None
-#     # CAPEX
-#     location_search: float | None = None
-#     equipment_purchase: float | None = None
-#     construction_and_installation: float | None = None
-#     other_capex: float | None = None
-
-#     # OPEX
-#     electricity_compensation: float | None = None
-#     rent_payment: float | None = None
-#     operator_commission: float | None = None
-#     internet_and_connection: float | None = None
-#     taxes: float | None = None
-#     insurance: float | None = None
-#     service_maintenance: float | None = None
-#     other_expenses: float | None = None
-
-#     comment: str | None = None
-
 class InvestmentExpenseCreateSchema(BaseModel):
     """Схема для создания записи о финансовых вложениях или операционных расходах.
     
@@ -84,10 +61,10 @@ class InvestmentExpenseCreateSchema(BaseModel):
         default=None,
         description="[OPEX] Арендные платежи за размещение оборудования/станции"
     )
-    operator_commission: float | None = Field(
-        default=None,
-        description="[OPEX] Комиссия оператора или платежного сервиса"
-    )
+    # operator_commission: float | None = Field(
+    #     default=None,
+    #     description="[OPEX] Комиссия оператора или платежного сервиса"
+    # )
     internet_and_connection: float | None = Field(
         default=None,
         description="[OPEX] Расходы на интернет, сотовую связь и каналы коммуникации"
@@ -113,3 +90,5 @@ class InvestmentExpenseCreateSchema(BaseModel):
         default=None,
         description="Произвольный комментарий или примечание к финансовой записи"
     )
+
+    
