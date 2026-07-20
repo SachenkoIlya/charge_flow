@@ -113,7 +113,6 @@ def get_metric_value(key:str, data:dict) -> str:
     metrics = requested["metrics"]
     margin = requested['margin']
 
-    logger.debug(f"key:{key}".upper())
     if key == "stations":
         station = requested["station"]
         return f'{station["connected_stations"]} / {station["total_station"]}'
@@ -134,7 +133,7 @@ def get_metric_value(key:str, data:dict) -> str:
     if key == 'availability':
         return '-'
     if key == 'net_profit':
-        f'{margin["net_profit"]:,.0f} ₽'.replace(",", " ")
+        return f'{margin["net_profit"]:,.0f} ₽'.replace(",", " ")
     return "-"
 
 
