@@ -124,14 +124,14 @@ def get_metric_value(key:str, data:dict) -> str:
         return f'{metrics["total_energy_kwh"]:,.0f}'.replace(",", " ")
     if key == "utilisation":
         return f'{requested["utilisation"]:.1f}%'
-    if key == "partner_pct":
-        return f'{requested["margin"]["partner_pct"]:.1f}%'
+    if key == "net_margin_pct":
+        return f'{requested["margin"]["net_margin_pct"]:.1f}%'
     if key == "avg_revenue_per_session":
         return f'{metrics["avg_revenue_per_session"]:,.0f} ₽'.replace(",", " ")
     if key == 'availability':
         return '-'
     if key == 'net_profit':
-        '-'
+        f'{metrics['margin']["net_profit"]:,.0f} ₽'.replace(",", " ")
     return "-"
 
 

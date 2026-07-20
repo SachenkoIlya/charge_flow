@@ -1,10 +1,11 @@
 from nicegui import ui
-
+from core.logger.logger import logger
 from frontend.features.summary.render.tables_section import render_tables_section
 
 def render_top_tables_dialog(data: dict):
     station_rating = data['requested_metrics']['station_rating']
-
+    logger.debug(station_rating)
+    
     dialog = ui.dialog()
 
     with dialog:
