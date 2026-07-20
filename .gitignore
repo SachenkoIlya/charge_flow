@@ -2,7 +2,7 @@ server-command.md
 test.py
 .env
 __pycache__/
-
+.VSCodeCounter/
 logs/
 venv/
 test/
@@ -11,3 +11,8 @@ docs
 
 db.md
 .nicegui
+
+chargeflow.dump
+chargeflow_full.dump
+tools/
+.pytest_cache/
