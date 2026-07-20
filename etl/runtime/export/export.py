@@ -10,6 +10,7 @@ import asyncio
 import pandas as pd
 
 
+
 class ExportFromBi:
     @staticmethod
     async def insert_from_db(type_method: str, df:pd.DataFrame, run_mode:str, db_run_export: "RunExport"):
