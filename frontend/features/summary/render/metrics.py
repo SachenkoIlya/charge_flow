@@ -142,8 +142,9 @@ def get_metric_value(key:str, data:dict) -> str:
 def get_metric_delta(key:str, data:dict) -> str:
     requested = data["requested_metrics"]
     comparable = data["comparable_metrics"]
-    requested_metrics = requested["metrics"]
-    comparable_metrics = comparable["metrics"]
+
+    requested_metrics = requested["margin"]
+    comparable_metrics = comparable["margin"]
 
     if key == "stations":
         return str(
