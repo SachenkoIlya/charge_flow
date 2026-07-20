@@ -70,7 +70,7 @@ METRICS = [
     },
     {
         'icon': 'percent',
-        'key': 'partner_pct',
+        'key': 'net_margin_pct',
         'icon_bg': 'bg-orange-600',
         'title': 'Маржинальность сети',
         'subtitle': 'contribution margin',
@@ -153,6 +153,7 @@ def get_metric_delta(key:str, data:dict) -> str:
         "avg_revenue_per_station",
         "avg_revenue_per_session",
         "total_energy_kwh",
+        'net_profit'
     ):
         return calc_delta(
             requested_metrics[key],
@@ -163,10 +164,10 @@ def get_metric_delta(key:str, data:dict) -> str:
             requested["utilisation"],
             comparable["utilisation"],
         )
-    if key == "partner_pct":
+    if key == "net_margin_pct":
         return calc_delta(
-            requested["margin"]["partner_pct"],
-            comparable["margin"]["partner_pct"],
+            requested["margin"]["net_margin_pct"],
+            comparable["margin"]["net_margin_pct"],
         )
 
     return "—"
