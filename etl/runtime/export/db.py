@@ -1,9 +1,8 @@
-from core.logger.logger import make_logger
+from core.logger.logger import logger
 from core.config.config import get_table_name_map, CHARGEPOINTS, CHARGIN_SESSION
 from core.base_db import Base
 import pandas as pd
 
-logger = make_logger(__name__, use_telegram=False)
 
 class RunExport:
     def __init__(self, base_db: Base):
@@ -74,12 +73,12 @@ class RunExport:
             "state", "connected", "lastSeen", "location_id",
             "location_name", "location_address", "location_city", 
             "location_latitude", "location_longitude", "model", 
-            "vendor", "protocol", "operatorId", "operatorName"
+            "vendor", "protocol", "operatorId", "operatorName", 'created_at'
         ]
         df = df[columns]
 
         q = f"""
-            INSERT INTO {table} (
+            INSERT INTO info_station (
                 user_id, operator,
                 station_id, key, name, serialNumber,
                 state, connected, lastSeen, location_id,
@@ -122,7 +121,7 @@ class RunExport:
 
 
     @Base.with_retries(retries=5, delay=1.5, msg_prefix='RunExport.insert_charging_sessions_df')
-    async def insert_charging_sessions_df(self, df:pd.DataFrame, run_mode: str):
+    async def insert_charging_sessions_df(self, df:pd.DataFrame, run_mode: str=None):
         table = self._get_table_name(CHARGIN_SESSION)
         table_charge_points = self._get_table_name(CHARGEPOINTS)
         columns = [
@@ -137,7 +136,7 @@ class RunExport:
 
 
         q = f"""
-            INSERT INTO {table} (
+            INSERT INTO charging_sessions_fact (
                 session_id, contract, subscriber_id, user_id, operator,
                 charger_name, evse_path, station_id, state, connector_type, evse_type, reason,
                 start_ts, end_ts, duration_minutes, energy_kwh,
@@ -149,7 +148,7 @@ class RunExport:
                 $1,$2,$3,$4,$5,$6,$7,
                 (
                     SELECT c.id
-                    FROM {table_charge_points} c
+                    FROM info_station c
                     WHERE c.operator = $5
                         AND c.key = split_part($7, '/', 1)
                     LIMIT 1
@@ -212,12 +211,10 @@ class RunExport:
             """
 
         async with self.db.pool.acquire() as conn:
-            result = await conn.execute(
+            await conn.execute(
                 q,
                 status,
                 tasks_id
             )
 
-            logger.info(result)
-
-
+    
