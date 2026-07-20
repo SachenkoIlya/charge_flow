@@ -3,7 +3,7 @@ from backend.api.routers.dashboard.finance.service.metrics import MetricFinance
 from backend.api.routers.user.stations.service.metrics import StationInfo
 from backend.api.routers.dashboard.stats.service.metrics import MetricStats
 from backend.api.routers.dashboard.summary.service.metrics import MetricSummary
-from backend.api.routers.investments.investments_and_expenses.services.data import InvestmentsAndExpensesRepository
+from backend.api.routers.investments.investments_and_expenses.services.services import InvestmentsAndExpensesRepository
 from backend.api.routers.admin.system.services.data import SystemReposytory
 from backend.api.routers.widget.charts.service.service import ChartService
 from backend.api.routers.widget.tables.service.service import TableService
