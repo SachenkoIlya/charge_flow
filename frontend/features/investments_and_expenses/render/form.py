@@ -13,7 +13,7 @@ EXPENSES_MAP = {
     'opex': {
         'electricity_compensation': 'Компенсация электроэнергии',
         'rent_payment': 'Арендная плата',
-        'operator_commission': 'Комиссия оператору',
+        # 'operator_commission': 'Комиссия оператору',
         'internet_and_connection': 'Интернет и связь',
         'taxes': 'Налоги',
         'insurance': 'Страхование',
