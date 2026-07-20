@@ -35,6 +35,6 @@ class StationInfoDb:
             GROUP BY location_name
             ORDER BY location_name;          
             """
-        async with self.db.pool.acquire() as conn:
+        async with self.db.get_conn() as conn:
             return await conn.fetch(q, requested_id)
         
