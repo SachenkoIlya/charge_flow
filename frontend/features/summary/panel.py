@@ -10,7 +10,6 @@ from frontend.features.summary.render.tables_section import (
     REVERS_ROWS
 )
 from frontend.features.summary.render.charts import render_chart
-from core.logger.logger import logger
 
 from frontend.components.metric_card import render_metrics 
 from frontend.components.render_title import render_title

@@ -109,11 +109,11 @@ def calc_delta(current: float, previous: float) -> str:
 
 def get_metric_value(key:str, data:dict) -> str:
     requested = data['requested_metrics']
-    logger.debug(f"requested: {requested}")
+    
     metrics = requested["metrics"]
     margin = requested['margin']
 
-    
+    logger.debug(f"key:{key}".upper())
     if key == "stations":
         station = requested["station"]
         return f'{station["connected_stations"]} / {station["total_station"]}'

@@ -65,14 +65,10 @@ class BasePanel(ABC):
 
     def apply_filters(self):
         context_filters = self.get_context_filters()
-        logger.debug(f"context_filters: {context_filters}")
         page_filters = self.get_page_filters(self.page_key)
         self.company_id = context_filters.get('company_id')
         self.payload = page_filters
-        logger.debug(
-            f'page_filters: {page_filters}, '
-            f'company_id: {self.company_id}'
-        )
+        
       
     async def refresh(self):
         if not self.container:
