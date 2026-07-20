@@ -143,37 +143,44 @@ def get_metric_delta(key:str, data:dict) -> str:
     requested = data["requested_metrics"]
     comparable = data["comparable_metrics"]
 
-    requested_metrics = requested["margin"]
-    comparable_metrics = comparable["margin"]
+    requested_metrics = requested["metrics"]
+    comparable_metrics = comparable["metrics"]
+
+    requested_margin = requested["margin"]
+    comparable_margin = comparable["margin"]
 
     if key == "stations":
         return str(
             requested["station"]["connected_stations"]
             - comparable["station"]["connected_stations"]
         )
-    if key in (
+    if key in {
         "total_revenue",
         "total_sessions",
         "avg_revenue_per_station",
         "avg_revenue_per_session",
         "total_energy_kwh",
-        'net_profit'
-    ):
+        
+    }:
         return calc_delta(
             requested_metrics[key],
             comparable_metrics[key]
         )
+    if key in {
+        'net_profit',
+        'net_margin_pct',
+    }:
+        return calc_delta(
+            requested_margin[key],
+            comparable_margin[key]
+        )
+
     if key == 'utilisation':
         return calc_delta(
             requested["utilisation"],
             comparable["utilisation"],
         )
-    if key == "net_margin_pct":
-        return calc_delta(
-            requested["margin"]["net_margin_pct"],
-            comparable["margin"]["net_margin_pct"],
-        )
-
+    
     return "—"
 
 
