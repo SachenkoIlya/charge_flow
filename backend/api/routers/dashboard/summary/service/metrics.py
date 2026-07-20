@@ -99,7 +99,6 @@ class MetricSummary:
         """
         
         rows = await self.db.get_margin_metrics(user_id, date_from, date_to)
-        
         total_revenue = float(rows["total_revenue"])
         station_owner_revenue = float(rows["station_owner_revenue"])
         operator_revenue = float(rows["operator_revenue"])

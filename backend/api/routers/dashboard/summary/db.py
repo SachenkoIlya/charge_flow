@@ -334,7 +334,7 @@ class SummaryDB:
                     0
                 ) AS operator_revenue,
 
-                MAX(opex.total_opex) AS total_opex,
+                COALESCE(MAX(opex.total_opex), 0) AS total_opex,
 
                 COALESCE(
                     SUM(cs.partner_revenue)
@@ -342,7 +342,7 @@ class SummaryDB:
                     0
                 )
                 -
-                MAX(opex.total_opex)
+                COALESCE(MAX(opex.total_opex), 0)
                 AS net_profit
 
             FROM charging_sessions_fact cs
