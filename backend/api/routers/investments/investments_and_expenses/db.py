@@ -56,3 +56,18 @@ class InvestmentsDB:
                 expense_date,
                 comment
             )
+    
+    @Base.with_retries(retries=5, delay=1.5, msg_prefix='update_bi_exports')
+    async def execute_many_query(self, records:list[tuple]):
+        q = """
+                INSERT INTO finance_operations(
+                    user_id, station_id, expense_date, comment, mode, amount_type, amount
+                )
+                VALUES(
+                    $1, $2, $3, $4, $5, $6, $7
+                )
+            """
+        async with self.db.pool.acquire() as conn:
+            await conn.executemany(q, records)
+
+        
