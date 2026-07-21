@@ -62,36 +62,31 @@ class FinanceMetricsService:
         
         # Создаем глубокую копию
         prepare_result = deepcopy(result)
-        # Добавляем в ответ информацию о временном фильтре
-        # prepare_result['date_range'] = {
-        #     'period': period,
-        #     'date_from': date_from.strftime("%Y-%m-%d %H:%M:%S") if date_from else None,
-        #     'date_to': date_to.strftime("%Y-%m-%d %H:%M:%S") if date_to else None,
-        # }
-         
         # Извлекаем базовые значения для расчетов
         revenue = prepare_result['metrics'].get('total_revenue', 0)
         investment = prepare_result.get('investment')
          # Суммы берутся из блока инвестиций
         capex = investment.get('capex')
         opex = investment.get('opex')
-        
         # считаем без налогов
-        opex_amount_for_ebidta = sum(
-            float(opex[o]) for o in opex if o != 'taxes'
-        )
-        opex_total_amount = sum(
-            float(opex[o]) for o in opex
-        )
+        opex_amount_for_ebidta = 0
+        opex_total_amount = 0
+        capex_total_amount = 0
 
+        if opex:
+            opex_amount_for_ebidta = sum(
+                float(opex[o]) for o in opex if o != 'taxes'
+            ) 
+            opex_total_amount = sum(
+                float(opex[o]) for o in opex
+            ) 
+        if capex:
+            capex_total_amount = sum(
+                float(capex[c]) for c in capex 
+            )
         # 1. EBITDA = Выручка минус Операционные расходы. Капитальные вложения (CAPEX) здесь НЕ учитываются.
         # Налоги не учитываются
         ebitda = round(revenue - opex_amount_for_ebidta, 2)
-        
-        capex_total_amount = sum(
-            float(capex[c]) for c in capex 
-        )
-       
         net_profit = round(revenue - opex_total_amount, 2)
         cash_flow = round(revenue - opex_total_amount - capex_total_amount, 2)
         
@@ -139,19 +134,31 @@ class FinanceMetricsService:
         date_to:datetime=None,
     ) -> dict[str, float | int]:
        
-        result = {}
+        investment = {
+            "capex": {
+                "construction_and_installation": 0,
+                "other_capex": 0,
+                "location_search": 0,
+                "equipment_purchase": 0
+                },
+            "opex": {
+                "insurance": 0,
+                "taxes": 0,
+                "service_maintenance": 0,
+                "internet_and_connection": 0,
+                "rent_payment": 0,
+                "other_expenses": 0,
+                "electricity_compensation": 0
+            }
+        }
         records = await self.db.get_investment_group(user_id, date_from, date_to)
         for record in records:
             mode = record.get('mode')
             amount_type = record.get('amount_type')
             amount = float(record.get('amount', 0))
-            
-            if mode not in result:
-                result[mode] = {}
-            
-            result[mode][amount_type] = amount
-
-        return result
+            if mode in investment:
+                investment[mode][amount_type] = amount
+        return investment
     
 
     async def get_date_range(

@@ -1,15 +1,15 @@
 from fastapi import APIRouter, Depends
 
-from backend.api.routers.dashboard.finance.schemas import FinanceFilterSchema
+from backend.api.routers.dashboard.finance.schemas import FinanceFilterSchema, FinanceResponseModel
 from backend.dependencies.get_manager import get_current_token, get_dashboard
 from backend.api.routers.dashboard.manager import ManagerDashboardMetrics
-
+from core.logger.logger import logger
 
 ENDPOINT = '/finance'
 DESCRIPTION = (
-    'Возвращает данные финансового дашборда: ключевые показатели '
-    '(выручка, EBITDA, чистая прибыль), P&L по станциям, план-факт анализ, '
-    'CAPEX, денежный поток, окупаемость, структуру затрат и аналитические графики.'
+    "Возвращает данные финансового дашборда: ключевые показатели "
+    "(выручка, EBITDA, чистая прибыль), P&L по станциям, план-факт анализ, "
+    "CAPEX, денежный поток, окупаемость, структуру затрат и аналитические графики."
 )
 
 router = APIRouter(prefix='/v1/dashboard', tags=['dashboard'])
@@ -19,7 +19,8 @@ router = APIRouter(prefix='/v1/dashboard', tags=['dashboard'])
      summary='Финансовые показатели dashboard',
     description=DESCRIPTION,
     response_model_exclude_none=True,
-    response_model='')
+    
+    response_model=FinanceResponseModel)
 async def get_finance(
     payload: FinanceFilterSchema,
     dash: ManagerDashboardMetrics=Depends(get_dashboard),
@@ -41,7 +42,11 @@ async def get_finance(
             где все пустые значения (None) будут автоматически исключены.
     """
     user_id = credentials.get('user_id')
-    return await dash.finance.get_metrics(
-        user_id=user_id, 
-        period=payload.toggle_value
-    )
+    try:
+        return await dash.finance.get_metrics(
+            user_id=user_id, 
+            period=payload.toggle_value
+        )
+    except Exception as e:
+        logger.exception(str(e))
+        return str(e)
