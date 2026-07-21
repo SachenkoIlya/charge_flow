@@ -92,7 +92,7 @@ def get_metrics_value(key:str, data:dict)->str:
         'net_profit': f"{metrics['net_profit']:,.0f} ₽".replace(",", " "),
         'capex': f"{total_capex:,.0f} ₽".replace(",", " "),
         'cash_flow': f"{metrics['cash_flow']:,.0f} ₽".replace(",", " "),
-        'payback_period': '-'
+        'payback_period': f"{metrics['payback_period']:,.0f} ₽".replace(",", " "),
     }
     return k.get(key, '-')
 
