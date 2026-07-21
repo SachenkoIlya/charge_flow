@@ -26,6 +26,9 @@ class MetricsModel(BaseModel):
     cash_flow: Optional[float] = Field(
         description='Денежный поток (Cash Flow). Реальный остаток свободных денег на счетах после вычета всех операционных и капитальных затрат.'
     )
+    payback_period: Optional[float] = Field(
+        description='Срок окупаемости инвестиций в месяцах. Рассчитывается как отношение общего CAPEX к среднемесячной чистой прибыли.'
+    )
 
 class CapexModel(BaseModel):
     construction_and_installation: Optional[float] = Field(

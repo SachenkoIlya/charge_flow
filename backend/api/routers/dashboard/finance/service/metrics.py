@@ -80,8 +80,5 @@ class MetricFinance:
         result = await gather_named(data)
         return self.metrics_service.build_response(
             result=result,
-            period=period,
-            date_from=date_from,
-            date_to=date_to,
         )
     

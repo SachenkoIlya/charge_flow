@@ -24,13 +24,69 @@ class FinanceMetricsService:
     """
     def __init__(self, base_db: "Base"):
         self.db = FinanceDB(base_db)
-    
     @staticmethod
+    def calculate_payback_period(
+        net_profit:float, 
+        capex_total_amount:float,
+        date_from:datetime,
+        date_to:datetime
+    ) ->float:
+        payback_period = 0
+        if (
+            net_profit > 0 
+            and capex_total_amount > 0 
+            and date_from and date_to
+        ):
+            # Находим точное количество месяцев в выбранном диапазоне дат
+            months_count = (date_to.year - date_from.year) * 12 + (date_to.month - date_from.month)
+            months_count += (date_to.day - date_from.day) / 30.4
+            months_count = max(months_count, 1.0) # Защита от деления на 0
+            # Среднемесячная чистая прибыль за этот период
+            monthly_net_profit = net_profit / months_count
+            # Окупаемость = Весь CAPEX делим на среднюю прибыль в месяц
+            payback_period = round(capex_total_amount / monthly_net_profit, 1)
+        return payback_period
+    
+
+    @staticmethod
+    def calculate_financial_indicators(prepare_result:dict) -> dict:
+        # Извлекаем базовые значения для расчетов
+        revenue = prepare_result['metrics'].get('total_revenue', 0)
+        investment = prepare_result.get('investment')
+         # Суммы берутся из блока инвестиций
+        capex = investment.get('capex')
+        opex = investment.get('opex')
+        # считаем без налогов
+        opex_amount_for_ebidta = 0
+        opex_total_amount = 0
+        capex_total_amount = 0
+
+        if opex:
+            opex_amount_for_ebidta = sum(
+                float(opex[o]) for o in opex if o != 'taxes'
+            ) 
+            opex_total_amount = sum(
+                float(opex[o]) for o in opex
+            ) 
+        if capex:
+            capex_total_amount = sum(
+                float(capex[c]) for c in capex 
+            )
+        # 1. EBITDA = Выручка минус Операционные расходы. Капитальные вложения (CAPEX) здесь НЕ учитываются.
+        # Налоги не учитываются
+        ebitda = round(revenue - opex_amount_for_ebidta, 2)
+        net_profit = round(revenue - opex_total_amount, 2)
+        cash_flow = round(revenue - opex_total_amount - capex_total_amount, 2)
+        return {
+            'ebitda': ebitda,
+            'net_profit': net_profit,
+            'cash_flow': cash_flow
+        }, capex_total_amount
+    
     def build_response(
+        self,
         result: dict, 
-        period:str, 
-        date_from:datetime=None, 
-        date_to: datetime=None
+        mask:str="%Y-%m-%d %H:%M:%S"
     ) -> dict:
         """
         Сформировать итоговый ответ с финансовыми метриками.
@@ -62,40 +118,31 @@ class FinanceMetricsService:
         
         # Создаем глубокую копию
         prepare_result = deepcopy(result)
-        # Извлекаем базовые значения для расчетов
-        revenue = prepare_result['metrics'].get('total_revenue', 0)
-        investment = prepare_result.get('investment')
-         # Суммы берутся из блока инвестиций
-        capex = investment.get('capex')
-        opex = investment.get('opex')
-        # считаем без налогов
-        opex_amount_for_ebidta = 0
-        opex_total_amount = 0
-        capex_total_amount = 0
-
-        if opex:
-            opex_amount_for_ebidta = sum(
-                float(opex[o]) for o in opex if o != 'taxes'
-            ) 
-            opex_total_amount = sum(
-                float(opex[o]) for o in opex
-            ) 
-        if capex:
-            capex_total_amount = sum(
-                float(capex[c]) for c in capex 
-            )
-        # 1. EBITDA = Выручка минус Операционные расходы. Капитальные вложения (CAPEX) здесь НЕ учитываются.
-        # Налоги не учитываются
-        ebitda = round(revenue - opex_amount_for_ebidta, 2)
-        net_profit = round(revenue - opex_total_amount, 2)
-        cash_flow = round(revenue - opex_total_amount - capex_total_amount, 2)
+        date_range = prepare_result.get('date_range')
         
+        date_from = date_range.get('date_from')
+        date_to = date_range.get('date_to')
+        
+        date_from = datetime.strptime(date_from, mask)
+        date_to = datetime.strptime(date_to, mask)
+        
+       
+        financial_indicators, capex_total_amount = self.calculate_financial_indicators(prepare_result)
+        payback_period = self.calculate_payback_period(
+            net_profit=financial_indicators.get('net_profit'),
+            capex_total_amount=capex_total_amount,
+            date_from=date_from,
+            date_to=date_to
+        )
+
         prepare_result['metrics'].update({
-            # 'capex': capex,
-            # 'opex': opex,
-            'ebitda': ebitda,
-            'net_profit': net_profit,
-            'cash_flow': cash_flow 
+            **financial_indicators,
+            'payback_period': payback_period
+            # # 'capex': capex,
+            # # 'opex': opex,
+            # 'ebitda': ebitda,
+            # 'net_profit': net_profit,
+            # 'cash_flow': cash_flow 
         })
         return prepare_result
     
