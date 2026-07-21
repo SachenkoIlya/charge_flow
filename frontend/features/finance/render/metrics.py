@@ -81,7 +81,7 @@ FINANCE_METRICS = [
 
 def get_metrics_value(key:str, data:dict)->str:
     metrics = data["metrics"]
-    capex = metrics['investment']['capex']
+    capex = data['investment']['capex']
     total_capex = str(
         sum(
             capex[m] for m in capex
