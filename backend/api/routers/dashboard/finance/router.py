@@ -42,6 +42,7 @@ async def get_finance(
             где все пустые значения (None) будут автоматически исключены.
     """
     user_id = credentials.get('user_id')
+    logger.debug(f"звшли в finance endpoint")
     try:
         return await dash.finance.get_metrics(
             user_id=user_id, 
