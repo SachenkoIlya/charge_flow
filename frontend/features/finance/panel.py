@@ -112,10 +112,5 @@ class Panel(BasePanel):
             # )
 
 
-    async def load_data(self):
-        payload = deepcopy(self.payload)
-        logger.debug(f"{self.page_key}: зашли в load_data".upper())
-        logger.debug(f"payload: {payload}")
-        return True
 
         
