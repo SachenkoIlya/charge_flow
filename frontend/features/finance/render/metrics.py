@@ -82,16 +82,15 @@ FINANCE_METRICS = [
 def get_metrics_value(key:str, data:dict)->str:
     metrics = data["metrics"]
     capex = data['investment']['capex']
-    total_capex = str(
-        sum(
-            capex[m] for m in capex
-        )
+    total_capex = sum(
+        capex[m] for m in capex
     )
+    
     k = {
         'total_revenue':  f"{metrics['total_revenue']:,.0f} ₽".replace(",", " "),
         'ebitda': f"{metrics['ebitda']:,.0f} ₽".replace(",", " "),
         'net_profit': f"{metrics['net_profit']:,.0f} ₽".replace(",", " "),
-        'capex': f"{total_capex :,.0f} ₽".replace(",", " "),
+        'capex': f"{total_capex:,.0f} ₽".replace(",", " "),
         'cash_flow': f"{metrics['cash_flow']:,.0f} ₽".replace(",", " "),
         'payback_period': '-'
     }
