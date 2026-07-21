@@ -1,14 +1,20 @@
 from nicegui import ui
 from frontend.features.summary.render.metrics import METRICS, get_delta_class, get_metric_value, get_metric_delta
-
-def render_metrics(data: dict, columns:int, on_top_click=None):
+from typing import Any
+def render_metrics(
+    data: dict, 
+    columns:int, 
+    default_metrics:dict, 
+    metric_value_func: Any, 
+    metric_delta_func: Any, 
+    on_top_click=None):
     with ui.grid(columns=columns).classes(
         'w-full gap-4 mt-6'
     ):
-        for metric in METRICS:
+        for metric in default_metrics:
             key = metric.get('key', '')
-            value = get_metric_value(key, data)
-            delta = get_metric_delta(key, data)
+            value = metric_value_func(key, data)
+            delta = metric_delta_func(key, data)
             metric_card(
                 metric, 
                 value, 

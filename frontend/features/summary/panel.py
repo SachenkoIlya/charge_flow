@@ -4,10 +4,10 @@ from datetime import datetime, timedelta
 from core.logger.logger import logger
 from frontend.features.base.panel import BasePanel
 from frontend.features.summary.render.render_top_table import render_top_tables_dialog
-from frontend.features.summary.render.tables_section import (
-    render_tables_section, 
-    TOP_ROWS, 
-    REVERS_ROWS
+from frontend.features.summary.render.metrics import (
+    METRICS, 
+    get_metric_value, 
+    get_metric_delta
 )
 from frontend.features.summary.render.charts import render_chart
 
@@ -94,7 +94,14 @@ class Panel(BasePanel):
                 on_date_change=self.on_date_change,
             )
             top_dialog = render_top_tables_dialog(self.data)
-            render_metrics(data=self.data, columns=5,  on_top_click=top_dialog.open)
+            render_metrics(
+                data=self.data, 
+                columns=5,  
+                metric_value_func=get_metric_value, 
+                metric_delta_func=get_metric_delta,
+                default_metrics=METRICS,
+                on_top_click=top_dialog.open
+                )
             render_chart(data=self.data)
             # render_tables_section(TOP_ROWS, REVERS_ROWS)
 

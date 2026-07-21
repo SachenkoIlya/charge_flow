@@ -5,7 +5,11 @@ from frontend.components.metric_card import render_metrics
 from frontend.features.base.panel import BasePanel
 
 from frontend.features.finance.charts.render_charts import render_finance_charts
-
+from frontend.features.finance.render.metrics import (
+    FINANCE_METRICS,
+    get_metrics_value,
+    get_metric_delta
+)
 
 from frontend.api.client import frontend_api
 from core.logger.logger import logger
@@ -79,6 +83,9 @@ class Panel(BasePanel):
 
 
     async def render_content(self):
+        
+        logger.debug(self.data)
+
         with ui.element('div').style('zoom: 0.9'):
             await render_title(
                 label='Финансы и прибыльность',
@@ -86,20 +93,23 @@ class Panel(BasePanel):
                 page_key=self.page_key,
                 on_date_change=self.on_date_change 
             )
-            # render_metrics(
-            #     data=FINANCE_METRICS, 
-            #     columns=len(FINANCE_METRICS)
-            # )
+            render_metrics(
+                self.data, 
+                columns=len(FINANCE_METRICS),
+                metric_value_func=get_metrics_value, 
+                metric_delta_func=get_metric_delta,
+                default_metrics=FINANCE_METRICS,
+            )
             
-            render_finance_charts(
-                cashflow=CASHFLOW_METRICS,
-                break_even=BREAK_EVEN_METRICS,
-                cost_structure=COST_STRUCTURE
-            )
-            render_tables_section(
-                rows=PNL_ROWS,
-                plan_rows=PLAN_FACT_ROWS
-            )
+            # render_finance_charts(
+            #     cashflow=CASHFLOW_METRICS,
+            #     break_even=BREAK_EVEN_METRICS,
+            #     cost_structure=COST_STRUCTURE
+            # )
+            # render_tables_section(
+            #     rows=PNL_ROWS,
+            #     plan_rows=PLAN_FACT_ROWS
+            # )
 
 
     async def load_data(self):
