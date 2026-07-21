@@ -1,7 +1,7 @@
 
 from frontend.components.drawer import render_sidebar
 from datetime import datetime, timedelta
-
+from core.logger.logger import logger
 from frontend.features.base.panel import BasePanel
 from frontend.features.summary.render.render_top_table import render_top_tables_dialog
 from frontend.features.summary.render.tables_section import (
@@ -68,6 +68,7 @@ class Panel(BasePanel):
     async def render_content(self):
         comparable_period = self.data['comparable_period']
 
+        
         comparable_from = datetime.strptime(
             comparable_period['date_from'],
             '%Y-%m-%d %H:%M:%S'
