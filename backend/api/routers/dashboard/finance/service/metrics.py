@@ -59,11 +59,17 @@ class MetricFinance:
                 date_from=date_from,
                 date_to=date_to
             ),
-            'investment': self.metrics_service.get_investment_metrics_v2(
+            'investment': self.metrics_service.get_investment_metrics(
                 user_id=user_id,
                 date_from=date_from,
                 date_to=date_to,
             ),
+            'date_range': self.metrics_service.get_date_range(
+                date_from=date_from,
+                date_to=date_to,
+                period=period,
+                user_id=user_id,
+            )
             # 'charts': self.charts.get_cost_structure(
             #     user_id=user_id,
             #     date_from=date_from,

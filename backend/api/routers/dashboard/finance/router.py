@@ -41,4 +41,7 @@ async def get_finance(
             где все пустые значения (None) будут автоматически исключены.
     """
     user_id = credentials.get('user_id')
-    return await dash.finance.get_metrics(user_id, payload.toggle_value)
+    return await dash.finance.get_metrics(
+        user_id=user_id, 
+        period=payload.toggle_value
+    )

@@ -25,10 +25,25 @@ class FinanceDB:
                 AND ($2::timestamp IS NULL OR cs.start_ts >= $2)
                 AND ($3::timestamp IS NULL OR cs.start_ts < $3)
             """ 
-        async with self.db.pool.acquire() as conn:
-            return await conn.fetchrow(q, user_id, date_from, date_to)
+        async with self.db.get_conn() as conn:
+            return await conn.fetchrow(
+                q, 
+                user_id, 
+                date_from, 
+                date_to
+            )
 
-
+    async def get_date_range(self, user_id:int):
+        q = """
+            SELECT
+                MIN(cs.start_ts) as first_date,
+                MAX(cs.start_ts) as  last_date
+            FROM charging_sessions_fact cs
+            WHERE user_id = $1
+            AND cs.state = 'COMPLETED';
+            """
+        async with self.db.get_conn() as conn:
+            return await conn.fetchrow(q, user_id)
     async def get_investment(
         self, 
         user_id: int, 
@@ -49,10 +64,41 @@ class FinanceDB:
             AND ($4::timestamp IS NULL OR f.created_at < $4)
             ORDER BY f.id
             """ 
-        async with self.db.pool.acquire() as conn:
-            return await conn.fetch(q, user_id, mode, date_from, date_to)
+        async with self.db.get_conn() as conn:
+            return await conn.fetch(
+                q, 
+                user_id, 
+                mode, 
+                date_from, 
+                date_to
+            )
 
-    async def get_investment_v2(
+    async def get_investment_group(
+        self,
+        user_id: int,
+        date_from: datetime | None=None,
+        date_to: datetime | None=None,
+    ) ->list[Record]:
+        q = """
+            SELECT
+                f.mode
+                , f.amount_type
+                , COALESCE(
+                    SUM(f.amount)
+                    , 0
+                ) AS amount
+
+            FROM finance_operations f
+            WHERE user_id = $1
+                AND ($2::timestamp IS NULL or f.expense_date >= $2)
+                AND ($3::timestamp IS NULL or f.expense_date < $3)
+            GROUP BY 
+                f.mode, f.amount_type
+            """
+        async with self.db.get_conn() as conn:
+            return await conn.fetch(q, user_id, date_from, date_to)
+        
+    async def get_investment(
         self, 
         user_id: int, 
         date_from: datetime | None=None,
@@ -72,7 +118,7 @@ class FinanceDB:
                 AND ($3::timestamp IS NULL or f.expense_date < $3)
             GROUP BY f.mode
             """
-        async with self.db.pool.acquire() as conn:
+        async with self.db.get_conn() as conn:
             return await conn.fetch(
                 q,
                 user_id,
@@ -138,7 +184,7 @@ class FinanceDB:
                 AND ($3::timestamp IS NULL or f.expense_date < $3)
                 AND mode = $4
             """
-        async with self.db.pool.acquire() as conn:
+        async with self.db.get_conn() as conn:
             return await conn.fetch(
                 q,
                 user_id,
