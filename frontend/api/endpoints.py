@@ -47,7 +47,7 @@ class Endpoints:
             'url':'v1/dashboard/summary',
             'method': 'post'
         },
-        'summary': {
+        'finance': {
             'url':'v1/dashboard/finance',
             'method': 'post'
         }
