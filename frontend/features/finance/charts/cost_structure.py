@@ -61,7 +61,7 @@ def prepar_charts(cost_structure: dict):
                 'type': 'pie',
 
                 'radius': ['55%', '80%'],
-                'center': ['40%', '50%'],
+                'center': ['35%', '50%'],
 
                 # подписи скрыты
                 'label': {
