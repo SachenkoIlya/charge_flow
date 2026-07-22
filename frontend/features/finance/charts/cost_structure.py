@@ -21,10 +21,10 @@ def prepar_charts(cost_structure: dict):
         },
         'series': [
             {
-                'name': 'Структура затрат',
+                'name': 'opex расходы',
                 'type': 'pie',
-                'radius': ['45%', '72%'],
-                'center': ['32%', '55%'],
+                'radius': ['55%', '85%'],
+                'center': ['50%', '50%'],
                 'avoidLabelOverlap': True,
                 'label': {'show': False},
                 'data': [
