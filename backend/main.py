@@ -35,9 +35,7 @@ async def lifespan(app: FastAPI):
     try:
         app.state.client = httpx.AsyncClient(base_url="http://localhost:8001")
         logger.info(f"client created".upper())
-        
         yield
-
         await app.state.client.aclose()
         logger.info(f"client closed".upper())
     finally:
