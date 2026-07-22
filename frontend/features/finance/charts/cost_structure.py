@@ -8,7 +8,7 @@ def render_cost_structure_chart(cost_structure:dict):
     with chart_card():
         ui.label('Структура затрат').classes('text-sm font-bold mb-2')
         ui.echart(chart).style(
-            'height: 220px; width: 100%;'
+            'height: 270px; width: 100%;'
         )
 
 
