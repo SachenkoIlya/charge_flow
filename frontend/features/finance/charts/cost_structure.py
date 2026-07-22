@@ -1,11 +1,10 @@
 from nicegui import ui
 
 from frontend.components.chart_card import chart_card
-from core.logger.logger import logger
+
 
 def render_cost_structure_chart(cost_structure:dict):
-    chart = prepare_charts(cost_structure)
-    logger.debug(chart)
+    chart = prepar_charts_v2(cost_structure)
     with chart_card():
         ui.label('Структура затрат').classes('text-sm font-bold mb-2')
         ui.echart(chart).classes('w-full h-[220px]')
