@@ -1,8 +1,8 @@
 from backend.api.routers.dashboard.finance.db import FinanceDB
 from core.base_db import Base
 from datetime import datetime
-
-
+from core.logger.logger import logger
+from asyncpg import Record
 
 class FinanceChartsService:
     """
@@ -22,80 +22,15 @@ class FinanceChartsService:
     """
     def __init__(self, base_db: "Base"):
         self.db = FinanceDB(base_db)
+        self.chart_name: str = 'network_cost_structure'
 
-    async def get_network_cost_structure(
-        self, 
-        user_id:int,
-        date_from:datetime=None, 
-        date_to:datetime=None,
-        chart_name: str = 'network_cost_structure'
-    ) -> dict:
-        """
-        Получить структуру сетевых расходов за выбранный период.
-
-        Метод агрегирует расходы по категориям и возвращает данные
-        в формате, пригодном для построения диаграммы структуры затрат.
-
-        Категории расходов:
-            - electricity_compensation;
-            - rent_payment;
-            - operator_commission;
-            - service_maintenance;
-            - internet_and_connection;
-            - taxes.
-
-        Args:
-            user_id (int):
-                Идентификатор пользователя.
-
-            date_from (datetime | None):
-                Начальная дата периода.
-
-            date_to (datetime | None):
-                Конечная дата периода.
-
-            chart_name (str):
-                Имя графика в итоговой структуре ответа.
-
-        Returns:
-            dict:
-                Словарь с данными для диаграммы.
-
-                Пример:
-                {
-                    "network_cost_structure": {
-                        "electricity_compensation": 165000.0,
-                        "rent_payment": 59000.0,
-                        "operator_commission": 85000.0,
-                        "service_maintenance": 4000.0,
-                        "internet_and_connection": 1150.0,
-                        "taxes": 12000.0
-                    }
-                }
-        """
-        result = {
-            'electricity_compensation': 0,
-            'rent_payment': 0,
-            'operator_commission': 0,
-            'service_maintenance': 0,
-            'internet_and_connection': 0,
-            'taxes': 0
+    @staticmethod
+    def demical_to_float(data:Record) -> dict:
+        return  {
+            k: float(v) 
+            for k, v in data.items()
         }
-
-        rows = await self.db.get_network_cost_structure(
-            user_id=user_id,
-            date_from=date_from,
-            date_to=date_to
-        )
-        if rows:
-            row = rows[0]
-            result.update({
-                key: round(float(row[key] or 0), 2)
-                for key in result
-            })
-        return {
-            chart_name: result
-        }
+    
 
     async def get_cost_structure(
         self, 
@@ -123,8 +58,13 @@ class FinanceChartsService:
             dict:
                 Структура данных для отображения диаграммы затрат.
         """
-        return await self.get_network_cost_structure(
+
+        row = await self.db.get_full_network_cost_structure(
             user_id=user_id,
             date_from=date_from,
             date_to=date_to
         )
+
+        return {
+            self.chart_name: self.demical_to_float(row)
+        }

@@ -1,3 +1,4 @@
+from backend.api.routers.dashboard.finance.schemas import FinanceResponseModel
 from backend.api.routers.dashboard.finance.service.charts import FinanceChartsService
 from backend.api.routers.dashboard.finance.service.normalize import FinanceMetricsService
 from core.base_db import Base
@@ -31,7 +32,11 @@ class MetricFinance:
         self.metrics_service = FinanceMetricsService(base_db)
         self.charts = FinanceChartsService(base_db)
     
-    async def get_metrics(self, user_id: int, period: str):
+    async def get_metrics(
+        self, 
+        user_id: int, 
+        period: str
+    ) -> FinanceResponseModel:
         """
         Получить финансовые показатели пользователя за указанный период.
         Args:
@@ -64,17 +69,17 @@ class MetricFinance:
                 date_from=date_from,
                 date_to=date_to,
             ),
+            'charts': self.charts.get_cost_structure(
+                user_id=user_id,
+                date_from=date_from,
+                date_to=date_to,
+            ),
             'date_range': self.metrics_service.get_date_range(
                 date_from=date_from,
                 date_to=date_to,
                 period=period,
                 user_id=user_id,
-            )
-            # 'charts': self.charts.get_cost_structure(
-            #     user_id=user_id,
-            #     date_from=date_from,
-            #     date_to=date_to,
-            # )
+            ),
         }
 
         result = await gather_named(data)

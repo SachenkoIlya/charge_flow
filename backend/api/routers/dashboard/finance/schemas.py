@@ -75,6 +75,38 @@ class InvestmentModel(BaseModel):
         description='Детализация всех операционных расходов (OPEX) по категориям.'
     )
 
+class NetworkCostStructureModel(BaseModel):
+    electricity_compensation: Optional[float | int] = Field(
+        description='Компенсация расходов на электроэнергию',
+        examples=[165000.0]
+    )
+    rent_payment: Optional[float | int] = Field(
+        description='Расходы на аренду помещений или площадей',
+        examples=[59000.0]
+    )
+    operator_commission: Optional[float | int] = Field(
+        description='Комиссионное вознаграждение оператора',
+        examples=[85000.0]
+    )
+    service_maintenance: Optional[float | int] = Field(
+        description='Расходы на техническое и сервисное обслуживание',
+        examples=[4000.0]
+    )
+    internet_and_connection: Optional[float | int] = Field(
+        description='Затраты на интернет, связь и каналы передачи данных',
+        examples=[1150.0]
+    )
+    taxes: Optional[float | int] = Field(
+        description='Налоговые отчисления и обязательные сборы',
+        examples=[12000.0]
+    )
+
+
+class ChartsModel(BaseModel):
+    network_cost_structure: NetworkCostStructureModel = Field(
+        description='Структура операционных расходов сети для построения графиков и диаграмм'
+    )
+
 class DateRangeModel(BaseModel):
     period: Optional[str] = Field(
         examples=["1y", '6m', 'all'],
@@ -99,4 +131,7 @@ class FinanceResponseModel(BaseModel):
     date_range: DateRangeModel = Field(
         description='Временной диапазон, за который были рассчитаны все финансовые метрики в ответе.'
     )
-    
+    charts: ChartsModel = Field(
+        description='Набор структурированных данных для визуализации аналитических графиков и диаграмм'
+    )
+        
