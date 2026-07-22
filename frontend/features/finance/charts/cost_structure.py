@@ -30,15 +30,11 @@ def prepar_charts(cost_structure: dict):
         'tooltip': {
             'trigger': 'item',
             
-            'formatter': """
-                function(params) {
-                    // Форматируем число с пробелами (локаль ru-RU) без копеек
-                    let formattedValue = new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 0 }).format(params.value);
-                    return '<b>' + params.name + '</b><br/>' +
-                        'Сумма: ' + formattedValue + ' ₽<br/>' +
-                        'Доля: ' + params.percent + '%';
-                }
-            """
+            'formatter': (
+                '<b>{b}</b><br/>'
+                'Сумма: {c} ₽<br/>'
+                'Доля: {d}%'
+            ).replace('{c}', '{c}')
         },
 
         'legend': {
