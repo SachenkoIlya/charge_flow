@@ -39,8 +39,9 @@ def prepar_charts(cost_structure: dict):
         'legend': {
             'show': True,
             'orient': 'vertical',
-            'right': 20,            # Увеличили отступ от края, чтобы текст не прижимался
-            'top': 'center',
+            'right': 5,            # Увеличили отступ от края, чтобы текст не прижимался
+            'top': 15,
+            'selectedMode': False,
             
             # 1. Делаем цветные квадратики больше (было 12)
             'itemWidth': 18,        
