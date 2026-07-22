@@ -83,8 +83,7 @@ class Panel(BasePanel):
 
 
     async def render_content(self):
-        
-        logger.debug(self.data)
+        charts = self.data['charts']
 
         with ui.element('div').style('zoom: 0.9'):
             await render_title(
@@ -100,12 +99,13 @@ class Panel(BasePanel):
                 metric_delta_func=get_metric_delta,
                 default_metrics=FINANCE_METRICS,
             )
+
+            render_finance_charts(
+                # cashflow=CASHFLOW_METRICS,
+                # break_even=BREAK_EVEN_METRICS,
+                cost_structure=charts['network_cost_structure']
+            )
             
-            # render_finance_charts(
-            #     cashflow=CASHFLOW_METRICS,
-            #     break_even=BREAK_EVEN_METRICS,
-            #     cost_structure=COST_STRUCTURE
-            # )
             # render_tables_section(
             #     rows=PNL_ROWS,
             #     plan_rows=PLAN_FACT_ROWS

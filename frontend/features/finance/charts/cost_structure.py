@@ -4,12 +4,13 @@ from frontend.components.chart_card import chart_card
 
 
 def render_cost_structure_chart(cost_structure:dict):
+    chart = prepar_charts(cost_structure)
     with chart_card():
         ui.label('Структура затрат').classes('text-sm font-bold mb-2')
-        ui.echart(cost_structure).classes('w-full h-[220px]')
+        ui.echart(chart).classes('w-full h-[220px]')
 
-
-COST_STRUCTURE = {
+def prepar_charts(cost_structure: dict):
+    return {
         'backgroundColor': 'transparent',
         'tooltip': {'trigger': 'item'},
         'legend': {
@@ -27,12 +28,12 @@ COST_STRUCTURE = {
                 'avoidLabelOverlap': True,
                 'label': {'show': False},
                 'data': [
-                    {'value': 10.25, 'name': 'Затраты на эл/энергию'},
-                    {'value': 4.09, 'name': 'Аренда'},
-                    {'value': 2.57, 'name': 'Комиссия оператора'},
-                    {'value': 1.98, 'name': 'Сервисное обслуживание'},
-                    {'value': 0.71, 'name': 'Интернет'},
-                    {'value': 1.23, 'name': 'Налоги'},
+                    {'value': cost_structure['electricity_compensation'], 'name': 'Затраты на эл/энергию'},
+                    {'value': cost_structure['rent_payment'], 'name': 'Аренда'},
+                    {'value': cost_structure['operator_commission'], 'name': 'Комиссия оператора'},
+                    {'value': cost_structure['service_maintenance'], 'name': 'Сервисное обслуживание'},
+                    {'value': cost_structure['internet_and_connection'], 'name': 'Интернет'},
+                    {'value': cost_structure['taxes'], 'name': 'Налоги'},
                 ],
             }
         ],
