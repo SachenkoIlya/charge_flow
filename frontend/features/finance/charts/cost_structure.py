@@ -39,10 +39,19 @@ def prepar_charts(cost_structure: dict):
         'legend': {
             'show': True,
             'orient': 'vertical',
-            'right': 10,
+            'right': 20,            # Увеличили отступ от края, чтобы текст не прижимался
             'top': 'center',
-            'itemWidth': 12,
-            'itemHeight': 12
+            
+            # 1. Делаем цветные квадратики больше (было 12)
+            'itemWidth': 18,        
+            'itemHeight': 18,       
+            'itemGap': 15,          # Добавили расстояние МЕЖДУ строками легенды, чтобы они не слипались
+            
+            'textStyle': {
+                'color': '#9ca3af',
+                'fontSize': 14,     # 2. Увеличили размер шрифта текста (дефолт обычно 12)
+                'fontWeight': '500' # Сделали текст чуть плотнее, чтобы лучше читался
+            }
         },
 
         'series': [
