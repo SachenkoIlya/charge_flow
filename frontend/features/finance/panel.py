@@ -11,12 +11,9 @@ from frontend.features.finance.render.metrics import (
     get_metric_delta
 )
 
-from frontend.api.client import frontend_api
-from core.logger.logger import logger
 from frontend.features.finance.render.metrics import FINANCE_METRICS
 from frontend.features.finance.charts.cashflow import CASHFLOW_METRICS
 from frontend.features.finance.charts.break_even import BREAK_EVEN_METRICS
-from frontend.features.finance.charts.cost_structure import COST_STRUCTURE
 from frontend.features.finance.charts.tables_section import (
     render_tables_section, 
     PLAN_FACT_ROWS, 
@@ -24,7 +21,6 @@ from frontend.features.finance.charts.tables_section import (
 )
 
 from dataclasses import dataclass
-from copy import deepcopy
 from fastapi import Request
 from nicegui import ui, app
 
