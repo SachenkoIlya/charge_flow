@@ -151,13 +151,6 @@ class FinanceDB:
                 ,
                 COALESCE(
                     SUM(f.amount) FILTER(
-                        WHERE f.amount_type = 'operator_commission'
-                    )
-                    , 0
-                ) as operator_commission
-                ,
-                COALESCE(
-                    SUM(f.amount) FILTER(
                         WHERE f.amount_type = 'service_maintenance'
                     )
                     , 0
@@ -192,7 +185,95 @@ class FinanceDB:
                 date_to,
                 mode
             )
-        
 
-      
-     
+    async def get_operator_commission(
+        self, 
+        user_id:int, 
+        date_from:datetime, 
+        date_to:datetime
+    ) ->Record:
+        q = """
+            SELECT
+                COALESCE( 
+                    COALESCE(
+                        SUM(cs.gross_revenue) 
+                        , 0
+                    ) 
+                    - 
+                    COALESCE(
+                        SUM(cs.partner_revenue) 
+                        , 0
+                    ) 
+                    ,
+                    0
+                ) as operator_commission
+            FROM charging_sessions_fact cs
+            WHERE
+                cs.user_id = $1
+                AND ($2::timestamp IS NULL or cs.start_ts >= $2)
+                ANd ($3::timestamp IS NULL or cs.start_ts < $3)
+            """
+        async with self.db.get_conn() as conn:
+            return await conn.fetchrow(
+                q,
+                user_id,
+                date_from,
+                date_to
+            )
+
+    async def get_full_network_cost_structure(
+        self,
+        user_id: int,
+        date_from: datetime | None = None,
+        date_to: datetime | None = None,
+        mode: str = 'opex'
+        ) -> Record:    
+        q = """
+            WITH finance_agg AS (
+                SELECT
+                    COALESCE(SUM(f.amount) FILTER (WHERE f.amount_type = 'electricity_compensation'), 0) as electricity_compensation
+                    ,
+                    COALESCE(SUM(f.amount) FILTER (WHERE f.amount_type = 'rent_payment'), 0) as rent_payment
+                    ,
+                    COALESCE(SUM(f.amount) FILTER (WHERE f.amount_type = 'service_maintenance'), 0) as service_maintenance
+                    ,
+                    COALESCE(SUM(f.amount) FILTER (WHERE f.amount_type = 'internet_and_connection'), 0) as internet_and_connection
+                    ,
+                    COALESCE(SUM(f.amount) FILTER (WHERE f.amount_type = 'taxes'), 0) as taxes
+
+                FROM finance_operations f
+                
+                WHERE f.user_id = $1
+                    AND ($2::timestamp IS NULL or f.expense_date >= $2)
+                    AND ($3::timestamp IS NULL or f.expense_date < $3)
+                    AND mode = $4
+            ),
+            commission_agg AS (
+                SELECT
+                    COALESCE(SUM(gross_revenue - partner_revenue), 0) as operator_commission
+                
+                FROM charging_sessions_fact cs
+                
+                WHERE cs.user_id = $1
+                    AND ($2::timestamp IS NULL OR cs.start_ts >= $2)
+                    AND ($3::timestamp IS NULL OR cs.start_ts < $3)
+            )
+            SELECT
+                f_agg.electricity_compensation,
+                f_agg.rent_payment,
+                f_agg.service_maintenance,
+                f_agg.internet_and_connection,
+                f_agg.taxes,
+                c_agg.operator_commission
+            
+            FROM finance_agg f_agg
+            CROSS JOIN commission_agg c_agg;
+        """
+        async with self.db.get_conn() as conn:
+            return await conn.fetchrow(
+                q,
+                user_id,
+                date_from,
+                date_to,
+                mode
+            )
