@@ -97,8 +97,8 @@ class Panel(BasePanel):
             )
 
             render_finance_charts(
-                # cashflow=CASHFLOW_METRICS,
-                # break_even=BREAK_EVEN_METRICS,
+                cashflow=CASHFLOW_METRICS,
+                break_even=BREAK_EVEN_METRICS,
                 cost_structure=charts['network_cost_structure']
             )
             
