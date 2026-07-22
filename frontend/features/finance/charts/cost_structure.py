@@ -13,12 +13,12 @@ def prepar_charts(cost_structure: dict):
     return {
         'backgroundColor': 'transparent',
         'tooltip': {'trigger': 'item'},
-        'legend': {
-            'orient': 'vertical',
-            'right': 10,
-            'top': 'middle',
-            'textStyle': {'color': '#9ca3af'},
-        },
+        # 'legend': {
+        #     'orient': 'vertical',
+        #     'right': 10,
+        #     'top': 'middle',
+        #     'textStyle': {'color': '#9ca3af'},
+        # },
         'series': [
             {
                 'name': 'opex расходы',
