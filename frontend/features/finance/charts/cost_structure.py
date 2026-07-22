@@ -4,11 +4,46 @@ from frontend.components.chart_card import chart_card
 
 
 def render_cost_structure_chart(cost_structure:dict):
-    chart = prepar_charts(cost_structure)
+    chart = prepar_charts_v2([cost_structure])
     with chart_card():
         ui.label('Структура затрат').classes('text-sm font-bold mb-2')
         ui.echart(chart).classes('w-full h-[220px]')
 
+def prepar_charts_v2(data: list[dict]):
+    return {
+    # 'title': {
+    #     'text': 'Оборот по локациям',
+    #     'left': 'center',
+    # },
+
+    'tooltip': {
+        'trigger': 'item',
+        'formatter': '{b}<br/>Оборот: {c} ₽ ({d}%)'
+    },
+
+    # 'legend': {
+    #     'orient': 'vertical',
+    #     'left': 'right'
+    # },
+
+    'series': [
+        {
+            'name': 'Оборот',
+            'type': 'pie',
+            'radius': '80%',
+
+            'data': data,
+
+            'emphasis': {
+                'itemStyle': {
+                    'shadowBlur': 10,
+                    'shadowOffsetX': 0,
+                    'shadowColor': 'rgba(0, 0, 0, 0.3)'
+                }
+            }
+        }
+    ]
+}
 def prepar_charts(cost_structure: dict):
     return {
         'backgroundColor': 'transparent',
