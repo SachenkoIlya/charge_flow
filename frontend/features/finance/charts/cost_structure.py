@@ -7,9 +7,11 @@ def render_cost_structure_chart(cost_structure:dict):
     chart = prepar_charts(cost_structure)
     with chart_card():
         ui.label('Структура затрат').classes('text-sm font-bold mb-2')
-        ui.echart(chart).classes('w-full h-[220px]')
+        ui.echart(chart).style(
+            'height: 220px; width: 100%;'
+        )
 
-        
+
 def prepar_charts(cost_structure: dict):
     data = [
         {'value': cost_structure['electricity_compensation'], 'name': 'Электроэнергия'},
