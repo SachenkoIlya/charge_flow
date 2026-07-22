@@ -1,5 +1,5 @@
 from backend.api.routers.admin.companies.service.metrics import UserRepositoryMetrics
-from backend.api.routers.dashboard.finance.service.metrics import MetricFinance
+from backend.api.routers.dashboard.finance.service.service import MetricFinance
 from backend.api.routers.user.stations.service.metrics import StationInfo
 from backend.api.routers.dashboard.stats.service.metrics import MetricStats
 from backend.api.routers.dashboard.summary.service.metrics import MetricSummary
