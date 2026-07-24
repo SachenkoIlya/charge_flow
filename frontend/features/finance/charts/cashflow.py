@@ -72,8 +72,10 @@ def prepare_data(cash_flow_history: list[dict[str, Any]]) -> dict:
 
         "tooltip": {
             "trigger": "axis",
+            'triggerOn': 'click',
             "axisPointer": {
                 "type": "line",
+                 'snap': True,
                 "lineStyle": {
                     "type": "dashed",
                     "color": "#94a3b8",
@@ -87,7 +89,7 @@ def prepare_data(cash_flow_history: list[dict[str, Any]]) -> dict:
         },
 
         "grid": {
-            "left": 45,
+            "left": 40,
             "right": 10,
             "top": 20,
             "bottom": 30,
