@@ -18,7 +18,7 @@ router = APIRouter(prefix='/v1/dashboard', tags=['dashboard'])
     ENDPOINT, 
      summary='Финансовые показатели dashboard',
     description=DESCRIPTION,
-    response_model_exclude_none=True,
+    # response_model_exclude_none=True,
     
     response_model=FinanceResponseModel)
 async def get_finance(

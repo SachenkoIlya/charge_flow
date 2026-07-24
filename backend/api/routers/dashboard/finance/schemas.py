@@ -1,16 +1,15 @@
 from typing import Optional
 from pydantic import BaseModel, Field
-
+from datetime import date as dt, datetime   
+from typing import Literal
 
 class FinanceFilterSchema(BaseModel):
-    toggle_value: Optional[str] = Field(
+    toggle_value: Literal["6m", "1y", "all"] = Field(
         description=(
-            "Период отчета. Возможные значения: "
-            "'6m' (6 месяцев), "
-            "'1y' (1 год), "
-            "'all' (весь период). "
+            "Период отчёта: '6m' — 6 месяцев, "
+            "'1y' — 1 год, 'all' — весь период."
         ),
-        examples=['all'],
+        examples=["all"],
     )
 
 class MetricsModel(BaseModel):
@@ -26,8 +25,10 @@ class MetricsModel(BaseModel):
     cash_flow: Optional[float] = Field(
         description='Денежный поток (Cash Flow). Реальный остаток свободных денег на счетах после вычета всех операционных и капитальных затрат.'
     )
-    payback_period: Optional[float] = Field(
-        description='Срок окупаемости инвестиций в месяцах. Рассчитывается как отношение общего CAPEX к среднемесячной чистой прибыли.'
+    payback_period: float | None = Field(
+        default=None,
+        description="Расчётный срок окупаемости в месяцах. Может быть null, если расчёт невозможен.",
+        examples=[58.0, None],
     )
 
 class CapexModel(BaseModel):
@@ -76,49 +77,96 @@ class InvestmentModel(BaseModel):
     )
 
 class NetworkCostStructureModel(BaseModel):
-    electricity_compensation: Optional[float | int] = Field(
+    electricity_compensation: float  = Field(
         description='Компенсация расходов на электроэнергию',
         examples=[165000.0]
     )
-    rent_payment: Optional[float | int] = Field(
+    rent_payment: float = Field(
         description='Расходы на аренду помещений или площадей',
         examples=[59000.0]
     )
-    operator_commission: Optional[float | int] = Field(
+    operator_commission: float  = Field(
         description='Комиссионное вознаграждение оператора',
         examples=[85000.0]
     )
-    service_maintenance: Optional[float | int] = Field(
+    service_maintenance: float  = Field(
         description='Расходы на техническое и сервисное обслуживание',
         examples=[4000.0]
     )
-    internet_and_connection: Optional[float | int] = Field(
+    internet_and_connection: float = Field(
         description='Затраты на интернет, связь и каналы передачи данных',
         examples=[1150.0]
     )
-    taxes: Optional[float | int] = Field(
+    taxes: float  = Field(
         description='Налоговые отчисления и обязательные сборы',
         examples=[12000.0]
     )
 
+class AccumulatedCashFlowModel(BaseModel):
+    date: dt = Field(
+        description="Дата начала отчётного периода.",
+        examples=["2026-01-01"],
+    )
+    accumulated: float = Field(
+        description=(
+            "Накопленный чистый денежный поток с начала выбранного периода."
+        ),
+        examples=[847017.93],
+    )
+    net_cash_flow: float = Field(
+        description=(
+            "Чистый денежный поток за отчётный период: "
+            "выручка владельца за вычетом операционных расходов."
+        ),
+        examples=[287002.38],
+    )
 
 class ChartsModel(BaseModel):
     network_cost_structure: NetworkCostStructureModel = Field(
-        description='Структура операционных расходов сети для построения графиков и диаграмм'
+        description="Структура операционных расходов сети для построения графиков и диаграмм."
     )
 
+    cash_flow_history: list[AccumulatedCashFlowModel] = Field(
+        default_factory=list,
+        description=(
+            "История накопленного денежного потока. Каждый элемент содержит "
+            "дату периода, чистый денежный поток за период и накопленное значение."
+        ),
+        examples=[
+            [
+                {
+                    "date": "2026-01-01",
+                    "net_cash_flow": 91243.41,
+                    "accumulated": 91243.41,
+                },
+                {
+                    "date": "2026-02-01",
+                    "net_cash_flow": 80492.00,
+                    "accumulated": 171735.41,
+                },
+            ]
+        ],
+    )
 class DateRangeModel(BaseModel):
-    period: Optional[str] = Field(
-        examples=["1y", '6m', 'all'],
-        description='Идентификатор выбранного временного диапазона для фильтрации данных.'
+    period: Literal["6m", "1y", "all"] = Field(
+        description="Выбранный временной диапазон.",
+        examples=["1y"],
     )
-    date_from: Optional[str | None] = Field(
-        examples=['2025-07-21 14:35:52', None],
-        description='Начальная дата и время периода в формате YYYY-MM-DD HH:MM:SS. Может быть null, если данных нет.'
+    date_from: datetime | None = Field(
+        default=None,
+        description=(
+            "Начало выбранного временного диапазона. "
+            "Для периода 'all' может быть null."
+        ),
+        examples=["2025-07-21T14:35:52", None],
     )
-    date_to: Optional[str | None] = Field(
-        examples=['2026-07-21 14:35:52', None],
-        description='Конечная дата и время периода в формате YYYY-MM-DD HH:MM:SS. Может быть null, если данных нет.'
+    date_to: datetime | None = Field(
+        default=None,
+        description=(
+            "Конец выбранного временного диапазона. "
+            "Для периода 'all' может быть null."
+        ),
+        examples=["2026-07-21T14:35:52", None],
     )
 
 class FinanceResponseModel(BaseModel):
@@ -128,10 +176,11 @@ class FinanceResponseModel(BaseModel):
     investment: InvestmentModel = Field(
         description='Детализация инвестиционных расходов, сгруппированная по категориям CAPEX и OPEX.'
     )
-    date_range: DateRangeModel = Field(
-        description='Временной диапазон, за который были рассчитаны все финансовые метрики в ответе.'
-    )
     charts: ChartsModel = Field(
         description='Набор структурированных данных для визуализации аналитических графиков и диаграмм'
     )
+
+    date_range: DateRangeModel = Field(
+            description='Временной диапазон, за который были рассчитаны все финансовые метрики в ответе.'
+        )
         

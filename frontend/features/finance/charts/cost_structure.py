@@ -6,7 +6,7 @@ from frontend.components.chart_card import chart_card
 def render_cost_structure_chart(cost_structure:dict):
     chart = prepar_charts(cost_structure)
     with chart_card():
-        ui.label('Структура затрат').classes('text-sm font-bold mb-2')
+        ui.label('Структура затрат opex').classes('text-sm font-bold mb-2')
         ui.echart(chart).style(
             'height: 300px; width: 100%;'
         )

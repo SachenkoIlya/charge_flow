@@ -61,10 +61,7 @@ class InvestmentExpenseCreateSchema(BaseModel):
         default=None,
         description="[OPEX] Арендные платежи за размещение оборудования/станции"
     )
-    # operator_commission: float | None = Field(
-    #     default=None,
-    #     description="[OPEX] Комиссия оператора или платежного сервиса"
-    # )
+   
     internet_and_connection: float | None = Field(
         default=None,
         description="[OPEX] Расходы на интернет, сотовую связь и каналы коммуникации"

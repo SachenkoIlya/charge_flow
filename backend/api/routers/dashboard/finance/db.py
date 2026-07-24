@@ -44,6 +44,7 @@ class FinanceDB:
             """
         async with self.db.get_conn() as conn:
             return await conn.fetchrow(q, user_id)
+        
     async def get_investment(
         self, 
         user_id: int, 
@@ -277,3 +278,55 @@ class FinanceDB:
                 date_to,
                 mode
             )
+
+
+    async def get_group_month_cost_structure(
+        self,
+        user_id: int,
+        date_from: datetime | None = None,
+        date_to: datetime | None = None,
+        mode: str = 'opex'
+    ) -> list[Record]:
+        q = """
+            SELECT
+                DATE_TRUNC('month', f.expense_date)::date AS month_date
+                ,
+                COALESCE(
+                    SUM(f.amount), 0
+                ) as opex_expenses
+
+            FROM finance_operations f
+            WHERE f.user_id = $1
+                AND mode = $2
+               
+            GROUP BY month_date
+            ORDER BY month_date ASC;
+            """
+        async with self.db.get_conn() as conn:
+            return await conn.fetch(
+                q,
+                user_id,
+                mode,
+                # date_from,
+                # date_to
+            )
+        # AND ($3::timestamp IS NULL or f.expense_date >= $3)
+        # AND ($4::timestamp IS NULL or f.expense_date < $4)
+
+    async def get_group_month_revenue(self, user_id: int) -> list[Record]:
+        q = """
+            SELECT
+                DATE_TRUNC('month', cs.start_ts)::date AS month_date
+                ,
+                COALESCE(SUM(cs.gross_revenue), 0) as total_revenue
+                ,
+                COALESCE(SUM(cs.partner_revenue), 0) as owner_revenue
+                ,
+                COALESCE(SUM(cs.gross_revenue - cs.partner_revenue), 0) as operator_commission
+            FROM charging_sessions_fact cs
+            WHERE cs.user_id = $1
+            GROUP BY month_date
+            ORDER BY  month_date ASC
+            """
+        async with self.db.get_conn() as conn:
+            return await conn.fetch(q, user_id)

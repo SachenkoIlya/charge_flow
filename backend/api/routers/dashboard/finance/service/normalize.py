@@ -22,8 +22,9 @@ class FinanceMetricsService:
         db (FinanceDB):
             Объект доступа к финансовым данным.
     """
-    def __init__(self, base_db: "Base"):
-        self.db = FinanceDB(base_db)
+    def __init__(self, db: "FinanceDB"):
+        self.db = db
+        
     @staticmethod
     def calculate_payback_period(
         net_profit:float, 
@@ -31,20 +32,28 @@ class FinanceMetricsService:
         date_from:datetime,
         date_to:datetime
     ) ->float:
-        payback_period = 0
+        payback_period = None
+
         if (
-            net_profit > 0 
-            and capex_total_amount > 0 
-            and date_from and date_to
+            net_profit > 0
+            and capex_total_amount > 0
+            and date_from is not None
+            and date_to is not None
         ):
-            # Находим точное количество месяцев в выбранном диапазоне дат
-            months_count = (date_to.year - date_from.year) * 12 + (date_to.month - date_from.month)
+            months_count = (date_to.year - date_from.year) * 12
+            months_count += date_to.month - date_from.month
             months_count += (date_to.day - date_from.day) / 30.4
-            months_count = max(months_count, 1.0) # Защита от деления на 0
-            # Среднемесячная чистая прибыль за этот период
+
+            months_count = max(months_count, 1.0)
+
             monthly_net_profit = net_profit / months_count
-            # Окупаемость = Весь CAPEX делим на среднюю прибыль в месяц
-            payback_period = round(capex_total_amount / monthly_net_profit, 1)
+
+            if monthly_net_profit > 0:
+                payback_period = round(
+                    capex_total_amount / monthly_net_profit,
+                    1,
+                )
+
         return payback_period
     
 
@@ -119,12 +128,13 @@ class FinanceMetricsService:
         # Создаем глубокую копию
         prepare_result = deepcopy(result)
         date_range = prepare_result.get('date_range')
-        
+
+       
         date_from = date_range.get('date_from')
         date_to = date_range.get('date_to')
         
-        date_from = datetime.strptime(date_from, mask)
-        date_to = datetime.strptime(date_to, mask)
+        date_from = datetime.strptime(date_from, mask) if date_from else None
+        date_to = datetime.strptime(date_to, mask) if date_from else None
         
        
         financial_indicators, capex_total_amount = self.calculate_financial_indicators(prepare_result)
@@ -144,6 +154,7 @@ class FinanceMetricsService:
             # 'net_profit': net_profit,
             # 'cash_flow': cash_flow 
         })
+        logger.warning(prepare_result['charts'])
         return prepare_result
     
     async def get_metrics(

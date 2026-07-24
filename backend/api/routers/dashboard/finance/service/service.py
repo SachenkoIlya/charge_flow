@@ -1,11 +1,11 @@
+from backend.api.routers.dashboard.finance.db import FinanceDB
 from backend.api.routers.dashboard.finance.schemas import FinanceResponseModel
-from backend.api.routers.dashboard.finance.service.charts import FinanceChartsService
+from backend.api.routers.dashboard.finance.service.charts.charts import  FinanceChartsService
+from backend.api.routers.dashboard.finance.service.conext import PeriodContext
 from backend.api.routers.dashboard.finance.service.normalize import FinanceMetricsService
 from core.base_db import Base
 from backend.core.gather_named import gather_named
 from backend.core.period_date import get_date_range_from_period
-
-
 
 class MetricFinance:
     """
@@ -29,8 +29,9 @@ class MetricFinance:
             Сервис получения и подготовки финансовых данных.
     """
     def __init__(self, base_db: "Base"):
-        self.metrics_service = FinanceMetricsService(base_db)
-        self.charts = FinanceChartsService(base_db)
+        self.fin_db = FinanceDB(base_db)
+        self.metrics_service = FinanceMetricsService(self.fin_db)
+        self.charts = FinanceChartsService(self.fin_db)
     
     async def get_metrics(
         self, 
@@ -58,6 +59,13 @@ class MetricFinance:
                     - информацию о выбранном периоде.
         """
         date_from, date_to = get_date_range_from_period(period)
+
+        ctx = PeriodContext(
+            user_id=user_id,
+            date_from=date_from,
+            date_to=date_to
+        )
+
         data = {
             'metrics': self.metrics_service.get_metrics(
                 user_id=user_id,
@@ -69,10 +77,8 @@ class MetricFinance:
                 date_from=date_from,
                 date_to=date_to,
             ),
-            'charts': self.charts.get_cost_structure(
-                user_id=user_id,
-                date_from=date_from,
-                date_to=date_to,
+            'charts': self.charts.build_charts(
+                ctx=ctx
             ),
             'date_range': self.metrics_service.get_date_range(
                 date_from=date_from,
