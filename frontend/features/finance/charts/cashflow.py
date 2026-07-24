@@ -29,7 +29,7 @@ def render_cashflow_chart(cash_flow_history:list[dict]):
     options = prepare_data(cash_flow_history)
     with chart_card():
         ui.label('Накопленный денежный поток').classes('text-sm font-bold mb-2')
-        ui.echart(options).classes('w-full h-[280px]')
+        ui.echart(options).classes('w-full h-[300px]')
 
 
 
@@ -71,7 +71,7 @@ def prepare_data(cash_flow_history: list[dict[str, Any]]) -> dict:
         },
 
         "tooltip": {
-            "trigger": "item",
+            "trigger": "axis",
             'triggerOn': 'click',
             "axisPointer": {
                 "type": "line",
