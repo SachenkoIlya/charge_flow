@@ -59,28 +59,10 @@ def prepare_data(cash_flow_history: list[dict[str, Any]]) -> dict:
     options = {
         "backgroundColor": "transparent",
 
-        "title": {
-            # "text": "Накопленный денежный поток",
-            "left": 0,
-            "top": 0,
-            "textStyle": {
-                "color": "#ffffff",
-                "fontSize": 14,
-                "fontWeight": 600,
-            },
-        },
-
         "tooltip": {
             "trigger": "axis",
-            'triggerOn': 'click',
-            "axisPointer": {
-                "type": "line",
-                 'snap': False,
-                "lineStyle": {
-                    "type": "dashed",
-                    "color": "#94a3b8",
-                },
-            },
+            "triggerOn": "click",
+            "confine": True,
             ":valueFormatter": (
                 "value => new Intl.NumberFormat('ru-RU', "
                 "{minimumFractionDigits: 2, maximumFractionDigits: 2}"
@@ -89,16 +71,16 @@ def prepare_data(cash_flow_history: list[dict[str, Any]]) -> dict:
         },
 
         "grid": {
-            "left": 55,
-            "right": 30,
-            "top": 45,
-            "bottom": 35,
-            "containLabel": False,
+            "left": "3%",
+            "right": "4%",
+            "top": 20,
+            "bottom": "3%",
+            "containLabel": True,
         },
 
         "xAxis": {
             "type": "category",
-            "boundaryGap": True,
+            "boundaryGap": False,
             "data": dates,
             "axisLine": {
                 "lineStyle": {
@@ -137,9 +119,10 @@ def prepare_data(cash_flow_history: list[dict[str, Any]]) -> dict:
                 "type": "line",
                 "smooth": True,
                 "data": accumulated_values,
-                "symbol": "circle",
-                "symbolSize": 7,
+
                 "showSymbol": True,
+                "symbol": "circle",
+                "symbolSize": 10,
 
                 "lineStyle": {
                     "width": 3,
