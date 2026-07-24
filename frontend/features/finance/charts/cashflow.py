@@ -89,7 +89,7 @@ def prepare_data(cash_flow_history: list[dict[str, Any]]) -> dict:
         },
 
         "grid": {
-            "left": 40,
+            "left": 30,
             "right": 10,
             "top": 20,
             "bottom": 30,
