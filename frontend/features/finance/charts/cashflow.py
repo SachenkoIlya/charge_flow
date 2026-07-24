@@ -98,7 +98,7 @@ def prepare_data(cash_flow_history: list[dict[str, Any]]) -> dict:
 
         "xAxis": {
             "type": "category",
-            "boundaryGap": False,
+            "boundaryGap": True,
             "data": dates,
             "axisLine": {
                 "lineStyle": {
