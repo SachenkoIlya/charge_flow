@@ -98,6 +98,7 @@ def prepare_data(cash_flow_history: list[dict[str, Any]]) -> dict:
         "xAxis": {
             "type": "category",
             "boundaryGap": True,
+            "smooth": True,
             "data": dates,
             "axisLine": {
                 "lineStyle": {
@@ -113,6 +114,9 @@ def prepare_data(cash_flow_history: list[dict[str, Any]]) -> dict:
         },
 
         "yAxis": {
+            "type": "category",
+            "boundaryGap": True,
+            "smooth": True,
             "type": "value",
             "axisLabel": {
                 "color": "#94a3b8",
@@ -134,6 +138,8 @@ def prepare_data(cash_flow_history: list[dict[str, Any]]) -> dict:
             {
                 "name": "Накопленный поток",
                 "type": "line",
+                "type": "category",
+                "boundaryGap": True,
                 "smooth": True,
                 "data": accumulated_values,
                 "symbol": "circle",
