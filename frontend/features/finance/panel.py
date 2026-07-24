@@ -12,13 +12,7 @@ from frontend.features.finance.render.metrics import (
 )
 
 from frontend.features.finance.render.metrics import FINANCE_METRICS
-from frontend.features.finance.charts.cashflow import CASHFLOW_METRICS
 from frontend.features.finance.charts.break_even import BREAK_EVEN_METRICS
-from frontend.features.finance.charts.tables_section import (
-    render_tables_section, 
-    PLAN_FACT_ROWS, 
-    PNL_ROWS
-)
 
 from dataclasses import dataclass
 from fastapi import Request
