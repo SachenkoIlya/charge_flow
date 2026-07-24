@@ -29,7 +29,7 @@ def render_cashflow_chart(cash_flow_history:list[dict]):
     options = prepare_data(cash_flow_history)
     with chart_card():
         ui.label('Накопленный денежный поток').classes('text-sm font-bold mb-2')
-        ui.echart(options).classes('w-full h-[220px]')
+        ui.echart(options).classes('w-full h-[280px]')
 
 
 
@@ -60,7 +60,7 @@ def prepare_data(cash_flow_history: list[dict[str, Any]]) -> dict:
         "backgroundColor": "transparent",
 
         "title": {
-            "text": "Накопленный денежный поток",
+            # "text": "Накопленный денежный поток",
             "left": 0,
             "top": 0,
             "textStyle": {
@@ -87,10 +87,10 @@ def prepare_data(cash_flow_history: list[dict[str, Any]]) -> dict:
         },
 
         "grid": {
-            "left": 70,
-            "right": 20,
-            "top": 65,
-            "bottom": 45,
+            "left": 45,
+            "right": 10,
+            "top": 20,
+            "bottom": 30,
             "containLabel": True,
         },
 
