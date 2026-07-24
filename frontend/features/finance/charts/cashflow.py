@@ -71,7 +71,7 @@ def prepare_data(cash_flow_history: list[dict[str, Any]]) -> dict:
         },
 
         "tooltip": {
-            "trigger": "items",
+            "trigger": "item",
             'triggerOn': 'click',
             "axisPointer": {
                 "type": "line",
