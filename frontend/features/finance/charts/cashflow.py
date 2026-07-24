@@ -62,7 +62,7 @@ def prepare_data(cash_flow_history: list[dict[str, Any]]) -> dict:
         "title": {
             # "text": "Накопленный денежный поток",
             "left": 0,
-            "top": 10,
+            "top": 0,
             "textStyle": {
                 "color": "#ffffff",
                 "fontSize": 14,
@@ -89,16 +89,16 @@ def prepare_data(cash_flow_history: list[dict[str, Any]]) -> dict:
         },
 
         "grid": {
-            'left': '3%',
-            'right': '2%',
-            'bottom': '3%',
-            'containLabel': True
+            "left": 55,
+            "right": 20,
+            "top": 45,
+            "bottom": 35,
+            "containLabel": False,
         },
 
         "xAxis": {
             "type": "category",
             "boundaryGap": True,
-            "smooth": True,
             "data": dates,
             "axisLine": {
                 "lineStyle": {
@@ -114,9 +114,6 @@ def prepare_data(cash_flow_history: list[dict[str, Any]]) -> dict:
         },
 
         "yAxis": {
-            "type": "category",
-            "boundaryGap": True,
-            "smooth": True,
             "type": "value",
             "axisLabel": {
                 "color": "#94a3b8",
@@ -138,8 +135,6 @@ def prepare_data(cash_flow_history: list[dict[str, Any]]) -> dict:
             {
                 "name": "Накопленный поток",
                 "type": "line",
-                "type": "category",
-                "boundaryGap": True,
                 "smooth": True,
                 "data": accumulated_values,
                 "symbol": "circle",
