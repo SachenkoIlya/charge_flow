@@ -90,7 +90,7 @@ def prepare_data(cash_flow_history: list[dict[str, Any]]) -> dict:
 
         "grid": {
             "left": 55,
-            "right": 20,
+            "right": 30,
             "top": 45,
             "bottom": 35,
             "containLabel": False,
