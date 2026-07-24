@@ -62,7 +62,7 @@ def prepare_data(cash_flow_history: list[dict[str, Any]]) -> dict:
         "title": {
             # "text": "Накопленный денежный поток",
             "left": 0,
-            "top": 0,
+            "top": 10,
             "textStyle": {
                 "color": "#ffffff",
                 "fontSize": 14,
