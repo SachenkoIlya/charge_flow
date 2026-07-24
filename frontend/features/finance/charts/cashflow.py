@@ -75,7 +75,7 @@ def prepare_data(cash_flow_history: list[dict[str, Any]]) -> dict:
             'triggerOn': 'click',
             "axisPointer": {
                 "type": "line",
-                 'snap': True,
+                 'snap': False,
                 "lineStyle": {
                     "type": "dashed",
                     "color": "#94a3b8",
