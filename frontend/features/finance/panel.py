@@ -31,7 +31,7 @@ class Panel(BasePanel):
     
     async def render(self):
         await self.load_station()
-        
+
         page = app.storage.user.setdefault('pages', {})
         page_state = page.setdefault(self.page_key, {})
         
@@ -72,12 +72,13 @@ class Panel(BasePanel):
                 ) as self.container:
                     await self.render_content()
 
-
+  
 
     async def render_content(self):
         charts = self.data['charts']
 
-        with ui.element('div').style('zoom: 0.9'):
+        # with ui.element('div').style('zoom: 0.9'):
+        with ui.column().classes('w-full max-w-[1600px] mx-auto gap-3'):
             await render_title(
                 label='Финансы и прибыльность',
                 label_aggre='Finance & Profitability',
