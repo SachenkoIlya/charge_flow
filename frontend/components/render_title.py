@@ -302,7 +302,7 @@ async def render_title(
     pages = app.storage.user.setdefault('pages', {})
     page_state = pages.setdefault(page_key, {})
 
-    page_state.setdefault('station_ids', [])
+    page_state.setdefault('station_id', [])
 
     async def handle_station_change(e):
         station_id = e.value
@@ -374,28 +374,23 @@ async def render_title(
                 )
 
                 async def handle_toggle(e):
-                    selected_label = get_selected_label(e)
-                    new_value = resolve_toggle_value(
-                        data,
-                        selected_label,
+                    station_id = e.value
+
+                    page_state['station_ids'] = (
+                        [int(station_id)]
+                        if station_id is not None
+                        else []
                     )
 
-                    if new_value is None:
-                        return
-
-                    if page_state.get('toggle_value') == new_value:
-                        return
-
-                    page_state['toggle_value'] = new_value
                     app.storage.user['pages'] = pages
 
                     if on_date_change:
                         await on_date_change()
 
-                period_toggle.on(
-                    'update:model-value',
-                    handle_toggle,
-                )
+                    period_toggle.on(
+                        'update:model-value',
+                        handle_toggle,
+                    )
 
             else:
                 await get_calendar(
@@ -403,15 +398,21 @@ async def render_title(
                     on_change_date=on_date_change,
                 )
 
+            selected_station_ids = page_state.get('station_ids', [])
+
+            selected_station_id = (
+                selected_station_ids[0]
+                if selected_station_ids
+                else None
+            )
             if stations:
                 ui.select(
                     options=stations,
-                    value=page_state.get('station_id'),
+                    value=selected_station_id,
                     label='Станция',
-                    clearable=True,
                     on_change=handle_station_change,
                 ).props(
-                    'outlined dense options-dense'
+                    'outlined dense options-dense clearable'
                 ).classes(
                     'w-72'
                 )
