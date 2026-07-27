@@ -11,6 +11,7 @@ from frontend.features.investments_and_expenses.render.form import get_selected_
 class BasePanel(ABC):
     page_key = str
     endpoints_name = str
+    stations: dict[int, str] = {}
     container = None
     
     def __post_init__(self):
@@ -71,7 +72,11 @@ class BasePanel(ABC):
         self.company_id = context_filters.get('company_id')
         self.payload = page_filters
         
-      
+    async def load_station(self) -> None:
+        if self.stations:
+            return
+        self.stations = await get_selected_station(self.request)
+
     async def refresh(self):
         if not self.container:
             return
