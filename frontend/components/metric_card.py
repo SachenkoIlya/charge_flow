@@ -11,7 +11,7 @@ def render_metrics(
     metric_delta_func: Any, 
     on_top_click=None):
     with ui.grid(columns=columns).classes(
-        'w-full gap-6 mt-3'
+        'w-full gap-3 mt-3'
     ):
         for metric in default_metrics:
             key = metric.get('key', '')
