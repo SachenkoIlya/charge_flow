@@ -66,8 +66,8 @@ class Panel(BasePanel):
                     min-h-screen
                     overflow-y-auto
                     overflow-x-hidden
-                    px-6
-                    py-5
+                    px-10
+                    py-2
                 """
             ) as self.container:
                 await self.render_content()
