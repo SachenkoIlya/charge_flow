@@ -62,15 +62,15 @@ class Panel(BasePanel):
             render_sidebar(role=role)
 
             with ui.element('main').classes(
-                        """
-                            flex-1
-                            h-screen
-                            overflow-hidden
-                            px-10
-                            py-2
-                        """
-                ) as self.container:
-                    await self.render_content()
+            """
+                flex-1
+                h-screen
+                overflow-hidden
+                px-10
+                py-2
+            """
+            ) as self.container:
+                await self.render_content()
 
   
 
@@ -78,7 +78,7 @@ class Panel(BasePanel):
         charts = self.data['charts']
 
         # with ui.element('div').style('zoom: 0.9'):
-        with ui.column().classes('w-full max-w-[1600px] mx-auto gap-3'):
+        with ui.column().classes('w-full max-w-[1600px] mx-auto gap-2'):
             await render_title(
                 label='Финансы и прибыльность',
                 label_aggre='Finance & Profitability',
