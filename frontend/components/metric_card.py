@@ -1,6 +1,8 @@
 from nicegui import ui
 from frontend.features.summary.render.metrics import METRICS, get_delta_class, get_metric_value, get_metric_delta
 from typing import Any
+
+
 def render_metrics(
     data: dict, 
     columns:int, 
@@ -9,7 +11,7 @@ def render_metrics(
     metric_delta_func: Any, 
     on_top_click=None):
     with ui.grid(columns=columns).classes(
-        'w-full gap-3 mt-6'
+        'w-full gap-6 mt-3'
     ):
         for metric in default_metrics:
             key = metric.get('key', '')
