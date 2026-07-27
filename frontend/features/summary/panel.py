@@ -28,6 +28,7 @@ class Panel(BasePanel):
     page_key = 'summary'
 
     async def render(self):
+        selected_station = await self.get_selected_stations()
         self.reset_page_dates()
         self.apply_filters()
         loaded = await self.load_data()
@@ -61,11 +62,14 @@ class Panel(BasePanel):
                     py-5
                 """
             ) as self.container:
-                await self.render_content()
+                await self.render_content(stations=selected_station)
 
 
 
-    async def render_content(self):
+    async def render_content(self, stations: list[dict]):
+
+        logger.debug(stations)
+
         comparable_period = self.data['comparable_period']
 
         
@@ -91,6 +95,7 @@ class Panel(BasePanel):
                 label='Общая сводка по сети',
                 label_aggre=label_aggre,
                 page_key=self.page_key,
+                stations=stations,
                 on_date_change=self.on_date_change,
             )
             top_dialog = render_top_tables_dialog(self.data)

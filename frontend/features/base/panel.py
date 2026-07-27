@@ -5,6 +5,7 @@ from datetime import datetime
 from copy import deepcopy
 
 from frontend.api.client import frontend_api
+from frontend.features.investments_and_expenses.render.form import get_selected_station
 
 
 class BasePanel(ABC):
@@ -16,12 +17,13 @@ class BasePanel(ABC):
 
         self.data = None
         today = datetime.now().strftime("%d.%m.%Y")
-        
+
+          
         pages = app.storage.user.setdefault('pages', {})
         page_state = pages.setdefault(self.page_key, {
             'date_from': today,
             'date_to': today,
-            'station': None,
+            'station_ids': [],
             'toggle_value': None
         })
 
@@ -107,3 +109,8 @@ class BasePanel(ABC):
             return False
         self.data = response
         return True
+
+
+    async def get_selected_stations(self):
+        return await get_selected_station(self.request)
+  
