@@ -483,7 +483,7 @@ async def render_title(
         with ui.row().classes(
             '''
             items-center
-            gap-3
+            gap-8
             px-3
             py-2
             rounded-2xl
