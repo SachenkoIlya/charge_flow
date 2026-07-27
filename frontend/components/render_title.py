@@ -377,7 +377,7 @@ async def render_title(
                     station_id = e.value
                     logger.warning(station_id)
                     page_state['station_ids'] = (
-                        [int(station_id)]
+                        [station_id]
                         if station_id is not None
                         else []
                     )
