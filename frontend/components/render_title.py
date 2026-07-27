@@ -305,16 +305,15 @@ async def render_title(
     page_state.setdefault('station_ids', [])
 
     async def handle_station_change(e):
-        station_ids = e.value or []
+        station_id = e.value
 
-        if page_state.get('station_ids') == station_ids:
-            return
-
-        page_state['station_ids'] = station_ids
+        page_state['station_id'] = station_id
         app.storage.user['pages'] = pages
 
         if on_date_change:
-            asyncio.create_task(on_date_change())
+            await on_date_change()
+            # if on_date_change:
+            # asyncio.create_task(on_date_change())
 
     with ui.row().classes(
         'w-full items-start justify-between mb-0'
@@ -391,7 +390,7 @@ async def render_title(
                     app.storage.user['pages'] = pages
 
                     if on_date_change:
-                        asyncio.create_task(on_date_change())
+                        await on_date_change()
 
                 period_toggle.on(
                     'update:model-value',
@@ -407,12 +406,12 @@ async def render_title(
             if stations:
                 ui.select(
                     options=stations,
-                    value=page_state.get('station_ids', []),
-                    multiple=True,
-                    label='Станции',
+                    value=page_state.get('station_id'),
+                    label='Станция',
+                    clearable=True,
                     on_change=handle_station_change,
                 ).props(
-                    'outlined dense use-chips'
+                    'outlined dense options-dense'
                 ).classes(
                     'w-72'
                 )
