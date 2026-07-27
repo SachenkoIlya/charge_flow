@@ -30,6 +30,8 @@ class Panel(BasePanel):
 
     
     async def render(self):
+        await self.load_station()
+        
         page = app.storage.user.setdefault('pages', {})
         page_state = page.setdefault(self.page_key, {})
         

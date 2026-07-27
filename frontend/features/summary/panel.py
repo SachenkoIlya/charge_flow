@@ -12,7 +12,7 @@ from frontend.features.summary.render.metrics import (
 from frontend.features.summary.render.charts import render_chart
 
 from frontend.components.metric_card import render_metrics 
-from frontend.components.render_title import render_title
+from frontend.components.render_title import get_data_from_map, render_title
 
 from dataclasses import dataclass
 from fastapi import Request
@@ -29,11 +29,19 @@ class Panel(BasePanel):
 
     async def render(self):
         await self.load_station()
-        self.reset_page_dates()
+              
+        page = app.storage.user.setdefault('pages', {})
+        page_state = page.setdefault(self.page_key, {})
+              
+        data = get_data_from_map(self.page_key)
+        if data and page_state.get('toggle_value') is None:
+            page_state['toggle_value'] = data['default_value']
+             
         self.apply_filters()
         loaded = await self.load_data()
         if not loaded:
             return
+              
         
         role = self.user.get('role')
 
