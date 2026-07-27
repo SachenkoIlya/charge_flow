@@ -306,7 +306,6 @@ async def render_title(
 
     async def handle_station_change(e):
         station_id = e.value
-        logger.warning(station_id)
         page_state['station_ids'] = (
             [station_id]
             if station_id is not None
@@ -380,9 +379,29 @@ async def render_title(
                     font-bold
                     '''
                 )
+                async def handle_toggle(e):
+                    selected_label = get_selected_label(e)
+                    new_value = resolve_toggle_value(
+                        data,
+                        selected_label,
+                    )
 
-             
+                    if new_value is None:
+                        return
 
+                    if page_state.get('toggle_value') == new_value:
+                        return
+
+                    page_state['toggle_value'] = new_value
+                    app.storage.user['pages'] = pages
+
+                    if on_date_change:
+                        asyncio.create_task(on_date_change())
+
+                period_toggle.on(
+                    'update:model-value',
+                    handle_toggle,
+                )
             else:
                 await get_calendar(
                     page_key=page_key,
@@ -390,7 +409,6 @@ async def render_title(
                 )
 
             selected_station_ids = page_state.get('station_ids', [])
-            logger.warning(stations)
             selected_station_id = (
                 selected_station_ids[0]
                 if selected_station_ids
