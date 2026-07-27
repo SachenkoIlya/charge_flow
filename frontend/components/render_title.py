@@ -302,12 +302,12 @@ async def render_title(
     pages = app.storage.user.setdefault('pages', {})
     page_state = pages.setdefault(page_key, {})
 
-    page_state.setdefault('station_id', [])
+    page_state.setdefault('station_ids', [])
 
     async def handle_station_change(e):
         station_id = e.value
 
-        page_state['station_id'] = station_id
+        page_state['station_ids'] = station_id
         app.storage.user['pages'] = pages
 
         if on_date_change:
