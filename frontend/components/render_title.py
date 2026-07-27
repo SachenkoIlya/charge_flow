@@ -292,6 +292,142 @@ def get_data_from_map(page_key: str):
 #                     'w-72'
 #                 )
 
+# async def render_title(
+#     label: str,
+#     label_aggre: str,
+#     page_key: str,
+#     stations: dict[int, str] | None = None,
+#     on_date_change=None,
+# ):
+#     pages = app.storage.user.setdefault('pages', {})
+#     page_state = pages.setdefault(page_key, {})
+
+#     page_state.setdefault('station_ids', [])
+
+#     async def handle_station_change(e):
+#         station_id = e.value
+#         page_state['station_ids'] = (
+#             [station_id]
+#             if station_id is not None
+#             else []
+#         )
+    
+#         app.storage.user['pages'] = pages
+    
+#         if on_date_change:
+#             asyncio.create_task(on_date_change())
+    
+#         period_toggle.on(
+#             'update:model-value',
+#             handle_station_change,
+#         )
+   
+#     with ui.row().classes(
+#         'w-full items-start justify-between mb-0'
+#     ):
+#         with ui.column().classes('gap-0'):
+#             ui.label(label).classes(
+#                 'text-3xl font-bold text-white leading-tight'
+#             )
+
+#             if page_key == 'summary':
+#                 ui.label(label_aggre).classes(
+#                     'text-sm text-gray-400 mt-1'
+#                 ).style(
+#                     'white-space: pre-line'
+#                 )
+
+#         with ui.row().classes(
+#             'items-center gap-3'
+#         ):
+#             data = get_data_from_map(page_key)
+
+#             if data:
+#                 toggle_items = data.get('toggle', [])
+
+#                 options = {
+#                     item['label']: item['value']
+#                     for item in toggle_items
+#                 }
+
+#                 allowed_values = set(options.values())
+#                 current_value = page_state.get('toggle_value')
+
+#                 if current_value not in allowed_values:
+#                     current_value = data.get('default_value')
+#                     page_state['toggle_value'] = current_value
+
+#                 value_to_label = {
+#                     item['value']: item['label']
+#                     for item in toggle_items
+#                 }
+
+#                 current_label = value_to_label.get(current_value)
+
+#                 period_toggle = ui.toggle(
+#                     list(options.keys()),
+#                     value=current_label,
+#                 ).props(
+#                     'unelevated toggle-color=green'
+#                 ).classes(
+#                     '''
+#                     bg-[#101923]
+#                     border border-[#1f2937]
+#                     rounded-2xl
+#                     p-1
+#                     text-sm
+#                     font-bold
+#                     '''
+#                 )
+#                 async def handle_toggle(e):
+#                     selected_label = get_selected_label(e)
+#                     new_value = resolve_toggle_value(
+#                         data,
+#                         selected_label,
+#                     )
+
+#                     if new_value is None:
+#                         return
+
+#                     if page_state.get('toggle_value') == new_value:
+#                         return
+
+#                     page_state['toggle_value'] = new_value
+#                     app.storage.user['pages'] = pages
+
+#                     if on_date_change:
+#                         asyncio.create_task(on_date_change())
+
+#                 period_toggle.on(
+#                     'update:model-value',
+#                     handle_toggle,
+#                 )
+#             else:
+#                 await get_calendar(
+#                     page_key=page_key,
+#                     on_change_date=on_date_change,
+#                 )
+
+#             selected_station_ids = page_state.get('station_ids', [])
+#             selected_station_id = (
+#                 selected_station_ids[0]
+#                 if selected_station_ids
+#                 else None
+#             )
+#             logger.warning(selected_station_ids)
+
+#             if stations:
+#                 ui.select(
+#                     options=stations,
+#                     value=selected_station_id,
+#                     label='Станция',
+#                     on_change=handle_station_change,
+#                 ).props(
+#                     'outlined dense options-dense clearable'
+#                 ).classes(
+#                     'w-72'
+#                 )
+
 async def render_title(
     label: str,
     label_aggre: str,
@@ -306,28 +442,34 @@ async def render_title(
 
     async def handle_station_change(e):
         station_id = e.value
+
         page_state['station_ids'] = (
             [station_id]
             if station_id is not None
             else []
         )
-    
+
         app.storage.user['pages'] = pages
-    
+
         if on_date_change:
             asyncio.create_task(on_date_change())
-    
-        period_toggle.on(
-            'update:model-value',
-            handle_station_change,
-        )
-   
+
     with ui.row().classes(
-        'w-full items-start justify-between mb-0'
+        '''
+        w-full
+        items-start
+        justify-between
+        mb-0
+        '''
     ):
         with ui.column().classes('gap-0'):
             ui.label(label).classes(
-                'text-3xl font-bold text-white leading-tight'
+                '''
+                text-3xl
+                font-bold
+                text-white
+                leading-tight
+                '''
             )
 
             if page_key == 'summary':
@@ -337,8 +479,18 @@ async def render_title(
                     'white-space: pre-line'
                 )
 
+        # Общий контейнер фильтров
         with ui.row().classes(
-            'items-center gap-3'
+            '''
+            items-center
+            gap-3
+            px-3
+            py-2
+            rounded-2xl
+            bg-[#0f1822]
+            border
+            border-[#243244]
+            '''
         ):
             data = get_data_from_map(page_key)
 
@@ -372,15 +524,18 @@ async def render_title(
                 ).classes(
                     '''
                     bg-[#101923]
-                    border border-[#1f2937]
-                    rounded-2xl
+                    border
+                    border-[#1f2937]
+                    rounded-xl
                     p-1
                     text-sm
                     font-bold
                     '''
                 )
+
                 async def handle_toggle(e):
                     selected_label = get_selected_label(e)
+
                     new_value = resolve_toggle_value(
                         data,
                         selected_label,
@@ -402,18 +557,18 @@ async def render_title(
                     'update:model-value',
                     handle_toggle,
                 )
-            else:
-                await get_calendar(
-                    page_key=page_key,
-                    on_change_date=on_date_change,
-                )
 
-            selected_station_ids = page_state.get('station_ids', [])
+            selected_station_ids = page_state.get(
+                'station_ids',
+                [],
+            )
+
             selected_station_id = (
                 selected_station_ids[0]
                 if selected_station_ids
                 else None
             )
+
             logger.warning(selected_station_ids)
 
             if stations:
@@ -423,7 +578,12 @@ async def render_title(
                     label='Станция',
                     on_change=handle_station_change,
                 ).props(
-                    'outlined dense options-dense clearable'
+                    '''
+                    outlined
+                    dense
+                    options-dense
+                    clearable
+                    '''
                 ).classes(
                     'w-72'
                 )
