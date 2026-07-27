@@ -6,7 +6,7 @@ from nicegui import app
 import asyncio 
 
 FILTER_MAP = {
-    'symmary': {
+    'summary': {
        'toggle': [
             {'label': '6 МЕС', 'value': '6m'},
             {'label': '1 ГОД', 'value': '1y'},
