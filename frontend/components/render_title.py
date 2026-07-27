@@ -375,7 +375,7 @@ async def render_title(
 
                 async def handle_toggle(e):
                     station_id = e.value
-
+                    logger.warning(station_id)
                     page_state['station_ids'] = (
                         [int(station_id)]
                         if station_id is not None
@@ -399,12 +399,14 @@ async def render_title(
                 )
 
             selected_station_ids = page_state.get('station_ids', [])
-
+            logger.warning(stations)
             selected_station_id = (
                 selected_station_ids[0]
                 if selected_station_ids
                 else None
             )
+            logger.warning(selected_station_ids)
+
             if stations:
                 ui.select(
                     options=stations,
