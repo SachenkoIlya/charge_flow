@@ -3,7 +3,7 @@ from nicegui import ui
 from frontend.components.calendar import get_calendar
 from core.logger.logger import logger
 from nicegui import app
-
+import asyncio 
 
 FILTER_MAP = {
     'symmary': {
@@ -314,7 +314,7 @@ async def render_title(
         app.storage.user['pages'] = pages
 
         if on_date_change:
-            await on_date_change()
+            asyncio.create_task(on_date_change())
 
     with ui.row().classes(
         'w-full items-start justify-between mb-0'
@@ -391,7 +391,7 @@ async def render_title(
                     app.storage.user['pages'] = pages
 
                     if on_date_change:
-                        await on_date_change()
+                        asyncio.create_task(on_date_change())
 
                 period_toggle.on(
                     'update:model-value',
