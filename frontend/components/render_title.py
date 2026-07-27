@@ -311,7 +311,7 @@ async def render_title(
         app.storage.user['pages'] = pages
 
         if on_date_change:
-            await on_date_change()
+            asyncio.create_task(on_date_change())
             # if on_date_change:
             # asyncio.create_task(on_date_change())
 
@@ -385,7 +385,7 @@ async def render_title(
                     app.storage.user['pages'] = pages
 
                     if on_date_change:
-                        await on_date_change()
+                        asyncio.create_task(on_date_change())
 
                     period_toggle.on(
                         'update:model-value',
