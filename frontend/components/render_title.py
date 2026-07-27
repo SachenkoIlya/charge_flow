@@ -304,6 +304,24 @@ async def render_title(
 
     page_state.setdefault('station_ids', [])
 
+    async def handle_station_change(e):
+        station_id = e.value
+        logger.warning(station_id)
+        page_state['station_ids'] = (
+            [station_id]
+            if station_id is not None
+            else []
+        )
+    
+        app.storage.user['pages'] = pages
+    
+        if on_date_change:
+            asyncio.create_task(on_date_change())
+    
+        period_toggle.on(
+            'update:model-value',
+            handle_station_change,
+        )
    
     with ui.row().classes(
         'w-full items-start justify-between mb-0'
@@ -363,24 +381,7 @@ async def render_title(
                     '''
                 )
 
-                async def handle_station_change(e):
-                    station_id = e.value
-                    logger.warning(station_id)
-                    page_state['station_ids'] = (
-                        [station_id]
-                        if station_id is not None
-                        else []
-                    )
-
-                    app.storage.user['pages'] = pages
-
-                    if on_date_change:
-                        asyncio.create_task(on_date_change())
-
-                    period_toggle.on(
-                        'update:model-value',
-                        handle_station_change,
-                    )
+             
 
             else:
                 await get_calendar(
