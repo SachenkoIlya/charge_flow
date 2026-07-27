@@ -79,6 +79,7 @@ class Panel(BasePanel):
             await render_title(
                 label='Финансы и прибыльность',
                 label_aggre='Finance & Profitability',
+                stations=self.stations,
                 page_key=self.page_key,
                 on_date_change=self.on_date_change 
             )
