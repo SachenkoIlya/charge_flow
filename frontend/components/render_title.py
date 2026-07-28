@@ -19,11 +19,11 @@ ui.add_css("""
 FILTER_MAP = {
     'summary': {
        'toggle': [
-            {'label': '6 МЕС', 'value': '6m'},
-            {'label': '1 ГОД', 'value': '1y'},
-            {'label': 'ВСЕ', 'value': 'all'},
+            {'label': '1 месяц', 'value': 'one_month'},
+            # {'label': '1 ГОД', 'value': '1y'},
+            # {'label': 'ВСЕ', 'value': 'all'},
         ],
-            'default_value': 'all',
+            'default_value': 'one_month',
     },
     'finance': {
         'toggle': [
@@ -85,67 +85,54 @@ async def render_title(
     # 1. Конфигурация экрана
     # -----------------------------------
     filter_config = FILTER_MAP.get(page_key, {})
-
     toggle_items = filter_config.get('toggle', [])
     default_toggle_value = filter_config.get('default_value')
-
     # Пока станции нужны только этим экранам
     show_stations = page_key in {
         'summary',
         'finance',
     }
-
     toggle_options = {
         item['value']: item['label']
         for item in toggle_items
     }
-
     # -----------------------------------
     # 2. State страницы
     # -----------------------------------
     pages = app.storage.user.get('pages', {})
     page_state = pages.setdefault(page_key, {})
-
     page_state.setdefault(
         'toggle_value',
         default_toggle_value,
     )
-
     if show_stations:
         page_state.setdefault(
             'station_ids',
             [],
         )
-
     app.storage.user['pages'] = pages
-
     selected_station_ids = (
         page_state.get('station_ids', [])
         if show_stations
         else []
     )
-
     # -----------------------------------
     # 3. Отображение выбранных станций
     # -----------------------------------
     def station_display_value(value):
         if not value:
             return 'Все станции'
-
         # Если пользователь руками выбрал все станции
         if stations and len(value) == len(stations):
             return 'Все станции'
-
         if len(value) == 1:
             station_id = value[0]
-
             return stations.get(
                 station_id,
                 '1 станция',
             )
 
         count = len(value)
-
         if 11 <= count % 100 <= 14:
             word = 'станций'
         elif count % 10 == 1:
@@ -154,7 +141,6 @@ async def render_title(
             word = 'станции'
         else:
             word = 'станций'
-
         return f'Выбрано: {count} {word}'
 
     # -----------------------------------
@@ -162,7 +148,6 @@ async def render_title(
     # из handlers
     # -----------------------------------
     station_label = None
-
     # -----------------------------------
     # 4. Handler станций
     # -----------------------------------
