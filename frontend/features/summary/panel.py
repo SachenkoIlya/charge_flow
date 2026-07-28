@@ -38,9 +38,9 @@ class Panel(BasePanel):
             page_state['toggle_value'] = data['default_value']
              
         self.apply_filters()
-        loaded = await self.load_data()
-        if not loaded:
-            return
+        # loaded = await self.load_data()
+        # if not loaded:
+        #     return
               
         
         role = self.user.get('role')
@@ -102,7 +102,7 @@ class Panel(BasePanel):
                 stations=self.stations,
                 on_date_change=self.on_date_change,
             )
-            top_dialog = render_top_tables_dialog(self.data)
+            # top_dialog = render_top_tables_dialog(self.data)
             # render_metrics(
             #     data=self.data, 
             #     columns=5,  
