@@ -75,11 +75,8 @@ class Panel(BasePanel):
 
 
     async def render_content(self):
-
-
         comparable_period = self.data['comparable_period']
 
-        
         comparable_from = datetime.strptime(
             comparable_period['date_from'],
             '%Y-%m-%d %H:%M:%S'
@@ -106,15 +103,15 @@ class Panel(BasePanel):
                 on_date_change=self.on_date_change,
             )
             top_dialog = render_top_tables_dialog(self.data)
-            render_metrics(
-                data=self.data, 
-                columns=5,  
-                metric_value_func=get_metric_value, 
-                metric_delta_func=get_metric_delta,
-                default_metrics=METRICS,
-                on_top_click=top_dialog.open
-                )
-            render_chart(data=self.data)
+            # render_metrics(
+            #     data=self.data, 
+            #     columns=5,  
+            #     metric_value_func=get_metric_value, 
+            #     metric_delta_func=get_metric_delta,
+            #     default_metrics=METRICS,
+            #     on_top_click=top_dialog.open
+            #     )
+            # render_chart(data=self.data)
             # render_tables_section(TOP_ROWS, REVERS_ROWS)
 
     

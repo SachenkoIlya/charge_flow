@@ -96,7 +96,8 @@ class BasePanel(ABC):
         
         if self.page_key in {'finance', 'system'}:
             payload = {
-                'toggle_value': self.payload.get('toggle_value')
+                'period': self.payload.get('toggle_value'),
+                'station_ids': self.payload.get('station_ids')
             }
         else:
             payload = deepcopy(self.payload)
