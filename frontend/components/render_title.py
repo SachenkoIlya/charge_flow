@@ -90,8 +90,18 @@ async def render_title(
         if len(value) == 1:
             station_id = value[0]
             return stations.get(station_id, '1 станция')
+        count = len(value)
 
-        return f'Выбрано: {len(value)}'
+        if 11 <= count % 100 <= 14:
+            word = 'станций'
+        elif count % 10 == 1:
+            word = 'станция'
+        elif 2 <= count % 10 <= 4:
+            word = 'станции'
+        else:
+            word = 'станций'
+
+        return f'Выбрано: {count} {word}'
 
     # -----------------------------
     # 3. Обработчик выбора станции
@@ -177,6 +187,15 @@ async def render_title(
                 '''
             ).classes(
                 'w-[285px]'
+            )
+
+            station_select.add_slot(
+                'selected',
+                r'''
+                <div class="text-white text-sm">
+                    {{ props.opt }}
+                </div>
+                '''
             )
 
 
