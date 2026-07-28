@@ -4,7 +4,7 @@ from datetime import date as dt, datetime
 from typing import Literal
 
 class FinanceFilterSchema(BaseModel):
-    toggle_value: Literal["6m", "1y", "all"] = Field(
+    period: Literal["6m", "1y", "all"] = Field(
         description=(
             "Период отчёта: '6m' — 6 месяцев, "
             "'1y' — 1 год, 'all' — весь период."

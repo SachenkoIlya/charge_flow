@@ -1,9 +1,13 @@
+from backend.api.routers.dashboard.finance.service.conext import PeriodContext
 from backend.api.routers.dashboard.summary.db import SummaryDB
+from backend.core.schemas import DashboardFilterSchema
 from core.logger.logger import logger
 from backend.api.routers.dashboard.summary.schemas import SummaryResponseModel
 from backend.api.routers.dashboard.summary.service.charts import _normalize_metrics_chart
 from backend.core.gather_named import gather_named
 from backend.core.period_date import (
+    get_last_30_days_with_comparable_period,
+    get_date_range_from_period,
     get_period_days,
     comparable_period,
     get_date_expr,
@@ -11,6 +15,8 @@ from backend.core.period_date import (
 )
 from core.base_db import Base
 from datetime import datetime
+from asyncpg import Record  
+
 
 
 class MetricSummary:
@@ -22,7 +28,7 @@ class MetricSummary:
     def __init__(self, base_db: "Base"):
         self.db = SummaryDB(base_db)
 
-    async def calc_utilisation(self, user_id, date_from:datetime, date_to:datetime):
+    async def calc_utilisation(self, ctx: PeriodContext):
         """
         Рассчитывает коэффициент утилизации (Utilisation Rate) зарядных станций
         за указанный период.
@@ -53,15 +59,75 @@ class MetricSummary:
                 25.0
         """
        
-        rows = await self.db.get_utilisation_metrics(user_id, date_from, date_to)
+        rows = await self.db.get_utilisation_metrics(
+            user_id=ctx.user_id, 
+            date_from=ctx.date_from, 
+            date_to=ctx.date_to,
+            station_ids=ctx.station_ids
+
+        )
         return _calc_utilisation(
             charging_minutes=float(rows['charging_minutes']),
             evse_count=float(rows['evse_count']),
-            date_from=date_from,
-            date_to=date_to
+            date_from=ctx.date_from,
+            date_to=ctx.date_to
         )
-    # get_margin_metrics
-    async def get_margin_pct(self,  user_id: int, date_from: datetime, date_to:datetime):
+
+
+    @staticmethod
+    def calculate_revenue_split(rows: Record) -> dict[str, float | float]:
+        total_revenue = float(rows["total_revenue"])
+        station_owner_revenue = float(rows["station_owner_revenue"])
+        operator_revenue = float(rows["operator_revenue"])
+        total_opex = float(rows["total_opex"])
+        net_profit = float(rows["net_profit"])
+        
+        # Доля партнёра от общей выручки.
+        # Показывает, какая часть денег клиентов уходит владельцам ЭЗС.
+        partner_share_pct = (
+            station_owner_revenue / total_revenue * 100
+            if total_revenue > 0
+            else 0
+        )
+        # Доля оператора-агрегатора от общей выручки.
+        # Показывает комиссию/доход оператора относительно всей выручки.
+        operator_share_pct = (
+            operator_revenue / total_revenue * 100
+            if total_revenue > 0
+            else 0
+        )
+        # Операционная маржа после OPEX.
+        # Показывает, сколько прибыли остается у оператора после расходов.
+        net_margin_pct = (
+            net_profit / station_owner_revenue * 100
+                if station_owner_revenue > 0
+                else 0
+            )
+        return {
+            # 'total_revenue': round(total_revenue, 2),
+            'station_owner_revenue': round(station_owner_revenue, 2),
+            'station_owner_pct': round(partner_share_pct, 2),
+            'operator_revenue': round(operator_revenue, 2),
+            'operator_commission_pct': round(operator_share_pct, 2),
+            'total_opex': round(total_opex, 2),
+            'net_profit': round(net_profit, 2),
+            'net_margin_pct': round(net_margin_pct, 2),
+        }
+    
+    @staticmethod
+    def _normalize_metrics(rows: Record | None) -> dict:
+        return {
+            'total_sessions': int(rows["total_sessions"]),
+            'total_revenue': round(float(rows["total_revenue"]), 2),
+            'avg_revenue_per_station': round(float(rows["avg_revenue_per_station"]), 2),
+            'avg_revenue_per_session': round(float(rows["avg_revenue_per_session"]), 2),
+            'total_energy_kwh': round(float(rows["total_energy_kwh"]), 2),
+        }
+    
+    async def get_margin_pct(
+        self,  
+        ctx: PeriodContext
+    ) -> dict[str, float | float]:
         """
         Рассчитывает распределение выручки между партнёром и оператором
         за указанный период.
@@ -98,46 +164,18 @@ class MetricSummary:
             }
         """
         
-        rows = await self.db.get_margin_metrics(user_id, date_from, date_to)
-        total_revenue = float(rows["total_revenue"])
-        station_owner_revenue = float(rows["station_owner_revenue"])
-        operator_revenue = float(rows["operator_revenue"])
-        total_opex = float(rows["total_opex"])
-        net_profit = float(rows["net_profit"])
-
-        # Доля партнёра от общей выручки.
-        # Показывает, какая часть денег клиентов уходит владельцам ЭЗС.
-        partner_share_pct = (
-            station_owner_revenue / total_revenue * 100
-            if total_revenue > 0
-            else 0
+        rows = await self.db.get_margin_metrics(
+            user_id=ctx.user_id, 
+            date_from=ctx.date_from, 
+            date_to=ctx.date_to,
+            station_ids=ctx.station_ids
         )
-        # Доля оператора-агрегатора от общей выручки.
-        # Показывает комиссию/доход оператора относительно всей выручки.
-        operator_share_pct = (
-            operator_revenue / total_revenue * 100
-            if total_revenue > 0
-            else 0
-        )
-        # Операционная маржа после OPEX.
-        # Показывает, сколько прибыли остается у оператора после расходов.
-        net_margin_pct = (
-            net_profit / station_owner_revenue * 100
-                if station_owner_revenue > 0
-                else 0
-            )
-        return {
-            # 'total_revenue': round(total_revenue, 2),
-            'station_owner_revenue': round(station_owner_revenue, 2),
-            'station_owner_pct': round(partner_share_pct, 2),
-            'operator_revenue': round(operator_revenue, 2),
-            'operator_commission_pct': round(operator_share_pct, 2),
-            'total_opex': round(total_opex, 2),
-            'net_profit': round(net_profit, 2),
-            'net_margin_pct': round(net_margin_pct, 2),
-        }
+        return self.calculate_revenue_split(rows)
     
-    async def normalize_metrics(self, user_id:int, date_from:datetime, date_to:datetime):
+    async def get_metrics(
+        self, 
+        ctx: PeriodContext
+    ) -> dict:
         """
         Получает и нормализует основные бизнес-метрики за указанный период.
 
@@ -179,20 +217,17 @@ class MetricSummary:
             преобразует и нормализует агрегированные данные,
             полученные из базы данных.
         """
-        rows = await self.db.get_metrics(user_id, date_from, date_to)
-        return {
-            'total_sessions': int(rows["total_sessions"]),
-            'total_revenue': round(float(rows["total_revenue"]), 2),
-            'avg_revenue_per_station': round(float(rows["avg_revenue_per_station"]), 2),
-            'avg_revenue_per_session': round(float(rows["avg_revenue_per_session"]), 2),
-            'total_energy_kwh': round(float(rows["total_energy_kwh"]), 2),
-        }
+        rows = await self.db.get_metrics(
+            user_id=ctx.user_id, 
+            date_from=ctx.date_from, 
+            date_to=ctx.date_to,
+            station_ids=ctx.station_ids
+        )
+        return self._normalize_metrics(rows)
     
     async def get_all_normalize_metrics(
         self, 
-        user_id: int, 
-        date_from: datetime, 
-        date_to:datetime,
+        ctx: PeriodContext,
         is_requested_metrics:bool=False
     ) -> dict:
         """
@@ -248,16 +283,14 @@ class MetricSummary:
             в единый словарь.
         """
         tasks = {
-            'metrics': self.normalize_metrics(user_id, date_from, date_to),
-            'station': self.normalize_connected_stations(user_id),
-            'utilisation': self.calc_utilisation(user_id, date_from, date_to),
-            'margin': self.get_margin_pct(user_id, date_from, date_to),
-            
-            
+            'metrics': self.get_metrics(ctx),
+            'station': self.normalize_connected_stations(ctx.user_id),
+            'utilisation': self.calc_utilisation(ctx),
+            'margin': self.get_margin_pct(ctx),
         }
         if is_requested_metrics:
-            tasks['charts'] = self.normalize_metrics_chart(user_id, date_from, date_to)
-            tasks['station_rating'] = self.normalize_station_rating(user_id, date_from, date_to)
+            tasks['charts'] = self.normalize_metrics_chart(ctx)
+            tasks['station_rating'] = self.normalize_station_rating(ctx)
         return await gather_named(tasks)
     
     async def normalize_connected_stations(self, user_id:int) -> int:
@@ -283,9 +316,7 @@ class MetricSummary:
     
     async def normalize_metrics_chart(
         self, 
-        user_id:int, 
-        date_from:datetime, 
-        date_to:datetime
+        ctx: PeriodContext
     ) -> dict:
         """
         Получает данные для графиков метрик за указанный период.
@@ -305,25 +336,29 @@ class MetricSummary:
                 включая временную ось и значения метрик по периодам.
         """
        
-        group_by = get_period_days(date_from, date_to)  
+        group_by = get_period_days(ctx.date_from, ctx.date_to)  
         
         date_expr = get_date_expr(group_by)
         
         rows = await self.db.get_charts(
-            user_id, 
-            date_from, 
-            date_to, 
-            date_expr
+            user_id=ctx.user_id, 
+            date_from=ctx.date_from, 
+            date_to=ctx.date_to, 
+            station_ids=ctx.station_ids, 
+            date_expr=date_expr
         )
         return _normalize_metrics_chart(group_by=group_by, rows=rows)
       
     async def normalize_station_rating(
         self,
-        user_id:int,
-        date_from:datetime,  
-        date_to:datetime  
+        ctx: PeriodContext
     ):
-        rows = await self.db.get_station_revenue_stats(user_id, date_from, date_to)
+        rows = await self.db.get_station_revenue_stats(
+            user_id=ctx.user_id, 
+            date_from=ctx.date_from, 
+            date_to=ctx.date_to,
+            )
+        
         station = []
         for row in rows:
             charging_minutes=float(row['charging_minutes'])
@@ -331,11 +366,9 @@ class MetricSummary:
             utilisation = _calc_utilisation(
                 charging_minutes=charging_minutes,
                 evse_count=evse_count,
-                date_from=date_from,
-                date_to=date_to
+                date_from=ctx.date_from,
+                date_to=ctx.date_to
             )
-            
-
             station.append({
                 "station_id": int(row["station_id"]),
                 "station_name": row['station_name'].replace('"', '').replace("'", ''),
@@ -356,8 +389,7 @@ class MetricSummary:
     async def get_summary_with_comparison(
         self, 
         user_id:int, 
-        date_from: datetime, 
-        date_to:datetime
+        payload: DashboardFilterSchema,
     ) -> SummaryResponseModel:
         """
         Формирует сводную аналитику за выбранный период и аналогичный
@@ -392,18 +424,33 @@ class MetricSummary:
             - Для параллельного выполнения запросов используется
             функция `gather_named()`.
         """
-        comparable_from, comparable_to = comparable_period(date_from, date_to)
+
+        date_range = get_last_30_days_with_comparable_period()
+        date_from, date_to = date_range['requested']
+        comparable_from, comparable_to = date_range['comparable']
+
+        requested_ctx = PeriodContext(
+            user_id=user_id,
+            date_from=date_from,
+            date_to=date_to,
+            station_ids=payload.station_ids
+            
+            
+        )
+        comparable_ctx = PeriodContext(
+            user_id=user_id,
+            date_from=comparable_from,
+            date_to=comparable_to,
+            station_ids=payload.station_ids
+        )
+
         data = await gather_named({
         'requested_metrics': self.get_all_normalize_metrics(
-            user_id,
-            date_from,
-            date_to,
-            True
+            ctx=requested_ctx,   
+            is_requested_metrics=True
             ),
         'comparable_metrics': self.get_all_normalize_metrics(
-            user_id,
-            comparable_from,
-            comparable_to
+            ctx=comparable_ctx  
             )
         })
         data['requested_period'] = {
@@ -415,5 +462,3 @@ class MetricSummary:
             'date_to': comparable_to.strftime("%Y-%m-%d %H:%M:%S"),
         }
         return data
-        # validated = SummaryResponseModel.model_validate(data)
-        # return validated

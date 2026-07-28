@@ -1,6 +1,8 @@
-from datetime import datetime
+from datetime import datetime, timedelta    
 from dateutil.relativedelta import relativedelta
 from core.logger.logger import logger
+
+
 def get_period_days(
     date_from:datetime, 
     date_to:datetime
@@ -167,6 +169,15 @@ def _calc_utilisation(
     )
 
 
+def get_last_30_days_with_comparable_period() -> dict[str, tuple[datetime]]:
+    requested_to = datetime.now()
+    requested_from = requested_to - timedelta(days=30)
+    comparable_to = requested_from
+    comparable_from = comparable_to - timedelta(days=30)
+    return {
+        'requested': (requested_from, requested_to),
+        'comparable': (comparable_from,comparable_to)
+    }
 
 def get_date_range_from_period(period: str) -> tuple[datetime|None, datetime|None]:
     """Вычисляет диапазон дат (начало и конец) на основе переданного текстового периода.
@@ -187,7 +198,6 @@ def get_date_range_from_period(period: str) -> tuple[datetime|None, datetime|Non
     Raises:
         ValueError: Если передан неизвестный или неподдерживаемый строковый период.
     """
-    logger.debug(period)
     
     if period is None:
         raise ValueError("Period value is missing in the payload")

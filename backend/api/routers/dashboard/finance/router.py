@@ -46,7 +46,7 @@ async def get_finance(
     try:
         return await dash.finance.get_metrics(
             user_id=user_id, 
-            period=payload.toggle_value
+            period=payload.period
         )
     except Exception as e:
         logger.exception(str(e))

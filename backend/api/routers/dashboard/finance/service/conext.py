@@ -8,4 +8,4 @@ class PeriodContext:
     user_id: int
     date_from: Optional[datetime] = None
     date_to: Optional[datetime] = None
-
+    station_ids: list[int] = None

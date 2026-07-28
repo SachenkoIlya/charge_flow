@@ -53,7 +53,8 @@ class SummaryDB:
         user_id: int, 
         date_from: datetime, 
         date_to: datetime, 
-        date_expr: str
+        date_expr: str,
+        station_ids:list[int]=None,
     ) -> list[Record]:
         """
         Получает агрегированные данные для построения графиков за указанный период.
@@ -113,13 +114,29 @@ class SummaryDB:
             WHERE user_id = $1
                 AND cs.start_ts >= $2
                 AND cs.start_ts < $3 
+                AND(
+                    cardinality($4::int[]) = 0
+                    OR cs.station_id = ANY($4::int[])
+                )
             GROUP BY period
             ORDER BY period
             """
-        async with self.db.pool.acquire() as conn:
-            return await conn.fetch(q, user_id, date_from, date_to)
+        async with self.db.get_conn() as conn:
+            return await conn.fetch(
+                q, 
+                user_id, 
+                date_from, 
+                date_to, 
+                station_ids
+            )
 
-    async def get_metrics(self, user_id: int, date_from: datetime, date_to: datetime) -> Record | None:
+    async def get_metrics(
+        self, 
+        user_id: int, 
+        date_from: datetime, 
+        date_to: datetime,
+        station_ids: list[int]=None
+    ) -> Record | None:
         """
         Получает агрегированные операционные и финансовые показатели
         по зарядным сессиям за указанный период.
@@ -206,16 +223,27 @@ class SummaryDB:
             WHERE user_id = $1
                 AND cs.start_ts >= $2
                 AND cs.start_ts < $3
+                AND (
+                    cardinality($4::int[]) = 0
+                    OR cs.station_id = ANY($4::int[])
+                )
             """
-        async with self.db.pool.acquire() as conn:
-            return await conn.fetchrow(q, user_id, date_from, date_to)
+        async with self.db.get_conn() as conn:
+            return await conn.fetchrow(
+                q, 
+                user_id, 
+                date_from, 
+                date_to,
+                station_ids
+            )
 
     
     async def get_utilisation_metrics(
         self, 
         user_id:int, 
         date_from: datetime=None, 
-        date_to:datetime=None
+        date_to:datetime=None,
+        station_ids: list[int]=None
     ) -> Record | None:
         """
         Получает данные, необходимые для расчёта утилизации зарядной инфраструктуры
@@ -258,9 +286,19 @@ class SummaryDB:
             WHERE user_id = $1
                 AND cs.start_ts >= $2
                 AND cs.start_ts < $3
+                AND (
+                    cardinality($4::int[]) = 0
+                    OR cs.station_id = ANY($4::int[])
+                )
             """
-        async with self.db.pool.acquire() as conn:
-            return await conn.fetchrow(q, user_id, date_from, date_to)
+        async with self.db.get_conn() as conn:
+            return await conn.fetchrow(
+                q, 
+                user_id, 
+                date_from, 
+                date_to,
+                station_ids
+            )
         
 
     async def get_margin_metrics(
@@ -268,6 +306,7 @@ class SummaryDB:
         user_id, 
         date_from: datetime, 
         date_to:datetime,
+        station_ids: list[int]=None,
         mode: str = 'opex'
     ) -> Record:
         """
@@ -358,14 +397,29 @@ class SummaryDB:
                     AND f.mode = $4
                     AND f.expense_date >= $2
                     AND f.expense_date < $3
+                    AND (
+                        cardinality($5::int[]) = 0
+                        OR f.station_id = ANY($5::int[])
+                    )
             ) AS opex
 
             WHERE cs.user_id = $1
                 AND cs.start_ts >= $2
                 AND cs.start_ts < $3
+                AND(
+                    cardinality($5::int[]) = 0
+                    OR cs.station_id = ANY($5::int[])
+                )
         """
         async with self.db.get_conn() as conn:
-            return await conn.fetchrow(q, user_id, date_from, date_to, mode)
+            return await conn.fetchrow(
+                q, 
+                user_id, 
+                date_from, 
+                date_to, 
+                mode, 
+                station_ids
+            )
 
    
         
@@ -421,7 +475,7 @@ class SummaryDB:
         self, 
         user_id:int, 
         date_from:datetime, 
-        date_to:datetime
+        date_to:datetime,
     ) -> list[Record]:
         q = """
             SELECT 
@@ -454,8 +508,13 @@ class SummaryDB:
             WHERE cs.user_id = $1
                 AND cs.start_ts >= $2
                 AND cs.end_ts < $3
-
+               
             GROUP BY cs.station_id
             """
-        async with self.db.pool.acquire() as conn:
-            return await conn.fetch(q, user_id, date_from, date_to)
+        async with self.db.get_conn() as conn:
+            return await conn.fetch(
+                q, 
+                user_id, 
+                date_from, 
+                date_to, 
+            )
