@@ -28,7 +28,7 @@ class Panel(BasePanel):
     page_key = 'summary'
 
     async def render(self):
-        # await self.load_station()
+        await self.load_station()
               
         page = app.storage.user.setdefault('pages', {})
         page_state = page.setdefault(self.page_key, {})
@@ -38,9 +38,9 @@ class Panel(BasePanel):
             page_state['toggle_value'] = data['default_value']
              
         self.apply_filters()
-        # loaded = await self.load_data()
-        # if not loaded:
-        #     return
+        loaded = await self.load_data()
+        if not loaded:
+            return
               
         
         role = self.user.get('role')
