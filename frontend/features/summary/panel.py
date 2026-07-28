@@ -115,7 +115,7 @@ class Panel(BasePanel):
             await render_title(
                 label='Оперативная Сводка',
                 current_period=current_period,
-                comparable_period=comparable_period,
+                сomparison_period=сomparison_period,
                 page_key=self.page_key,
                 stations=self.stations,
                 on_date_change=self.on_date_change,
