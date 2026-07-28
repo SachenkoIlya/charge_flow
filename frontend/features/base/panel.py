@@ -94,7 +94,7 @@ class BasePanel(ABC):
         if self.endpoints_name == 'investments':
             return True
         
-        if self.page_key in {'finance', 'system'}:
+        if self.page_key in {'finance', 'system', 'summary'}:
             payload = {
                 'period': self.payload.get('toggle_value'),
                 'station_ids': self.payload.get('station_ids')
