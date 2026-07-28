@@ -14,7 +14,7 @@ ui.add_css("""
 .station-multi-select .q-field__native {
     color: transparent;
 }
-""")
+""", shared=True)
 
 
 FILTER_MAP = {
