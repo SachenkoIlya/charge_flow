@@ -92,6 +92,9 @@ async def render_title(
         if not value:
             return 'Все станции'
 
+        if len(value) == len(stations):
+            return 'Все станции'
+
         if len(value) == 1:
             station_id = value[0]
             return stations.get(station_id, '1 станция')
