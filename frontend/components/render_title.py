@@ -73,6 +73,7 @@ def get_data_from_map(page_key: str):
         return None
     return data
 
+
 async def render_title(
     label,
     label_aggre,
@@ -137,6 +138,15 @@ async def render_title(
         if on_date_change:
             asyncio.create_task(on_date_change())
 
+
+    filter_config = FILTER_MAP.get(page_key, {})
+    toggle_items = filter_config.get('toggle', [])
+    default_toggle_value = filter_config.get('default_value')
+
+    toggle_options = {
+        item['value']: item['label']
+        for item in toggle_items
+    }
     with ui.row().classes(
         'w-full items-center justify-between'
     ):
@@ -149,7 +159,7 @@ async def render_title(
             ui.label(label_aggre).classes(
                 'text-sm text-slate-400'
             )
-
+        
         with ui.row().classes(
             '''
             items-center
@@ -161,21 +171,18 @@ async def render_title(
             '''
         ):
 
-            period_toggle = ui.toggle(
-                {
-                    '6m': '6 МЕС',
-                    '1y': '1 ГОД',
-                    'all': 'ВСЕ',
-                },
-                value=page_state['toggle_value'],
-            ).props(
-                'no-caps unelevated'
-            )
-
-            period_toggle.on(
-                'update:model-value',
-                handle_toggle,
-            )
+            if toggle_options:
+                period_toggle = ui.toggle(
+                    toggle_options,
+                    value=page_state['toggle_value'],
+                ).props(
+                    'no-caps unelevated'
+                )
+                
+                period_toggle.on(
+                    'update:model-value',
+                    handle_toggle,
+                )
 
             # -----------------------------
             # SELECT СТАНЦИЙ
