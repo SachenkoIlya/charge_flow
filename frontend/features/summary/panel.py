@@ -75,8 +75,21 @@ class Panel(BasePanel):
 
 
     async def render_content(self):
+        requested_period = self.data['requested_period']
         comparable_period = self.data['comparable_period']
 
+        current_from = datetime.strptime(
+            requested_period['date_from'],
+            '%Y-%m-%d %H:%M:%S'
+        ).strftime('%d.%m.%Y')
+
+        current_to = (
+            datetime.strptime(
+                comparable_period['date_to'],
+                '%Y-%m-%d %H:%M:%S'
+            ) - timedelta(days=1)
+        ).strftime('%d.%m.%Y')
+        
         comparable_from = datetime.strptime(
             comparable_period['date_from'],
             '%Y-%m-%d %H:%M:%S'
@@ -89,7 +102,11 @@ class Panel(BasePanel):
             ) - timedelta(days=1)
         ).strftime('%d.%m.%Y')
 
-        label_aggre = (
+        current_period = (
+            f"Текущий период: "
+              f"{current_from} — {current_to}"
+        )
+        сomparison_period = (
             f"Сравниваемый период: "
             f"{comparable_from} — {comparable_to}"
         )
@@ -97,7 +114,8 @@ class Panel(BasePanel):
         with ui.column().classes('w-full max-w-[1600px] mx-auto gap-3'):
             await render_title(
                 label='Оперативная Сводка',
-                label_aggre=label_aggre,
+                current_period=current_period,
+                comparable_period=comparable_period,
                 page_key=self.page_key,
                 stations=self.stations,
                 on_date_change=self.on_date_change,

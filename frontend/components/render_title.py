@@ -76,7 +76,8 @@ def get_data_from_map(page_key: str):
 
 async def render_title(
     label: str,
-    label_aggre: str,
+    current_period: str,
+    comparable_period: str,
     page_key: str,
     stations: dict=None,
     on_date_change=None,
@@ -211,7 +212,15 @@ async def render_title(
             )
 
             ui.label(
-                label_aggre
+                current_period
+            ).classes(
+                '''
+                text-sm
+                text-slate-400
+                '''
+            )
+            ui.label(
+                current_period
             ).classes(
                 '''
                 text-sm
