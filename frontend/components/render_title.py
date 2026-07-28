@@ -220,7 +220,7 @@ async def render_title(
                 '''
             )
             ui.label(
-                current_period
+                comparable_period       
             ).classes(
                 '''
                 text-sm
