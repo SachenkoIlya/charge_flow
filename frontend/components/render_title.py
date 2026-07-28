@@ -181,20 +181,23 @@ async def render_title(
             asyncio.create_task(
                 on_date_change()
             )
-
     # -----------------------------------
     # 5. Handler toggle
     # -----------------------------------
     async def handle_toggle(e):
-        page_state['toggle_value'] = e.value
-
+        selected_label = get_selected_label(e)
+        new_value = resolve_toggle_value(
+            filter_config,
+            selected_label,
+        )
+        if new_value is None:
+            return
+        if page_state.get('toggle_value') == new_value:
+            return
+        page_state['toggle_value'] = new_value
         app.storage.user['pages'] = pages
-
         if on_date_change:
-            asyncio.create_task(
-                on_date_change()
-            )
-
+            asyncio.create_task(on_date_change())
     # -----------------------------------
     # 6. HEADER
     # -----------------------------------
