@@ -77,8 +77,8 @@ def get_data_from_map(page_key: str):
 async def render_title(
     label: str,
     label_aggre: str,
-    stations: dict,
     page_key: str,
+    stations: dict=None,
     on_date_change=None,
 ):
     # -----------------------------------
