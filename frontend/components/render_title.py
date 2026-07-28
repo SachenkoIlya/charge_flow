@@ -5,6 +5,18 @@ from core.logger.logger import logger
 from nicegui import app
 import asyncio 
 
+
+ui.add_css("""
+.station-multi-select .q-field__native > span {
+    display: none;
+}
+
+.station-multi-select .q-field__native {
+    color: transparent;
+}
+""")
+
+
 FILTER_MAP = {
     'summary': {
        'toggle': [
@@ -61,7 +73,6 @@ def get_data_from_map(page_key: str):
         return None
     return data
 
-
 async def render_title(
     label,
     label_aggre,
@@ -72,17 +83,11 @@ async def render_title(
     pages = app.storage.user.get('pages', {})
     page_state = pages.setdefault(page_key, {})
 
-    # -----------------------------
-    # 1. Значения по умолчанию
-    # -----------------------------
     page_state.setdefault('station_ids', [])
     page_state.setdefault('toggle_value', 'all')
 
     selected_station_ids = page_state['station_ids']
 
-    # -----------------------------
-    # 2. Функция отображения станций
-    # -----------------------------
     def station_display_value(value):
         if not value:
             return 'Все станции'
@@ -90,6 +95,7 @@ async def render_title(
         if len(value) == 1:
             station_id = value[0]
             return stations.get(station_id, '1 станция')
+
         count = len(value)
 
         if 11 <= count % 100 <= 14:
@@ -103,21 +109,24 @@ async def render_title(
 
         return f'Выбрано: {count} {word}'
 
-    # -----------------------------
-    # 3. Обработчик выбора станции
-    # -----------------------------
+    # сюда позже положим label
+    station_label = None
+
     async def handle_station_change(e):
         station_ids = e.value or []
 
         page_state['station_ids'] = station_ids
         app.storage.user['pages'] = pages
 
+        if station_label:
+            station_label.set_text(
+                station_display_value(station_ids)
+            )
+
+        # пока занимаемся фронтом, можно временно отключить
         if on_date_change:
             asyncio.create_task(on_date_change())
 
-    # -----------------------------
-    # 4. Обработчик периода
-    # -----------------------------
     async def handle_toggle(e):
         page_state['toggle_value'] = e.value
         app.storage.user['pages'] = pages
@@ -125,23 +134,19 @@ async def render_title(
         if on_date_change:
             asyncio.create_task(on_date_change())
 
-    # -----------------------------
-    # 5. UI
-    # -----------------------------
     with ui.row().classes(
         'w-full items-center justify-between'
     ):
 
-        # Заголовок
         with ui.column().classes('gap-0'):
             ui.label(label).classes(
                 'text-2xl font-bold text-white'
             )
+
             ui.label(label_aggre).classes(
                 'text-sm text-slate-400'
             )
 
-        # Фильтры
         with ui.row().classes(
             '''
             items-center
@@ -172,28 +177,44 @@ async def render_title(
             # -----------------------------
             # SELECT СТАНЦИЙ
             # -----------------------------
-            selected_station_ids = page_state.get('station_ids', [])
+            with ui.element('div').classes(
+                'relative w-[285px]'
+            ):
 
-            display_value = station_display_value(selected_station_ids)
+                station_select = ui.select(
+                    options=stations,
+                    value=selected_station_ids,
+                    multiple=True,
+                    on_change=handle_station_change,
+                ).props(
+                    '''
+                    outlined
+                    dense
+                    options-dense
+                    clearable
+                    dropdown-icon=expand_more
+                    '''
+                ).classes(
+                    'w-full station-multi-select'
+                )
 
-            station_select = ui.select(
-                options=stations,
-                value=selected_station_ids,
-                multiple=True,
-                on_change=handle_station_change,
-            ).props(
-                f'''
-                outlined
-                dense
-                options-dense
-                clearable
-                dropdown-icon=expand_more
-                display-value="{display_value}"
-                '''
-            ).classes(
-                'w-[285px]'
-            )
-
+                station_label = ui.label(
+                    station_display_value(
+                        selected_station_ids
+                    )
+                ).classes(
+                    '''
+                    absolute
+                    left-3
+                    top-1/2
+                    -translate-y-1/2
+                    text-sm
+                    text-white
+                    pointer-events-none
+                    max-w-[210px]
+                    truncate
+                    '''
+                )
 
             
 # async def render_title(
