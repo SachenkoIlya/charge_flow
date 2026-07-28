@@ -96,7 +96,7 @@ class Panel(BasePanel):
 
         with ui.column().classes('w-full max-w-[1600px] mx-auto gap-3'):
             await render_title(
-                label='Общая сводка по сети',
+                label='Оперативная Сводка',
                 label_aggre=label_aggre,
                 page_key=self.page_key,
                 stations=self.stations,
