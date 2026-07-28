@@ -172,30 +172,26 @@ async def render_title(
             # -----------------------------
             # SELECT СТАНЦИЙ
             # -----------------------------
+            selected_station_ids = page_state.get('station_ids', [])
+
+            display_value = station_display_value(selected_station_ids)
+
             station_select = ui.select(
                 options=stations,
                 value=selected_station_ids,
                 multiple=True,
                 on_change=handle_station_change,
             ).props(
-                '''
+                f'''
                 outlined
                 dense
                 options-dense
                 clearable
                 dropdown-icon=expand_more
+                display-value="{display_value}"
                 '''
             ).classes(
                 'w-[285px]'
-            )
-
-            station_select.add_slot(
-                'selected',
-                r'''
-                <div class="text-white text-sm">
-                    {{ props.opt }}
-                </div>
-                '''
             )
 
 
