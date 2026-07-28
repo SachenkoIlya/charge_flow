@@ -28,7 +28,7 @@ class Panel(BasePanel):
     page_key = 'summary'
 
     async def render(self):
-        await self.load_station()
+        # await self.load_station()
               
         page = app.storage.user.setdefault('pages', {})
         page_state = page.setdefault(self.page_key, {})
@@ -75,23 +75,23 @@ class Panel(BasePanel):
 
 
     async def render_content(self):
-        # comparable_period = self.data['comparable_period']
+        comparable_period = self.data['comparable_period']
 
-        # comparable_from = datetime.strptime(
-        #     comparable_period['date_from'],
-        #     '%Y-%m-%d %H:%M:%S'
-        # ).strftime('%d.%m.%Y')
+        comparable_from = datetime.strptime(
+            comparable_period['date_from'],
+            '%Y-%m-%d %H:%M:%S'
+        ).strftime('%d.%m.%Y')
 
-        # comparable_to = (
-        #     datetime.strptime(
-        #         comparable_period['date_to'],
-        #         '%Y-%m-%d %H:%M:%S'
-        #     ) - timedelta(days=1)
-        # ).strftime('%d.%m.%Y')
+        comparable_to = (
+            datetime.strptime(
+                comparable_period['date_to'],
+                '%Y-%m-%d %H:%M:%S'
+            ) - timedelta(days=1)
+        ).strftime('%d.%m.%Y')
 
         label_aggre = (
             f"Сравниваемый период: "
-            # f"{comparable_from} — {comparable_to}"
+            f"{comparable_from} — {comparable_to}"
         )
 
         with ui.column().classes('w-full max-w-[1600px] mx-auto gap-3'):
@@ -102,17 +102,16 @@ class Panel(BasePanel):
                 stations=self.stations,
                 on_date_change=self.on_date_change,
             )
-            # top_dialog = render_top_tables_dialog(self.data)
-            # render_metrics(
-            #     data=self.data, 
-            #     columns=5,  
-            #     metric_value_func=get_metric_value, 
-            #     metric_delta_func=get_metric_delta,
-            #     default_metrics=METRICS,
-            #     on_top_click=top_dialog.open
-            #     )
-            # render_chart(data=self.data)
-            # render_tables_section(TOP_ROWS, REVERS_ROWS)
+            top_dialog = render_top_tables_dialog(self.data)
+            render_metrics(
+                data=self.data, 
+                columns=5,  
+                metric_value_func=get_metric_value, 
+                metric_delta_func=get_metric_delta,
+                default_metrics=METRICS,
+                on_top_click=top_dialog.open
+                )
+            render_chart(data=self.data)
 
     
         
