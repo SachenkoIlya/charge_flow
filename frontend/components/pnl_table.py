@@ -49,23 +49,23 @@ def render_pnl_table(rows: list[dict], height:int=600):
                             'shrink-0 truncate whitespace-nowrap'
                         )
 
-                    for row in rows:
-                        with ui.row().classes(
-                            '''
-                            min-w-[1400px]
-                            text-sm text-gray-200
-                            py-4
-                            border-b border-[#141c28]
-                            flex-nowrap
-                            '''
-                        ):
-                            for _, key, width in columns:
+                        for row in rows:
+                            with ui.row().classes(
+                                '''
+                                min-w-[1400px]
+                                text-sm text-gray-200
+                                py-4
+                                border-b border-[#141c28]
+                                flex-nowrap
+                                '''
+                            ):
+                                for _, key, width in columns:
 
-                                cls = 'shrink-0 truncate whitespace-nowrap'
+                                    cls = 'shrink-0 truncate whitespace-nowrap'
 
-                                if key == 'margin':
-                                    cls += ' text-green-400 font-semibold'
+                                    if key == 'margin':
+                                        cls += ' text-green-400 font-semibold'
 
-                                ui.label(row[key]).style(
-                                    f'width: {width}px'
-                                ).classes(cls)
+                                    ui.label(row[key]).style(
+                                        f'width: {width}px'
+                                    ).classes(cls)
