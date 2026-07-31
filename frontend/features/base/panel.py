@@ -164,12 +164,9 @@ class BasePanel(ABC):
                 px-10
                 py-2
                 """
+            ).style(
+                f'zoom: {self.content_scale};'
             ) as self.container:
-                with ui.element('div').classes(
-                    'w-full h-full'
-                ).style(
-                    f'zoom: {self.content_scale};'
-                ):
                     await self.render_content()
 
 
