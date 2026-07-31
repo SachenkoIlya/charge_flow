@@ -102,7 +102,7 @@ class Panel(BasePanel):
             render_finance_charts(
                 # cash_flow_history=charts['cash_flow_history'],
                 # break_even=BREAK_EVEN_METRICS,
-                cost_structure=charts['network_cost_structure'],
+                # cost_structure=charts['network_cost_structure'],
                 pnl_table=PNL_ROWS
             )
             
