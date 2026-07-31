@@ -63,6 +63,8 @@ class Panel(BasePanel):
                 text-white
                 overflow-hidden
             """
+        ).style(
+            'zoom: 0.9; width: 111.111%; height: 111.111%;'
         ):
             render_sidebar(role=role)
 
