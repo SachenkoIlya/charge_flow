@@ -1,14 +1,5 @@
 from backend.api.routers.admin.companies.db import UserRepositoryDB
-from backend.legacy.stats.db import StatsDB
 from core.base_db import Base
-
-
-class MetricsStats:
-    
-    def __init__(self, base_db: "Base"):
-        self.stats = StatsDB(base_db)
-       
-
 
 
 class  UserRepositoryMetrics:
@@ -30,7 +21,6 @@ class  UserRepositoryMetrics:
             list[dict]: Список словарей, готовых для валидации в Pydantic.
         """
         return await self.normalize_company_data()
-    
     
     async def normalize_company_data(self):
         """Трансформирует сырые строки из БД в формат для API.
