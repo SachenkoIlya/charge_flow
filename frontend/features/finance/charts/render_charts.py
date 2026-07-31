@@ -32,7 +32,9 @@ def render_finance_charts(
         'w-full grid-cols-1 lg:grid-cols-3 gap-4 mt-2'
     ):
         if pnl_table is not None:
-            with ui.element('div').classes('lg:col-span-2 min-w-0'):
+            # 'w-full min-w-0'
+            # lg:col-span-2 min-w-0
+            with ui.element('div').classes('w-full min-w-0'):
                 render_pnl_table(pnl_table)
 
         if cost_structure is not None:
