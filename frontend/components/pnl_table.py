@@ -22,22 +22,15 @@ def render_pnl_table(rows: list[dict], height:int=600):
                 'min-w-[1500px]'
             ):
                 columns = [
-                    ('Станция', 'station'),
-                    ('Выручка мес.', 'revenue_month'),
-                    # ('Выручка накоп.', 'revenue_total'),
-                    ('Э/энергия ₽', 'energy_cost'),
-                    ('кВт⋅ч', 'kwh'),
-                    # ('₽/кВт⋅ч', 'price_kwh'),
-                    ('Аренда фикс.', 'rent_fixed'),
-                    # ('% от ТО', 'rent_percent'),
-                    ('Аренда итого', 'rent_total'),
-                    # ('Комиссия своя', 'operator_own'),
-                    # ('Комиссия сторон.', 'operator_external'),
-                    # ('Комиссия всего', 'operator_total'),
-                    # ('% от ТО', 'operator_percent'),
-                    ('EBITDA', 'ebitda'),
-                    ('Прибыль', 'profit'),
-                    ('Маржа', 'margin'),
+                    ('Станция', 'station', 220),
+                    ('Выручка мес.', 'revenue_month', 150),
+                    ('Э/энергия ₽', 'energy_cost', 140),
+                    ('кВт⋅ч', 'kwh', 110),
+                    ('Аренда фикс.', 'rent_fixed', 130),
+                    ('Аренда итого', 'rent_total', 140),
+                    ('EBITDA', 'ebitda', 130),
+                    ('Прибыль', 'profit', 130),
+                    ('Маржа', 'margin', 100),
                 ]
 
                 with ui.row().classes(
@@ -49,30 +42,30 @@ def render_pnl_table(rows: list[dict], height:int=600):
                     flex-nowrap
                     '''
                 ):
-                    for label, _ in columns:
-                        ui.label(label).classes(
-                            'w-[180px] shrink-0 truncate whitespace-nowrap'
+                    for label, _, width in columns:
+                        ui.label(label).style(
+                            f'width: {width}px'
+                        ).classes(
+                            'shrink-0 truncate whitespace-nowrap'
                         )
 
-                for row in rows:
-                    with ui.row().classes(
-                        '''
-                        min-w-[1400px]
-                        text-sm text-gray-200
-                        py-4
-                        border-b border-[#141c28]
-                        flex-nowrap
-                        '''
-                    ):
+                    for row in rows:
+                        with ui.row().classes(
+                            '''
+                            min-w-[1400px]
+                            text-sm text-gray-200
+                            py-4
+                            border-b border-[#141c28]
+                            flex-nowrap
+                            '''
+                        ):
+                            for _, key, width in columns:
 
-                        for label, key in columns:
+                                cls = 'shrink-0 truncate whitespace-nowrap'
 
-                            cls = 'w-[180px] shrink-0 truncate whitespace-nowrap'
+                                if key == 'margin':
+                                    cls += ' text-green-400 font-semibold'
 
-                            if key == 'station':
-                                cls = 'w-[180px] shrink-0 truncate whitespace-nowrap'
-
-                            if key == 'margin':
-                                cls += ' text-green-400 font-semibold'
-
-                            ui.label(row[key]).classes(cls)
+                                ui.label(row[key]).style(
+                                    f'width: {width}px'
+                                ).classes(cls)
