@@ -52,16 +52,28 @@ class Panel(BasePanel):
         role = self.user.get('role')
 
         with ui.element('div').classes(
+            # """
+                # w-screen
+                # h-screen
+                # flex
+                # bg-gradient-to-br
+                # from-[#050b12]
+                # via-[#08111b]
+                # to-[#0b1724]
+                # text-white
+                # overflow-hidden
+            # """
             """
-                w-screen
-                h-screen
-                flex
-                bg-gradient-to-br
-                from-[#050b12]
-                via-[#08111b]
-                to-[#0b1724]
-                text-white
-                overflow-hidden
+            w-full
+            h-full
+            min-h-screen
+            flex
+            bg-gradient-to-br
+            from-[#050b12]
+            via-[#08111b]
+            to-[#0b1724]
+            text-white
+            overflow-hidden
             """
         ):
             render_sidebar(role=role)

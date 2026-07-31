@@ -47,8 +47,9 @@ class Panel(BasePanel):
 
         with ui.element('div').classes(
             """
-                w-screen
-                h-screen
+                w-full
+                h-full
+                min-h-screen
                 flex
                 bg-gradient-to-br
                 from-[#050b12]

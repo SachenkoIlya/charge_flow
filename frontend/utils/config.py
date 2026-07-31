@@ -1,6 +1,4 @@
 
-# screen_background = 'bg-gradient-to-br from-blue-150 via-gray-300 to-blue-200 m-0 overflow-hidden'
-# screen_background = 'bg-gradient-to-br from-blue-150 via-gray-300 to-blue-200 m-0 overflow-y-auto dark:from-gray-900 dark:via-gray-800 dark:to-gray-900'
 screen_background = """
     bg-gradient-to-br
     from-[#08111b]
@@ -10,7 +8,16 @@ screen_background = """
     m-0
     overflow-hidden
 """
-
+# screen_background = """
+#     bg-gradient-to-br
+#     from-[#08111b]
+#     via-[#0b1724]
+#     to-[#071019]
+#     text-white
+#     m-0
+#     overflow-hidden
+#     app-scale
+# """
 
 card_style ="""
     bg-[#111827]/80

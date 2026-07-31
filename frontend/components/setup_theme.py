@@ -12,6 +12,11 @@ def setup_theme():
 
     ui.add_head_html('''
     <style>
+    
+    body {
+        zoom: 0.9;
+    }
+    
     body, .q-page {
         background: #070d14;
         color: #e5e7eb;
