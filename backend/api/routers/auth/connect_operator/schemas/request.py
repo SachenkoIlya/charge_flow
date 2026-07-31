@@ -1,7 +1,7 @@
 from pydantic import BaseModel, EmailStr
 from typing import Optional
 
-class ConnectOperator(BaseModel):
+class ConnectOperatorRequest(BaseModel):
     email: EmailStr
     password: str
     login: str

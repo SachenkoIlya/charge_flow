@@ -1,9 +1,7 @@
 from fastapi import APIRouter, Depends
-from backend.api.routers.dashboard.manager import ManagerWidget
+from backend.manager.widget import ManagerWidget
 from backend.api.routers.widget.charts.schemas import ChartsRequestSchema
-from backend.api.routers.widget.charts.service.service import ChartService
 from backend.dependencies.get_manager import get_current_token, get_widget
-from core.logger.logger import logger
 
 
 ENDPOINT = '/charts'
@@ -36,7 +34,7 @@ async def charts(
     в соответствии с выбранным фильтром.
     """
     user_id = credentials.get('user_id')
-    result = await widget.charts.resolve_charts(user_id, payload)
+    result = await widget.charts.execute(user_id, payload)
 
     return {
         'result': result,

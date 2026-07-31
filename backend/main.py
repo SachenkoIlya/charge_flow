@@ -1,31 +1,25 @@
-from fastapi import FastAPI
-from backend.api.routers.auth.manager import UserAuthManager
-from core.base_db import Base
-from backend.services.manager import Manager
-from fastapi.middleware.cors import  CORSMiddleware
-
-from backend.api.routers.dashboard.manager import (
-    ManagerMetrics, 
-    ManagerFinance, 
-    ManagerSystem,
-    ManagerDashboardMetrics,
-    ManagerWidget
-)
-
-from core.security.settings import settings
 from contextlib import asynccontextmanager
-import httpx
-from core.logger.logger import logger
-from backend.api.router import api_router
 
+import httpx
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+from backend.api.router import api_router
+from backend.manager.dashboard import ManagerDashboardMetrics
+from backend.manager.finance import ManagerFinance
+from backend.manager.metrics import ManagerMetrics
+from backend.manager.system import ManagerSystem
+from backend.manager.user import UserAuthManager
+from backend.manager.widget import ManagerWidget
+from core.base_db import Base
+from core.logger.logger import logger
+from core.security.settings import settings
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     db = Base()
     await db.connect()
     
-    db_manager = Manager(db)
-    app.state.db_manager = db_manager   
     app.state.metrics = ManagerMetrics(db)
     app.state.investment = ManagerFinance(db)
     app.state.system  = ManagerSystem(db)

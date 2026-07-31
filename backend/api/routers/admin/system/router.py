@@ -1,11 +1,11 @@
 from pydantic import BaseModel
 
-from backend.api.routers.dashboard.manager import ManagerSystem
+from backend.manager.system import ManagerSystem
 from backend.api.routers.admin.system.schemas import SystemSchema, EtlRunsResponseSchema
 from backend.dependencies.get_manager import get_system
 from fastapi import APIRouter
 from fastapi import Depends
-from backend.services.admin_required import admin_required
+from backend.dependencies.admin_required import admin_required
 
 ENDPOINT = '/monitoring'
 DESCRIPTIONS =  """ 

@@ -16,3 +16,4 @@ chargeflow.dump
 chargeflow_full.dump
 tools/
 .pytest_cache/
+legacy

@@ -38,14 +38,13 @@ class NetworkCostStructureCharts:
         row = await self.db.get_full_network_cost_structure(
             user_id=ctx.user_id,
             date_from=ctx.date_from,
-            date_to=ctx.date_to
+            date_to=ctx.date_to,
+            station_ids=ctx.station_ids
         )
-    
         res = {
             k: float(v)
             for k, v in row.items()
         }
 
-        logger.warning(res)
         return res
     

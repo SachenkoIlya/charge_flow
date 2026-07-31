@@ -2,9 +2,10 @@ from core.security.security import security
 from core.base_db import Base
 from fastapi import HTTPException, status
 from backend.api.routers.auth.connect_operator.db import ConnectOperatorDB
-from backend.schemas.connect_operator import ConnectOperator
 from core.base_db import Base
 from asyncpg import Record
+
+from backend.api.routers.auth.connect_operator.schemas.request import ConnectOperatorRequest
 
 class ConnectOperatorService:
     """
@@ -28,7 +29,7 @@ class ConnectOperatorService:
         """
         return 'basic' if operator != 'volt' else 'bearer'
        
-    async def upsert(self, user_data: Record, data: ConnectOperator):
+    async def upsert(self, user_data: Record, data: ConnectOperatorRequest):
         """
         Создаёт или обновляет учётные данные оператора.
 
@@ -77,7 +78,7 @@ class ConnectOperatorService:
             "detail": "Оператор подключен"
         }
     
-    async def connect(self, data: ConnectOperator) -> dict:
+    async def connect(self, data: ConnectOperatorRequest) -> dict:
         """
         Подключает оператора к пользователю.
 

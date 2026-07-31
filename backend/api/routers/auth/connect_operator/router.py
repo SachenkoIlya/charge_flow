@@ -1,11 +1,12 @@
-from backend.api.routers.auth.connect_operator.schemas import OperatorConnectResponse
-from backend.api.routers.auth.manager import UserAuthManager
-from backend.schemas.connect_operator import ConnectOperator
+from backend.api.routers.auth.connect_operator.schemas.response import OperatorConnectResponse
+from backend.api.routers.auth.connect_operator.schemas.request import ConnectOperatorRequest
+
 from backend.dependencies.get_manager import get_user_create
-from backend.services.admin_required import admin_required
+from backend.dependencies.admin_required import admin_required
 from fastapi import APIRouter
 from fastapi import Depends
-from fastapi import  status
+
+from backend.manager.user import UserAuthManager
 
 
 
@@ -26,7 +27,7 @@ router = APIRouter(
     ),
 )
 async def connect(
-    data: ConnectOperator, 
+    data: ConnectOperatorRequest, 
     _: None = Depends(admin_required),
     auth: UserAuthManager=Depends(get_user_create)
 ):

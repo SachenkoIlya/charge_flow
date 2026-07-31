@@ -1,8 +1,7 @@
 from backend.api.routers.dashboard.finance.db import FinanceDB
-from core.base_db import Base
+from backend.api.routers.dashboard.finance.service.conext import PeriodContext
 from datetime import datetime
-from core.logger.logger import logger
-from copy import deepcopy
+
 
 class FinanceMetricsService:
     """
@@ -22,8 +21,8 @@ class FinanceMetricsService:
         db (FinanceDB):
             Объект доступа к финансовым данным.
     """
-    def __init__(self, db: "FinanceDB"):
-        self.db = db
+    def __init__(self, repository: "FinanceDB"):
+        self.repository = repository
         
     @staticmethod
     def calculate_payback_period(
@@ -92,76 +91,9 @@ class FinanceMetricsService:
             'cash_flow': cash_flow
         }, capex_total_amount
     
-    def build_response(
-        self,
-        result: dict, 
-        mask:str="%Y-%m-%d %H:%M:%S"
-    ) -> dict:
-        """
-        Сформировать итоговый ответ с финансовыми метриками.
-
-        Метод принимает результат параллельного выполнения запросов,
-        добавляет информацию о периоде и рассчитывает производные показатели:
-        OPEX, CAPEX, EBITDA, чистую прибыль и денежный поток.
-
-        Args:
-            result (dict):
-                Словарь с исходными данными:
-                - metrics: основные метрики;
-                - opex: операционные расходы;
-                - capex: капитальные расходы.
-
-            period (str):
-                Название выбранного периода.
-
-            date_from (datetime | None):
-                Начальная дата периода.
-
-            date_to (datetime | None):
-                Конечная дата периода.
-
-        Returns:
-            dict:
-                Подготовленный ответ с финансовыми метриками и диапазоном дат.
-        """
-        
-        # Создаем глубокую копию
-        prepare_result = deepcopy(result)
-        date_range = prepare_result.get('date_range')
-
-       
-        date_from = date_range.get('date_from')
-        date_to = date_range.get('date_to')
-        
-        date_from = datetime.strptime(date_from, mask) if date_from else None
-        date_to = datetime.strptime(date_to, mask) if date_from else None
-        
-       
-        financial_indicators, capex_total_amount = self.calculate_financial_indicators(prepare_result)
-        payback_period = self.calculate_payback_period(
-            net_profit=financial_indicators.get('net_profit'),
-            capex_total_amount=capex_total_amount,
-            date_from=date_from,
-            date_to=date_to
-        )
-
-        prepare_result['metrics'].update({
-            **financial_indicators,
-            'payback_period': payback_period
-            # # 'capex': capex,
-            # # 'opex': opex,
-            # 'ebitda': ebitda,
-            # 'net_profit': net_profit,
-            # 'cash_flow': cash_flow 
-        })
-        logger.warning(prepare_result['charts'])
-        return prepare_result
-    
     async def get_metrics(
         self, 
-        user_id:int, 
-        date_from: datetime=None, 
-        date_to:datetime=None
+        ctx: PeriodContext
     ) -> dict[str, float]:
         """
         Получить основные финансовые метрики пользователя за период.
@@ -180,16 +112,19 @@ class FinanceMetricsService:
             dict[str, float]:
                 Словарь с общей выручкой пользователя.
         """
-        rows = await self.db.get_metrics(user_id, date_from, date_to)
+        rows = await self.repository.get_metrics(
+            ctx.user_id, 
+            ctx.date_from, 
+            ctx.date_to,
+            ctx.station_ids
+        )
         return {
             'total_revenue': round(float(rows['total_revenue']), 2)
         }
     
     async def get_investment_metrics(
         self, 
-        user_id: int, 
-        date_from: datetime=None, 
-        date_to:datetime=None,
+        ctx: PeriodContext
     ) -> dict[str, float | int]:
        
         investment = {
@@ -209,7 +144,13 @@ class FinanceMetricsService:
                 "electricity_compensation": 0
             }
         }
-        records = await self.db.get_investment_group(user_id, date_from, date_to)
+        records = await self.repository.get_investment_group(
+            user_id=ctx.user_id, 
+            date_from=ctx.date_from, 
+            date_to=ctx.date_to,
+            station_ids=ctx.station_ids
+        )
+        
         for record in records:
             mode = record.get('mode')
             amount_type = record.get('amount_type')
@@ -221,15 +162,15 @@ class FinanceMetricsService:
 
     async def get_date_range(
         self, 
-        user_id:int,
-        period:str,
-        date_from: datetime=None,
-        date_to: datetime=None,
+        ctx:PeriodContext,
         mask = "%Y-%m-%d %H:%M:%S"
     ):
+        date_from = ctx.date_from
+        date_to = ctx.date_to
+
         if date_from is None and date_to is None:
-            rows = await self.db.get_date_range(
-                user_id=user_id,
+            rows = await self.repository.get_date_range(
+                user_id=ctx.user_id,
             ) 
             date_from = rows['first_date']
             date_to = rows['last_date']
@@ -238,7 +179,7 @@ class FinanceMetricsService:
         date_to = date_to.strftime(mask) if date_to else None
         
         return {
-            'period': period,
+            'period': ctx.period,
             'date_from': date_from,
             'date_to': date_to,
         }

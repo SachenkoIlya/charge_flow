@@ -11,7 +11,8 @@ class FinanceDB:
         self, 
         user_id:int, 
         date_from:datetime=None,
-        date_to: datetime=None, 
+        date_to: datetime=None,
+        station_ids: list[int]=None 
     ) -> Record:
         q = """
             SELECT 
@@ -24,13 +25,18 @@ class FinanceDB:
                 AND cs.state = 'COMPLETED'
                 AND ($2::timestamp IS NULL OR cs.start_ts >= $2)
                 AND ($3::timestamp IS NULL OR cs.start_ts < $3)
+                AND (
+                    cardinality($4::int[]) = 0
+                    OR cs.station_id = ANY($4::int[])
+                )
             """ 
         async with self.db.get_conn() as conn:
             return await conn.fetchrow(
                 q, 
                 user_id, 
                 date_from, 
-                date_to
+                date_to,
+                station_ids 
             )
 
     async def get_date_range(self, user_id:int):
@@ -44,41 +50,14 @@ class FinanceDB:
             """
         async with self.db.get_conn() as conn:
             return await conn.fetchrow(q, user_id)
-        
-    async def get_investment(
-        self, 
-        user_id: int, 
-        mode: str,
-        date_from: datetime | None=None,
-        date_to: datetime | None=None
-    ) -> list[Record]:
-        q = """
-            SELECT 
-                f.id,
-                f.amount_type,
-                f.amount,
-                f.created_at
-            FROM finance_operations f
-            WHERE user_id = $1
-            AND mode = $2
-            AND ($3::timestamp IS NULL OR f.created_at >= $3)
-            AND ($4::timestamp IS NULL OR f.created_at < $4)
-            ORDER BY f.id
-            """ 
-        async with self.db.get_conn() as conn:
-            return await conn.fetch(
-                q, 
-                user_id, 
-                mode, 
-                date_from, 
-                date_to
-            )
+
 
     async def get_investment_group(
         self,
         user_id: int,
         date_from: datetime | None=None,
         date_to: datetime | None=None,
+        station_ids: list[int]=None
     ) ->list[Record]:
         q = """
             SELECT
@@ -93,45 +72,30 @@ class FinanceDB:
             WHERE user_id = $1
                 AND ($2::timestamp IS NULL or f.expense_date >= $2)
                 AND ($3::timestamp IS NULL or f.expense_date < $3)
+                AND  (
+                    cardinality($4::int[]) = 0
+                    OR f.station_id = ANY($4::int[])
+                )
             GROUP BY 
                 f.mode, f.amount_type
             """
         async with self.db.get_conn() as conn:
-            return await conn.fetch(q, user_id, date_from, date_to)
-        
-    async def get_investment(
-        self, 
-        user_id: int, 
-        date_from: datetime | None=None,
-        date_to: datetime | None=None, 
-    ) -> list[Record]:
-        q = """
-            SELECT 
-                f.mode,
-                COUNT(*) as operations_count,
-                COALESCE(
-                    SUM(f.amount),
-                    0
-                ) as total_amount
-            FROM finance_operations f
-            WHERE user_id = $1
-                AND ($2::timestamp IS NULL or f.expense_date >= $2)
-                AND ($3::timestamp IS NULL or f.expense_date < $3)
-            GROUP BY f.mode
-            """
-        async with self.db.get_conn() as conn:
             return await conn.fetch(
-                q,
-                user_id,
-                date_from,
-                date_to
+                q, 
+                user_id, 
+                date_from, 
+                date_to,
+                station_ids
             )
+        
+   
         
     async def get_network_cost_structure(
         self, 
         user_id: int, 
         date_from: datetime | None=None,
         date_to: datetime | None=None, 
+        station_ids: list[int]=None,
         mode:str = 'opex'
     ) -> list[Record]:
         q = """
@@ -177,6 +141,10 @@ class FinanceDB:
                 AND ($2::timestamp IS NULL or f.expense_date >= $2)
                 AND ($3::timestamp IS NULL or f.expense_date < $3)
                 AND mode = $4
+                AND  (
+                    cardinality($5::int[]) = 0
+                    OR f.station_id = ANY($5::int[])
+                )
             """
         async with self.db.get_conn() as conn:
             return await conn.fetch(
@@ -184,14 +152,16 @@ class FinanceDB:
                 user_id,
                 date_from,
                 date_to,
-                mode
+                mode,
+                station_ids
             )
 
     async def get_operator_commission(
         self, 
         user_id:int, 
-        date_from:datetime, 
-        date_to:datetime
+        date_from:datetime=None, 
+        date_to:datetime=None,
+        station_ids:list[int]=None
     ) ->Record:
         q = """
             SELECT
@@ -212,14 +182,19 @@ class FinanceDB:
             WHERE
                 cs.user_id = $1
                 AND ($2::timestamp IS NULL or cs.start_ts >= $2)
-                ANd ($3::timestamp IS NULL or cs.start_ts < $3)
+                AND ($3::timestamp IS NULL or cs.start_ts < $3)
+                AND  (
+                    cardinality($5::int[]) = 0
+                    OR f.station_id = ANY($5::int[])
+                )
             """
         async with self.db.get_conn() as conn:
             return await conn.fetchrow(
                 q,
                 user_id,
                 date_from,
-                date_to
+                date_to,
+                station_ids
             )
 
     async def get_full_network_cost_structure(
@@ -227,6 +202,7 @@ class FinanceDB:
         user_id: int,
         date_from: datetime | None = None,
         date_to: datetime | None = None,
+        station_ids:list[int]=None,
         mode: str = 'opex'
         ) -> Record:    
         q = """
@@ -248,6 +224,10 @@ class FinanceDB:
                     AND ($2::timestamp IS NULL or f.expense_date >= $2)
                     AND ($3::timestamp IS NULL or f.expense_date < $3)
                     AND mode = $4
+                    AND  (
+                        cardinality($5::int[]) = 0
+                        OR f.station_id = ANY($5::int[])
+                    )
             ),
             commission_agg AS (
                 SELECT
@@ -258,6 +238,10 @@ class FinanceDB:
                 WHERE cs.user_id = $1
                     AND ($2::timestamp IS NULL OR cs.start_ts >= $2)
                     AND ($3::timestamp IS NULL OR cs.start_ts < $3)
+                    AND  (
+                        cardinality($5::int[]) = 0
+                        OR cs.station_id = ANY($5::int[])
+                    )
             )
             SELECT
                 f_agg.electricity_compensation,
@@ -276,7 +260,8 @@ class FinanceDB:
                 user_id,
                 date_from,
                 date_to,
-                mode
+                mode,
+                station_ids
             )
 
 

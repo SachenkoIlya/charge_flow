@@ -1,5 +1,5 @@
 from backend.api.routers.admin.companies.db import UserRepositoryDB
-from backend.api.routers.dashboard.stats.db import StatsDB
+from backend.legacy.stats.db import StatsDB
 from core.base_db import Base
 
 

@@ -3,7 +3,7 @@ from datetime import datetime
 from backend.api.routers.dashboard.finance.service.charts.accumulated_cash_flow import CashFlowHistory
 from backend.api.routers.dashboard.finance.service.charts.network_cost_structure import NetworkCostStructureCharts
 from backend.api.routers.dashboard.finance.service.conext import PeriodContext
-from backend.core.gather_named import gather_named
+from backend.utils.gather_named import gather_named
 from core.logger.logger import logger
 from asyncpg import Record
 

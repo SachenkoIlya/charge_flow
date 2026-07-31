@@ -1,8 +1,10 @@
+from backend.api.routers.dashboard.summary.service.charts import Charts
 from backend.api.routers.widget.charts.db import ChartsDB
 from core.base_db import Base
 from datetime import datetime
-from backend.api.routers.dashboard.summary.service.charts import _normalize_metrics_chart
-from backend.core.period_date import (
+
+# from backend.api.routers.dashboard.summary.service.charts import _normalize_metrics_chart
+from backend.utils.period_date import (
     get_period_days,
     get_date_expr,
 )
@@ -50,7 +52,7 @@ class SummaryTimeSeries:
             date_to, 
             date_expr
         )
-        result =  _normalize_metrics_chart(group_by=group_by, rows=rows)
+        result =  Charts._normalize_metrics_chart(group_by=group_by, rows=rows)
         result['date_range'] = {
             'period_mode': None,
             'group_by': group_by,

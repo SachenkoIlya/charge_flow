@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends
-from backend.api.routers.dashboard.manager import ManagerWidget
+from backend.manager.widget import ManagerWidget
 from backend.api.routers.widget.tables.schemas import TablesRequestSchema
 from backend.dependencies.get_manager import get_current_token, get_widget
 

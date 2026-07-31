@@ -1,6 +1,6 @@
 from backend.api.routers.widget.charts.db import ChartsDB
 from datetime import datetime
-from backend.core.period_date import get_date_range_from_period
+from backend.utils.period_date import get_date_range_from_period
 from core.logger.logger import logger
 
 
@@ -98,10 +98,6 @@ class NetworkCostStructureChart:
                 key: round(float(row[key] or 0), 2)
                 for key in result
             })
-        # return {
-        #     self.chart_name: result
-        # }
-        
         result['date_range'] = {
             'date_from': date_from.strftime("%Y-%m-%d"),
             'date_to': date_to.strftime("%Y-%m-%d"),

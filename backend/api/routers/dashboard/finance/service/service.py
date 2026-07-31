@@ -1,11 +1,14 @@
 from backend.api.routers.dashboard.finance.db import FinanceDB
-from backend.api.routers.dashboard.finance.schemas import FinanceResponseModel
+from backend.api.routers.dashboard.finance.schemas.response import FinanceResponseModel
+from backend.api.routers.dashboard.finance.schemas.request import FinanceRequestModel
 from backend.api.routers.dashboard.finance.service.charts.charts import  FinanceChartsService
 from backend.api.routers.dashboard.finance.service.conext import PeriodContext
 from backend.api.routers.dashboard.finance.service.normalize import FinanceMetricsService
 from core.base_db import Base
-from backend.core.gather_named import gather_named
-from backend.core.period_date import get_date_range_from_period
+from backend.utils.gather_named import gather_named
+from backend.utils.period_date import get_date_range_from_period
+from datetime import datetime
+from copy import deepcopy
 
 class MetricFinance:
     """
@@ -30,13 +33,74 @@ class MetricFinance:
     """
     def __init__(self, base_db: "Base"):
         self.fin_db = FinanceDB(base_db)
-        self.metrics_service = FinanceMetricsService(self.fin_db)
+        self.metrics = FinanceMetricsService(self.fin_db)
         self.charts = FinanceChartsService(self.fin_db)
+
+        self._handlers  = {
+            'metrics': self.metrics.get_metrics,
+            'investment': self.metrics.get_investment_metrics,
+            'charts': self.charts.build_charts,
+            'date_range': self.metrics.get_date_range
+        }
+
+    def build_response(
+            self,
+            result: dict, 
+            mask:str="%Y-%m-%d %H:%M:%S"
+        ) -> dict:
+            """
+            Сформировать итоговый ответ с финансовыми метриками.
     
+            Метод принимает результат параллельного выполнения запросов,
+            добавляет информацию о периоде и рассчитывает производные показатели:
+            OPEX, CAPEX, EBITDA, чистую прибыль и денежный поток.
+    
+            Args:
+                result (dict):
+                    Словарь с исходными данными:
+                    - metrics: основные метрики;
+                    - opex: операционные расходы;
+                    - capex: капитальные расходы.
+    
+                period (str):
+                    Название выбранного периода.
+    
+                date_from (datetime | None):
+                    Начальная дата периода.
+    
+                date_to (datetime | None):
+                    Конечная дата периода.
+    
+            Returns:
+                dict:
+                    Подготовленный ответ с финансовыми метриками и диапазоном дат.
+            """
+            prepare_result = deepcopy(result)
+            date_range = prepare_result.get('date_range')
+    
+            date_from = date_range.get('date_from')
+            date_to = date_range.get('date_to')
+            
+            date_from = datetime.strptime(date_from, mask) if date_from else None
+            date_to = datetime.strptime(date_to, mask) if date_from else None
+
+            financial_indicators, capex_total_amount = self.metrics.calculate_financial_indicators(prepare_result)
+            payback_period = self.metrics.calculate_payback_period(
+                net_profit=financial_indicators.get('net_profit'),
+                capex_total_amount=capex_total_amount,
+                date_from=date_from,
+                date_to=date_to
+            )
+            prepare_result['metrics'].update({
+                **financial_indicators,
+                'payback_period': payback_period
+            })
+            return prepare_result
+
     async def get_metrics(
         self, 
         user_id: int, 
-        period: str
+        payload: FinanceRequestModel
     ) -> FinanceResponseModel:
         """
         Получить финансовые показатели пользователя за указанный период.
@@ -58,38 +122,20 @@ class MetricFinance:
                     - денежный поток;
                     - информацию о выбранном периоде.
         """
-        date_from, date_to = get_date_range_from_period(period)
-
+        date_from, date_to = get_date_range_from_period(payload.period)
         ctx = PeriodContext(
             user_id=user_id,
             date_from=date_from,
-            date_to=date_to
+            date_to=date_to,
+            period=payload.period,
+            station_ids=payload.station_ids
         )
-
-        data = {
-            'metrics': self.metrics_service.get_metrics(
-                user_id=user_id,
-                date_from=date_from,
-                date_to=date_to
-            ),
-            'investment': self.metrics_service.get_investment_metrics(
-                user_id=user_id,
-                date_from=date_from,
-                date_to=date_to,
-            ),
-            'charts': self.charts.build_charts(
-                ctx=ctx
-            ),
-            'date_range': self.metrics_service.get_date_range(
-                date_from=date_from,
-                date_to=date_to,
-                period=period,
-                user_id=user_id,
-            ),
+        tasks = {
+            task: func(ctx)
+            for task, func in self._handlers.items()
         }
-
-        result = await gather_named(data)
-        return self.metrics_service.build_response(
+        result = await gather_named(tasks)
+        return self.build_response(
             result=result,
         )
     

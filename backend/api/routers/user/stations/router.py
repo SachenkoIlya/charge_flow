@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from fastapi import Depends
 from backend.api.routers.user.stations.schemas import StationSchemas
-from backend.api.routers.dashboard.manager import ManagerFinance
+from backend.manager.finance import ManagerFinance
 from backend.dependencies.get_manager import get_current_token, get_merics_investment
 
 

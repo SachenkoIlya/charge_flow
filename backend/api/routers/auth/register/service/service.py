@@ -1,6 +1,5 @@
-from backend.schemas.users import UserCreateRequest
+from backend.api.routers.auth.register.schemas.request import UserCreateRequest
 from core.security.security import security
-from core.base_db import Base
 from backend.api.routers.auth.users import Users
 from core.logger.logger import logger
 from fastapi import HTTPException, status

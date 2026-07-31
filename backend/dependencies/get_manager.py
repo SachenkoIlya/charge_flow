@@ -1,14 +1,12 @@
 from fastapi import Request
-from backend.api.routers.auth.manager import UserAuthManager
-from backend.api.routers.dashboard.manager import (
-    ManagerMetrics, 
-    ManagerFinance, 
-    ManagerSystem,
-    ManagerDashboardMetrics,
-    ManagerWidget
-)
 
-from backend.services.manager import Manager
+from backend.manager.metrics import ManagerMetrics
+from backend.manager.finance import ManagerFinance
+from backend.manager.system import ManagerSystem
+from backend.manager.dashboard import ManagerDashboardMetrics
+from backend.manager.widget import ManagerWidget
+from backend.manager.user import UserAuthManager
+
 from typing import cast
 from fastapi import Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
@@ -26,14 +24,14 @@ def get_current_token(
     return r
 
 
-def get_manager(request: Request) -> Manager:
-    """
-    Получение менеджера базы данных из состояния приложения.
+# def get_manager(request: Request) -> Manager:
+#     """
+#     Получение менеджера базы данных из состояния приложения.
 
-    Используется как dependency (Depends) в FastAPI для доступа к базе данных
-    в обработчиках запросов.
-    """
-    return cast(Manager, request.app.state.db_manager)
+#     Используется как dependency (Depends) в FastAPI для доступа к базе данных
+#     в обработчиках запросов.
+#     """
+#     return cast(Manager, request.app.state.db_manager)
 
 def get_user_create(request: Request) -> UserAuthManager:
     return cast(UserAuthManager, request.app.state.auth)

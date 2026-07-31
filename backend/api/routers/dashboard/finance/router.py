@@ -1,9 +1,11 @@
 from fastapi import APIRouter, Depends
 
-from backend.api.routers.dashboard.finance.schemas import FinanceFilterSchema, FinanceResponseModel
+from backend.api.routers.dashboard.finance.schemas.request import FinanceRequestModel
+from backend.api.routers.dashboard.finance.schemas.response import FinanceResponseModel
 from backend.dependencies.get_manager import get_current_token, get_dashboard
-from backend.api.routers.dashboard.manager import ManagerDashboardMetrics
+from backend.manager.dashboard import ManagerDashboardMetrics
 from core.logger.logger import logger
+
 
 ENDPOINT = '/finance'
 DESCRIPTION = (
@@ -22,7 +24,7 @@ router = APIRouter(prefix='/v1/dashboard', tags=['dashboard'])
     
     response_model=FinanceResponseModel)
 async def get_finance(
-    payload: FinanceFilterSchema,
+    payload: FinanceRequestModel,
     dash: ManagerDashboardMetrics=Depends(get_dashboard),
     credentials=Depends(get_current_token),
 ):
@@ -42,11 +44,10 @@ async def get_finance(
             где все пустые значения (None) будут автоматически исключены.
     """
     user_id = credentials.get('user_id')
-    logger.debug(f"звшли в finance endpoint")
     try:
         return await dash.finance.get_metrics(
             user_id=user_id, 
-            period=payload.period
+            payload=payload
         )
     except Exception as e:
         logger.exception(str(e))

@@ -3,7 +3,7 @@ from backend.api.routers.widget.charts.db import ChartsDB
 from backend.api.routers.widget.charts.schemas import ChartsRequestSchema
 from backend.api.routers.widget.charts.service.chart_registry import CHART_REGISTRY 
 from core.logger.logger import logger
-from backend.core.gather_named import gather_named  
+from backend.utils.gather_named import gather_named  
 import asyncio
 from typing import Any
 

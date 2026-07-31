@@ -1,9 +1,8 @@
 from fastapi import APIRouter, Depends
-from backend.api.routers.dashboard.summary.schemas import SummaryResponseModel
+from backend.api.routers.dashboard.summary.schemas.response import SummaryResponseModel
+from backend.api.routers.dashboard.summary.schemas.request import SummaryRequestModel
 from backend.dependencies.get_manager import get_current_token, get_dashboard
-from backend.core.date_insurance import date_insurance
-from backend.core.schemas import DashboardFilterSchema
-from backend.api.routers.dashboard.manager import ManagerDashboardMetrics
+from backend.manager.dashboard import ManagerDashboardMetrics   
 
 ENDPOINT = '/summary'
 DESCRIPTION = "Возвращает KPI, график динамики, рейтинг станций и сравнение с предыдущим периодом."
@@ -19,7 +18,7 @@ router = APIRouter(prefix='/v1/dashboard', tags=['dashboard'])
     response_model_exclude_none=True
     )
 async def get_summary(
-    payload: DashboardFilterSchema,
+    payload: SummaryRequestModel,
     dash: ManagerDashboardMetrics=Depends(get_dashboard),
     credentials = Depends(get_current_token),
 ):  

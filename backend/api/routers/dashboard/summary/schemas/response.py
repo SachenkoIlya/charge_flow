@@ -33,10 +33,6 @@ class StationModel(BaseModel):
 
 
 class MarginModel(BaseModel):
-    # total_revenue: Optional[float] = Field(
-    #     description="Общая выручка от зарядных сессий до распределения между владельцем станции и оператором"
-    # )
-
     station_owner_revenue: Optional[float] = Field(
         description="Доход владельца станции после вычета комиссии оператора"
     )
@@ -116,7 +112,8 @@ class MetricsBlockModel(BaseModel):
     metrics: MetricsModel = Field(
         description="Основные финансовые и эксплуатационные показатели"
     )
-    station: StationModel = Field(
+    station: Optional[StationModel] = Field(
+        default=None,
         description="Статистика подключённых станций"
     )
     utilisation: Optional[float] = Field(

@@ -1,5 +1,5 @@
 from abc import ABC
-from backend.core.gather_named import gather_named
+from backend.utils.gather_named import gather_named
 from core.base_db import Base
 from pydantic import BaseModel
 from core.logger.logger import logger

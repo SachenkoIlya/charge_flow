@@ -1,29 +1,19 @@
-from backend.api.routers.auth.register.schemas import RegisterUserResponse
-from backend.dependencies.get_manager import get_manager, get_user_create
-from backend.schemas.users import UserCreateRequest
-# from backend.database.manager import Manager
-from backend.api.routers.auth.manager import UserAuthManager
-from core.logger.logger import make_logger
-
-
-from fastapi import APIRouter, HTTPException, status
+from backend.api.routers.auth.register.schemas.response import UserCreateResponse
+from backend.api.routers.auth.register.schemas.request import UserCreateRequest
+from backend.manager.user import UserAuthManager
+from backend.dependencies.get_manager import  get_user_create
+from fastapi import APIRouter
 from fastapi import Depends
-import asyncpg
-
-
-logger = make_logger(__name__, use_telegram=False)
 
 ENDPOINT = '/register'
-
 router = APIRouter(
     prefix="/v1/user/auth",
     tags=["user-auth"],
 )
 
-
 @router.post(
     ENDPOINT,
-    response_model=RegisterUserResponse,
+    response_model=UserCreateResponse,
     summary="Регистрация пользователя",
     description=(
         "Создаёт нового пользователя. "
@@ -33,9 +23,7 @@ router = APIRouter(
 async def register(
     data: UserCreateRequest,
     auth: UserAuthManager=Depends(get_user_create),
-    # db_manager: Manager=Depends(get_manager)
 ):
-    # region DOC: register
     """
       Args:
         user (UserCreate): Данные пользователя для регистрации:
@@ -67,25 +55,16 @@ async def register(
             При других ошибках:
                 {
                     "status": "error",
-                    "user_id": None,
                     "error": [str(error)]
-                }
-
+                
     Raises:
-        asyncpg.exceptions.UniqueViolationError:
-            Если пользователь с таким email уже существует.
-
-    Notes:
         - Пароль перед сохранением хешируется.
         - Email должен быть уникальным.
         - Ошибки логируются через logger.
     
-    """
-    # endregion
-    """
     Регистрирует нового пользователя.
 
-    Router отвечает только за приём HTTP-запроса,
+    Router отвеает только за приём HTTP-запроса,
     получение зависимостей и вызов сервисного слоя.
     """
     return await auth.registration.create(data=data)
