@@ -1,4 +1,3 @@
-# from backend.legacy.stats.service.metrics import MetricStats
 from backend.api.routers.admin.companies.service.metrics import UserRepositoryMetrics
 from core.base_db import Base
 
