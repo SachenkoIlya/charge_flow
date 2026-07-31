@@ -76,9 +76,9 @@ def get_data_from_map(page_key: str):
 
 async def render_title(
     label: str,
-    current_period: str,
-    сomparison_period: str,
     page_key: str,
+    current_period: str='',
+    сomparison_period: str='',
     stations: dict=None,
     on_date_change=None,
 ):

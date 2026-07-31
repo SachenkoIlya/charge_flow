@@ -81,7 +81,7 @@ class Panel(BasePanel):
         with ui.column().classes('w-full max-w-[1600px] mx-auto gap-2'):
             await render_title(
                 label='Финансы и прибыльность',
-                label_aggre='Finance & Profitability',
+                # label_aggre='Finance & Profitability',
                 stations=self.stations,
                 page_key=self.page_key,
                 on_date_change=self.on_date_change 
