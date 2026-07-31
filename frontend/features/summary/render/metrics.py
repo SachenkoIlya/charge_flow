@@ -151,7 +151,7 @@ def get_metric_delta(key:str, data:dict) -> str:
     if key == "stations":
         return str(
             requested["station"]["connected_stations"]
-            - comparable["station"]["connected_stations"]
+            - requested["station"]["connected_stations"]
         )
     if key in {
         "total_revenue",
