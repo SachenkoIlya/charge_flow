@@ -1,10 +1,10 @@
 from nicegui import ui
 
 def render_pnl_table(rows: list[dict], height:int=600):
+        # h-[{height}px]
        with ui.card().classes(
         f'''
             w-full
-            h-[{height}px]
             bg-[#101923]/90
             border border-[#1f2937]
             rounded-xl
