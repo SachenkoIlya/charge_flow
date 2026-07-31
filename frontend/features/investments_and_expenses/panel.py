@@ -73,8 +73,8 @@ class Panel(BasePanel):
         
         with ui.element('div').style('zoom: 1'):
             await render_title(
-                label='CAPEX & OPEX',
-                label_aggre='Инвестиции и операционные расходы',
+                label='Инвестиционные и операционные расходы',
+                # label_aggre='Инвестиции и операционные расходы',
                 page_key=self.page_key,
                 on_date_change=self.on_date_change 
             )

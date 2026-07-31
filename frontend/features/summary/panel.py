@@ -85,7 +85,7 @@ class Panel(BasePanel):
 
         current_to = (
             datetime.strptime(
-                comparable_period['date_to'],
+                requested_period['date_to'],
                 '%Y-%m-%d %H:%M:%S'
             ) - timedelta(days=1)
         ).strftime('%d.%m.%Y')
