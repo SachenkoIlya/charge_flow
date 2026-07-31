@@ -14,11 +14,12 @@ def render_finance_charts(
 
     ):
     with ui.grid(columns=3).classes('w-full gap-4 mt-2'):
+        if pnl_table is not None:
+            render_pnl_table(pnl_table)
         if cash_flow_history is not None:
             render_cashflow_chart(cash_flow_history)
         if break_even is not None:
             render_break_even_chart(break_even)
         if cost_structure is not None:
             render_cost_structure_chart(cost_structure)
-        if pnl_table is not None:
-            render_pnl_table(pnl_table)
+        
