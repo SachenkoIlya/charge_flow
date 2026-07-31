@@ -56,7 +56,8 @@ class Panel(BasePanel):
             f"{comparable_from} — {comparable_to}"
         )
 
-        with ui.column().classes('w-full max-w-[1600px] mx-auto gap-3'):
+        # with ui.column().classes('w-full max-w-[1600px] mx-auto gap-3'):
+        with ui.element('div').style('zoom: 1'):
             await render_title(
                 label='Оперативная Сводка',
                 current_period=current_period,
