@@ -59,7 +59,7 @@ def render_pnl_table(rows: list[dict], height:int=600):
                         '''
                         min-w-[1400px]
                         text-sm text-gray-200
-                        py-2
+                        py-4
                         border-b border-[#141c28]
                         flex-nowrap
                         '''
