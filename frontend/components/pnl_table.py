@@ -1,6 +1,6 @@
 from nicegui import ui
 
-def render_pnl_table(rows: list[dict], height:int):
+def render_pnl_table(rows: list[dict], height:int=470):
        with ui.card().classes(
         f'''
             w-full

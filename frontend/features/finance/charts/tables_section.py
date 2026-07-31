@@ -12,11 +12,11 @@ def render_tables_section(rows: list[dict], plan_rows: list[dict], height:int=47
     ):
         render_pnl_table(rows=rows, height=height)
 
-        render_plan_fact_table(
-            title='План-факт',
-            rows=plan_rows,
-            height=height
-        )
+        # render_plan_fact_table(
+        #     title='План-факт',
+        #     rows=plan_rows,
+        #     height=height
+        # )
 
 
 PNL_ROWS = [
