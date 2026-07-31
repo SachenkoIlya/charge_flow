@@ -33,64 +33,6 @@ class Panel(BasePanel):
     endpoints_name: str = 'finance'
     page_key = 'finance'
 
-    
-    async def render(self):
-        await self.load_station()
-
-        page = app.storage.user.setdefault('pages', {})
-        page_state = page.setdefault(self.page_key, {})
-        
-        data = get_data_from_map(self.page_key)
-        if data and page_state.get('toggle_value') is None:
-            page_state['toggle_value'] = data['default_value']
-       
-        self.apply_filters()
-        loaded = await self.load_data()
-        if not loaded:
-            return
-        
-        role = self.user.get('role')
-
-        with ui.element('div').classes(
-            # """
-                # w-screen
-                # h-screen
-                # flex
-                # bg-gradient-to-br
-                # from-[#050b12]
-                # via-[#08111b]
-                # to-[#0b1724]
-                # text-white
-                # overflow-hidden
-            # """
-            """
-            w-full
-            h-full
-            min-h-screen
-            flex
-            bg-gradient-to-br
-            from-[#050b12]
-            via-[#08111b]
-            to-[#0b1724]
-            text-white
-            overflow-hidden
-            """
-        ):
-            render_sidebar(role=role)
-
-            with ui.element('main').classes(
-            """
-                flex-1
-                h-screen
-                overflow-hidden
-                px-10
-                py-2
-            """
-            ) as self.container:
-                await self.render_content()
-
-  
-
     async def render_content(self):
         charts = self.data['charts']
 

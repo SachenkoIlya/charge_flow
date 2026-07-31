@@ -27,86 +27,30 @@ class Panel(BasePanel):
     endpoints_name: str = 'summary'
     page_key = 'summary'
 
-    async def render(self):
-        await self.load_station()
-              
-        page = app.storage.user.setdefault('pages', {})
-        page_state = page.setdefault(self.page_key, {})
-              
-        data = get_data_from_map(self.page_key)
-        if data and page_state.get('toggle_value') is None:
-            page_state['toggle_value'] = data['default_value']
-             
-        self.apply_filters()
-        loaded = await self.load_data()
-        if not loaded:
-            return
-              
-        
-        role = self.user.get('role')
-
-        with ui.element('div').classes(
-            """
-                w-full
-                h-full
-                min-h-screen
-                flex
-                bg-gradient-to-br
-                from-[#050b12]
-                via-[#08111b]
-                to-[#0b1724]
-                text-white
-                overflow-hidden
-            """
-        ):
-            render_sidebar(role=role)
-
-            with ui.element('main').classes(
-                """
-                    flex-1
-                    min-h-screen
-                    overflow-y-auto
-                    overflow-x-hidden
-                    px-10
-                    py-2
-                """
-            ) as self.container:
-                await self.render_content()
-
-
-
+    @staticmethod
+    def format_date(
+        dates:str,
+        date_str: str="%d.%m.%Y",
+        date_time_str:str="%Y-%m-%d %H:%M:%S"
+    ):
+        return datetime.strptime(
+            dates, date_time_str
+        ).strftime(date_str)
+    
     async def render_content(self):
         requested_period = self.data['requested_period']
         comparable_period = self.data['comparable_period']
 
-        current_from = datetime.strptime(
-            requested_period['date_from'],
-            '%Y-%m-%d %H:%M:%S'
-        ).strftime('%d.%m.%Y')
-
-        current_to = (
-            datetime.strptime(
-                requested_period['date_to'],
-                '%Y-%m-%d %H:%M:%S'
-            ) - timedelta(days=1)
-        ).strftime('%d.%m.%Y')
-        
-        comparable_from = datetime.strptime(
-            comparable_period['date_from'],
-            '%Y-%m-%d %H:%M:%S'
-        ).strftime('%d.%m.%Y')
-
-        comparable_to = (
-            datetime.strptime(
-                comparable_period['date_to'],
-                '%Y-%m-%d %H:%M:%S'
-            ) - timedelta(days=1)
-        ).strftime('%d.%m.%Y')
+        current_from = self.format_date(requested_period['date_from'])
+        current_to = self.format_date(requested_period['date_to'])
+        comparable_from = self.format_date(comparable_period['date_from'])
+        comparable_to = self.format_date(comparable_period['date_to'])
 
         current_period = (
             f"Текущий период: "
               f"{current_from} — {current_to}"
         )
+
         сomparison_period = (
             f"Сравниваемый период: "
             f"{comparable_from} — {comparable_to}"

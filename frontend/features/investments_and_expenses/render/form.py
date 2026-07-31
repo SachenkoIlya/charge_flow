@@ -64,28 +64,6 @@ async def final_submit(
     return response
     
 
-def prepare_station(selected_station: list[dict]) -> dict:
-    return  {
-        str(station_id): f"{s['label']} · {station_key}"
-        for s in selected_station
-        for station_id, station_key 
-        in zip(
-            s['station_ids'],
-            s['station_keys']
-        )
-    }
-
-async def get_selected_station(
-    request: Request, 
-    endpoint_name:str='stations'
-) -> list[dict]:
-    
-    selected_station = await frontend_api(
-        endpoint_name=endpoint_name,
-        request=request,
-    )
-    return prepare_station(selected_station)
-
 
 def resolve_expense_fields(payload: dict):
     expense_fields = [
@@ -101,11 +79,14 @@ def resolve_expense_fields(payload: dict):
 
 
 
-async def render_form(data: dict[str, list], request: Request, mode:str = 'opex'):
+async def render_form(
+    data: dict[str, list], 
+    request: Request, 
+    selected_station: dict,
+    mode:str = 'opex'
+):
     inputs = {}
     category = data.get(mode)
-
-    selected_station = await get_selected_station(request=request)
 
     async def submit():
         payload = {
