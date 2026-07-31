@@ -5,6 +5,11 @@ from frontend.components.metric_card import render_metrics
 from frontend.features.base.panel import BasePanel
 
 from frontend.features.finance.charts.render_charts import render_finance_charts
+from frontend.features.finance.charts.tables_section import (
+    PLAN_FACT_ROWS, 
+    PNL_ROWS, 
+    render_tables_section
+)
 from frontend.features.finance.render.metrics import (
     FINANCE_METRICS,
     get_metrics_value,
@@ -95,15 +100,15 @@ class Panel(BasePanel):
             )
 
             render_finance_charts(
-                cash_flow_history=charts['cash_flow_history'],
-                break_even=BREAK_EVEN_METRICS,
+                # cash_flow_history=charts['cash_flow_history'],
+                # break_even=BREAK_EVEN_METRICS,
                 cost_structure=charts['network_cost_structure']
             )
             
-            # render_tables_section(
-            #     rows=PNL_ROWS,
-            #     plan_rows=PLAN_FACT_ROWS
-            # )
+            render_tables_section(
+                rows=PNL_ROWS,
+                plan_rows=PLAN_FACT_ROWS
+            )
 
 
 
