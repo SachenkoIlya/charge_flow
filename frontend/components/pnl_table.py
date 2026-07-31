@@ -14,7 +14,7 @@ def render_pnl_table(rows: list[dict], height:int=600):
             overflow-hidden
         '''
     ):
-        ui.label('P&L по станциям').classes('text-base font-bold mb-3')
+        # ui.label('P&L по станциям').classes('text-base font-bold mb-3')
         with ui.element('div').classes(
             'w-full overflow-x-auto'
         ):
