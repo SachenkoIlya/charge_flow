@@ -9,21 +9,22 @@ from frontend.components.drawer import render_sidebar
 from frontend.components.get_station import _get_selected_station
 from frontend.components.render_title import get_data_from_map
 from nicegui import ui
-
+from typing import ClassVar
 
 class BasePanel(ABC):
     user: dict
-    page_key = str
-    endpoints_name = str
+    page_key: str
+    endpoints_name: str
     stations: dict[int, str] = {}
     container = None
+
+    content_scale: ClassVar[float] = 0.92
     
     def __post_init__(self):
 
         self.data = None
         today = datetime.now().strftime("%d.%m.%Y")
 
-          
         pages = app.storage.user.setdefault('pages', {})
         page_state = pages.setdefault(self.page_key, {
             # 'date_from': today,
@@ -34,7 +35,6 @@ class BasePanel(ABC):
 
         context = app.storage.user.setdefault('context', {})
         context.setdefault('company_id', None)
-
 
         app.storage.user['pages'] = pages
         app.storage.user['context'] = context
@@ -130,7 +130,7 @@ class BasePanel(ABC):
         page_state = page.setdefault(self.page_key, {})
                 
         data = get_data_from_map(self.page_key)
-        
+
         if data and page_state.get('toggle_value') is None:
             page_state['toggle_value'] = data['default_value']
                
@@ -165,7 +165,12 @@ class BasePanel(ABC):
                 py-2
                 """
             ) as self.container:
-                await self.render_content()
+                with ui.element('div').classes(
+                    'w-full h-full'
+                ).style(
+                    f'zoom: {self.content_scale};'
+                ):
+                    await self.render_content()
 
 
   
