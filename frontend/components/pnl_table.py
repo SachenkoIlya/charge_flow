@@ -22,17 +22,16 @@ def render_pnl_table(rows: list[dict], height:int=600):
                 'min-w-[1500px]'
             ):
                 columns = [
-                    ('Станция', 'station', 220),
-                    ('Выручка мес.', 'revenue_month', 150),
-                    ('Э/энергия ₽', 'energy_cost', 140),
-                    ('кВт⋅ч', 'kwh', 110),
-                    ('Аренда фикс.', 'rent_fixed', 130),
-                    ('Аренда итого', 'rent_total', 140),
-                    ('EBITDA', 'ebitda', 130),
-                    ('Прибыль', 'profit', 130),
-                    ('Маржа', 'margin', 100),
+                    ('Станция', 'station', 300),
+                    ('Выручка', 'revenue', 150),
+                    ('Электроэнергия', 'energy_cost', 160),
+                    ('Валовая прибыль', 'gross_profit', 170),
+                    ('OPEX', 'opex', 140),
+                    ('EBITDA', 'ebitda', 140),
+                    ('Налоги', 'taxes', 130),
+                    ('Чистая прибыль', 'net_profit', 170),
+                    ('Маржа', 'margin', 110),
                 ]
-
                 with ui.row().classes(
                     '''
                     min-w-[1400px]
@@ -52,10 +51,12 @@ def render_pnl_table(rows: list[dict], height:int=600):
                 for row in rows:
                     with ui.row().classes(
                         '''
-                        min-w-[1400px]
-                        text-sm text-gray-200
+                        w-full
+                        text-sm 
+                        text-gray-200
                         py-4
-                        border-b border-[#141c28]
+                        border-b
+                        border-[#141c28]
                         flex-nowrap
                         '''
                     ):
