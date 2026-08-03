@@ -9,9 +9,9 @@ def render_opex_details(data: dict) -> None:
         'service_maintenance': 'Сервисное обслуживание',
         'internet_and_connection': 'Интернет и связь',
         'insurance': 'Страхование',
-        'taxes': 'Налоги',
         'other_expenses': 'Прочие расходы',
     }
+    
     rows = [
         {
             'key': key,

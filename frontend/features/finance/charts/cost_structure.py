@@ -3,7 +3,7 @@ from nicegui import ui
 from frontend.components.chart_card import chart_card
 
 
-def render_cost_structure_chart(cost_structure:dict):
+def render_opex_structure(cost_structure:dict):
     chart = prepar_charts(cost_structure)
     with chart_card():
         ui.label('Структура затрат opex').classes('text-sm font-bold mb-2')
@@ -12,16 +12,15 @@ def render_cost_structure_chart(cost_structure:dict):
         )
 
 
-def prepar_charts(cost_structure: dict):
+def prepar_charts(opex: dict):
     data = [
-        {'value': cost_structure['electricity_compensation'], 'name': 'Электроэнергия'},
-        {'value': cost_structure['rent_payment'], 'name': 'Аренда'},
-        {'value': cost_structure['operator_commission'], 'name': 'Комиссия оператора'},
-        {'value': cost_structure['service_maintenance'], 'name': 'Сервисное обслуживание'},
-        {'value': cost_structure['internet_and_connection'], 'name': 'Интернет'},
-        {'value': cost_structure['insurance'], 'name': 'Страхование'},
-        {'value': cost_structure['other_expenses'], 'name': 'Прочие расходы'},
-        {'value': cost_structure['taxes'], 'name': 'Налоги'},
+        {'value': opex['electricity_compensation'], 'name': 'Электроэнергия'},
+        {'value': opex['rent_payment'], 'name': 'Аренда'},
+        {'value': opex['operator_commission'], 'name': 'Комиссия оператора'},
+        {'value': opex['service_maintenance'], 'name': 'Сервисное обслуживание'},
+        {'value': opex['internet_and_connection'], 'name': 'Интернет и связь'},
+        {'value': opex['insurance'], 'name': 'Страхование'},
+        {'value': opex['other_expenses'], 'name': 'Прочие расходы'},
     ]
 
     data = [x for x in data if x['value'] > 0]

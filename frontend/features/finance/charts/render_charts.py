@@ -4,7 +4,7 @@ from frontend.components.render_opex_details import render_opex_details
 from frontend.components.pnl_table import render_pnl_table
 from frontend.features.finance.charts.cashflow import render_cashflow_chart
 from frontend.features.finance.charts.break_even import render_break_even_chart
-from frontend.features.finance.charts.cost_structure import render_cost_structure_chart
+from frontend.features.finance.charts.cost_structure import render_opex_structure
 
 
 # def render_finance_charts(
@@ -69,7 +69,7 @@ def render_finance_charts(
         ):
             if opex is not None:
                 with ui.element('div').classes('min-w-0 h-full'):
-                    render_cost_structure_chart(opex)
+                    render_opex_structure(opex)
 
                 with ui.element('div').classes(
                     'lg:col-span-2 min-w-0 h-full'
