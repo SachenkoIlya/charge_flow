@@ -59,7 +59,6 @@ def prepar_charts(cost_structure: dict):
                 'top': '54%',
                 'silent': True,
                 'style': {
-                    'text': 'Всего OPEX',
                     'fill': '#9ca3af',
                     'fontSize': 13,
                     'fontWeight': 500,
@@ -73,8 +72,8 @@ def prepar_charts(cost_structure: dict):
                 'name': 'OPEX расходы',
                 'type': 'pie',
 
-                'radius': ['60%', '80%'],
-                'center': ['50%', '50%'],
+                'radius': ['65%', '95%'],
+                'center': ['50%', '52%'],
 
                 'label': {
                     'show': False,
