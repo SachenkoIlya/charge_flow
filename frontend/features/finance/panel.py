@@ -36,7 +36,11 @@ class Panel(BasePanel):
     async def render_content(self):
         charts = self.data['charts']
         opex  = self.data['investment']['opex']
-        # with ui.element('div').style('zoom: 0.9'):
+
+        network_cost_structure = charts['network_cost_structure']
+        operator_commission = network_cost_structure['operator_commission']
+        opex['operator_commission'] = operator_commission
+
         with ui.column().classes('w-full max-w-[1600px] mx-auto gap-2'):
             await render_title(
                 label='Финансы и прибыльность',
@@ -57,7 +61,7 @@ class Panel(BasePanel):
                 # cash_flow_history=charts['cash_flow_history'],
                 # break_even=BREAK_EVEN_METRICS,
                 opex=opex,
-                cost_structure=charts['network_cost_structure'],
+                cost_structure=network_cost_structure,
                 pnl_table=PNL_ROWS
             )
             
