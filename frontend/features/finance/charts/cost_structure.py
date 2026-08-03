@@ -23,78 +23,86 @@ def prepar_charts(cost_structure: dict):
     ]
 
     data = [x for x in data if x['value'] > 0]
+    total = sum(d['value'] for d in data)
+
+    formatted_total = f'{total:,.0f}'.replace(',', ' ')
 
     return {
         'backgroundColor': 'transparent',
 
         'tooltip': {
             'trigger': 'item',
-            
             'formatter': (
                 '<b>{b}</b><br/>'
                 'Сумма: {c} ₽<br/>'
                 'Доля: {d}%'
-            ).replace('{c}', '{c}')
+            ),
         },
 
-        # 'legend': {
-        #     'show': True,
-        #     'orient': 'vertical',
-        #     'right': 5,            # Увеличили отступ от края, чтобы текст не прижимался
-        #     'top': 15,
-        #     'selectedMode': False,
-            
-        #     # 1. Делаем цветные квадратики больше (было 12)
-        #     'itemWidth': 18,        
-        #     'itemHeight': 18,       
-        #     'itemGap': 15,          # Добавили расстояние МЕЖДУ строками легенды, чтобы они не слипались
-            
-        #     'textStyle': {
-        #         'color': '#9ca3af',
-        #         'fontSize': 14,     # 2. Увеличили размер шрифта текста (дефолт обычно 12)
-        #         'fontWeight': '500' # Сделали текст чуть плотнее, чтобы лучше читался
-        #     }
-        # },
+        'graphic': [
+            {
+                'type': 'text',
+                'left': 'center',
+                'top': '43%',
+                'silent': True,
+                'style': {
+                    'text': f'{formatted_total} ₽',
+                    'fill': '#ffffff',
+                    'fontSize': 22,
+                    'fontWeight': 700,
+                    'textAlign': 'center',
+                },
+            },
+            {
+                'type': 'text',
+                'left': 'center',
+                'top': '54%',
+                'silent': True,
+                'style': {
+                    'text': 'Всего OPEX',
+                    'fill': '#9ca3af',
+                    'fontSize': 13,
+                    'fontWeight': 500,
+                    'textAlign': 'center',
+                },
+            },
+        ],
 
         'series': [
             {
                 'name': 'OPEX расходы',
                 'type': 'pie',
 
-                'radius': ['30%', '100%'],
+                'radius': ['60%', '80%'],
                 'center': ['50%', '50%'],
 
-                # подписи скрыты
                 'label': {
-                    'show': False
+                    'show': False,
                 },
 
                 'labelLine': {
-                    'show': False
+                    'show': False,
                 },
 
                 'data': data,
 
-                # красивый hover
                 'emphasis': {
                     'scale': True,
                     'scaleSize': 10,
-
                     'itemStyle': {
                         'shadowBlur': 20,
                         'shadowOffsetX': 0,
-                        'shadowColor': 'rgba(0,0,0,0.25)'
-                    }
+                        'shadowColor': 'rgba(0, 0, 0, 0.25)',
+                    },
                 },
 
                 'itemStyle': {
                     'borderRadius': 5,
-                    'borderColor': '#fff',
-                    'borderWidth': 2
+                    'borderColor': '#101923',
+                    'borderWidth': 2,
                 },
 
-                # клик по сектору
-                'selectedMode': 'single'
-            }
-        ]
+                'selectedMode': 'single',
+            },
+        ],
     }
