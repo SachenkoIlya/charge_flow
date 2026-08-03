@@ -298,7 +298,7 @@ def render_opex_details(data: dict) -> None:
             with ui.element('div').style(grid_style).classes(
                 '''
                 w-full
-                min-h-[32px]
+                min-h-[10px]
                 text-sm
                 border-b
                 border-[#141c28]
