@@ -152,9 +152,9 @@ def render_opex_details(
         text-white
     '''):
 
-        ui.label('Детализация OPEX').classes(
-            'text-sm font-bold mb-3'
-        )
+        # ui.label('Детализация OPEX').classes(
+        #     'text-sm font-bold mb-3'
+        # )
 
         # Заголовок
         with ui.element('div').style(grid_style).classes('''
