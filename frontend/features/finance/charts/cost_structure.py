@@ -19,6 +19,8 @@ def prepar_charts(cost_structure: dict):
         {'value': cost_structure['operator_commission'], 'name': 'Комиссия оператора'},
         {'value': cost_structure['service_maintenance'], 'name': 'Сервисное обслуживание'},
         {'value': cost_structure['internet_and_connection'], 'name': 'Интернет'},
+        {'value': cost_structure['insurance'], 'name': 'Страхование'},
+        {'value': cost_structure['other_expenses'], 'name': 'Прочие расходы'},
         {'value': cost_structure['taxes'], 'name': 'Налоги'},
     ]
 

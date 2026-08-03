@@ -67,9 +67,9 @@ def render_finance_charts(
         with ui.grid().classes(
             'w-full grid-cols-1 lg:grid-cols-3 gap-4 items-stretch'
         ):
-            if cost_structure is not None:
+            if opex is not None:
                 with ui.element('div').classes('min-w-0 h-full'):
-                    render_cost_structure_chart(cost_structure)
+                    render_cost_structure_chart(opex)
 
                 with ui.element('div').classes(
                     'lg:col-span-2 min-w-0 h-full'
