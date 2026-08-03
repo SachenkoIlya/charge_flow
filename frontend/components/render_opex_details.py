@@ -7,8 +7,7 @@ def render_opex_details(
     row_height:int=3
 
 ) -> None:
-    has_vertical_scroll = len(rows) > visible_rows
-    body_height = min(len(rows), visible_rows) * row_height
+   
     labels = {
         'electricity_compensation': 'Электроэнергия',
         'rent_payment': 'Аренда',
@@ -27,6 +26,9 @@ def render_opex_details(
         }
         for key, label in labels.items()
     ]
+
+    has_vertical_scroll = len(rows) > visible_rows
+    body_height = min(len(rows), visible_rows) * row_height
 
     total = sum(row['value'] for row in rows)
 
