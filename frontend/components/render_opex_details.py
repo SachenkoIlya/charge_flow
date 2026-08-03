@@ -136,8 +136,8 @@ def render_opex_details(
 
     grid_style = (
         'display:grid;'
-        'grid-template-columns: 2fr 140px 70px;'
-        'column-gap:16px;'
+        'grid-template-columns: minmax(260px, 1fr) 130px 60px;'
+        'column-gap:20px;'
         'align-items:center;'
     )
 
