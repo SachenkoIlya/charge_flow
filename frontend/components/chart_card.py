@@ -9,6 +9,6 @@ def chart_card(title: str=None):
         shadow-xl
         p-4
         text-white
-        h-[350px]
+        h-[380px]
         """
     )
