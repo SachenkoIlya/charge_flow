@@ -273,7 +273,7 @@ def render_opex_details(data: dict) -> None:
         '''
     ):
         ui.label('Детализация OPEX').classes(
-            'text-sm font-bold mb-3'
+            'text-sm font-bold mb-1'
         )
 
         # Заголовок
