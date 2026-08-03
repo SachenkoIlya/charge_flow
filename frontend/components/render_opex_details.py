@@ -229,7 +229,7 @@ from nicegui import ui
         #     ui.label('100%').classes(
         #         'text-right text-green-400'
         #     )
-        
+
 def render_opex_details(data: dict) -> None:
     labels = {
         'electricity_compensation': 'Электроэнергия',
@@ -298,7 +298,7 @@ def render_opex_details(data: dict) -> None:
             with ui.element('div').style(grid_style).classes(
                 '''
                 w-full
-                min-h-[42px]
+                min-h-[32px]
                 text-sm
                 border-b
                 border-[#141c28]
@@ -322,24 +322,24 @@ def render_opex_details(data: dict) -> None:
                     'text-right text-gray-300 whitespace-nowrap'
                 )
 
-        # Итог
-        with ui.element('div').style(grid_style).classes(
-            '''
-            w-full
-            pt-3
-            mt-1
-            text-sm
-            font-bold
-            '''
-        ):
-            ui.label('Итого OPEX')
+        # # Итог
+        # with ui.element('div').style(grid_style).classes(
+        #     '''
+        #     w-full
+        #     pt-3
+        #     mt-1
+        #     text-sm
+        #     font-bold
+        #     '''
+        # ):
+        #     ui.label('Итого OPEX')
 
-            ui.label(
-                f'{total:,.0f} ₽'.replace(',', ' ')
-            ).classes(
-                'text-right whitespace-nowrap'
-            )
+        #     ui.label(
+        #         f'{total:,.0f} ₽'.replace(',', ' ')
+        #     ).classes(
+        #         'text-right whitespace-nowrap'
+        #     )
 
-            ui.label('100%').classes(
-                'text-right text-green-400'
-            )
+        #     ui.label('100%').classes(
+        #         'text-right text-green-400'
+        #     )
