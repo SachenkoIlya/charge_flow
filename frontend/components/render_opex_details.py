@@ -1,13 +1,11 @@
 from nicegui import ui
 
-
 def render_opex_details(
     data: dict,
-    visible_rows:int=3,
-    row_height: int = 52,
-
+    visible_rows: int = 3,
+    row_height: int = 44,
 ) -> None:
-   
+
     labels = {
         'electricity_compensation': 'Электроэнергия',
         'rent_payment': 'Аренда',
@@ -17,7 +15,7 @@ def render_opex_details(
         'insurance': 'Страхование',
         'other_expenses': 'Прочие расходы',
     }
-    
+
     rows = [
         {
             'key': key,
@@ -27,30 +25,36 @@ def render_opex_details(
         for key, label in labels.items()
     ]
 
-    has_vertical_scroll = len(rows) > visible_rows
+    total = sum(row['value'] for row in rows)
     body_height = min(len(rows), visible_rows) * row_height
 
-    total = sum(row['value'] for row in rows)
+    grid_style = (
+        'display: grid; '
+        'grid-template-columns: minmax(260px, 1fr) 180px 90px; '
+        'column-gap: 24px;'
+    )
 
     with ui.card().classes(
         '''
         w-full
-        h-full
         bg-[#101923]/90
         border border-[#1f2937]
         rounded-xl
         shadow-xl
         p-4
         text-white
+        overflow-hidden
         '''
     ):
         ui.label('Детализация OPEX').classes(
             'text-sm font-bold mb-2'
         )
 
-        with ui.grid(columns=3).classes(
+        # Шапка таблицы
+        with ui.element('div').style(grid_style).classes(
             '''
             w-full
+            items-center
             text-xs
             text-gray-400
             border-b
@@ -62,15 +66,16 @@ def render_opex_details(
             ui.label('Сумма').classes('text-right')
             ui.label('Доля').classes('text-right')
 
-        body_classes = (
-            'w-full overflow-y-auto overflow-x-hidden'
-            if has_vertical_scroll
-            else 'w-full overflow-hidden'
-        )
+        # Тело таблицы
         with ui.element('div').style(
             f'height: {body_height}px;'
-        ).classes(body_classes):
-
+        ).classes(
+            '''
+            w-full
+            overflow-y-auto
+            overflow-x-hidden
+            '''
+        ):
             for row in rows:
                 share = (
                     row['value'] / total * 100
@@ -78,14 +83,17 @@ def render_opex_details(
                     else 0
                 )
 
-                with ui.grid(columns=3).classes(
+                with ui.element('div').style(
+                    grid_style + f' min-height: {row_height}px;'
+                ).classes(
                     '''
                     w-full
                     items-center
-                    py-3
                     text-sm
                     border-b
                     border-[#141c28]
+                    hover:bg-[#16212d]
+                    transition-colors
                     '''
                 ):
                     ui.label(row['label']).classes(
@@ -95,28 +103,35 @@ def render_opex_details(
                     ui.label(
                         f"{row['value']:,.0f} ₽".replace(',', ' ')
                     ).classes(
-                        'text-right font-semibold'
+                        'text-right font-semibold whitespace-nowrap'
                     )
 
                     ui.label(
                         f'{share:.1f}%'
                     ).classes(
-                        'text-right text-gray-300'
+                        'text-right text-gray-300 whitespace-nowrap'
                     )
 
-        # with ui.grid(columns=3).classes(
-        #     'w-full items-center pt-3'
-        # ):
-        #     ui.label('Итого OPEX').classes(
-        #         'font-bold'
-        #     )
+        # Итоговая строка
+        with ui.element('div').style(grid_style).classes(
+            '''
+            w-full
+            items-center
+            pt-3
+            mt-1
+            text-sm
+            '''
+        ):
+            ui.label('Итого OPEX').classes(
+                'font-bold'
+            )
 
-        #     ui.label(
-        #         f'{total:,.0f} ₽'.replace(',', ' ')
-        #     ).classes(
-        #         'text-right text-base font-bold'
-        #     )
+            ui.label(
+                f'{total:,.0f} ₽'.replace(',', ' ')
+            ).classes(
+                'text-right font-bold whitespace-nowrap'
+            )
 
-        #     ui.label('100%').classes(
-        #         'text-right font-semibold text-green-400'
-        #     )
+            ui.label('100%').classes(
+                'text-right font-semibold text-green-400'
+            )
