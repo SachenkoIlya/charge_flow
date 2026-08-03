@@ -59,6 +59,7 @@ def prepar_charts(cost_structure: dict):
                 'top': '54%',
                 'silent': True,
                 'style': {
+                    'text': 'Всего opex',
                     'fill': '#9ca3af',
                     'fontSize': 13,
                     'fontWeight': 500,
