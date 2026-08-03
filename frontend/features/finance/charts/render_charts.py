@@ -1,5 +1,6 @@
 from nicegui import ui
 
+from frontend.components.render_opex_details import render_opex_details
 from frontend.components.pnl_table import render_pnl_table
 from frontend.features.finance.charts.cashflow import render_cashflow_chart
 from frontend.features.finance.charts.break_even import render_break_even_chart
@@ -52,6 +53,7 @@ def render_finance_charts(
     cash_flow_history: list[dict] = None,
     break_even: dict = None,
     cost_structure: dict = None,
+    opex:dict=None,
     pnl_table: list[dict] = None,
 ):
     with ui.column().classes('w-full gap-4 mt-2'):
@@ -69,6 +71,10 @@ def render_finance_charts(
                 with ui.element('div').classes('min-w-0 h-full'):
                     render_cost_structure_chart(cost_structure)
 
+                with ui.element('div').classes(
+                    'lg:col-span-2 min-w-0 h-full'
+                ):
+                    render_opex_details(opex)
             if cash_flow_history is not None:
                 with ui.element('div').classes('lg:col-span-2 min-w-0 h-full'):
                     render_cashflow_chart(cash_flow_history)
@@ -76,3 +82,4 @@ def render_finance_charts(
             if break_even is not None:
                 with ui.element('div').classes('min-w-0 h-full'):
                     render_break_even_chart(break_even)
+            

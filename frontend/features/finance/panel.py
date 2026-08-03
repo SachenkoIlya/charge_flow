@@ -35,7 +35,7 @@ class Panel(BasePanel):
 
     async def render_content(self):
         charts = self.data['charts']
-
+        opex  = self.data['investment']['opex']
         # with ui.element('div').style('zoom: 0.9'):
         with ui.column().classes('w-full max-w-[1600px] mx-auto gap-2'):
             await render_title(
@@ -56,6 +56,7 @@ class Panel(BasePanel):
             render_finance_charts(
                 # cash_flow_history=charts['cash_flow_history'],
                 # break_even=BREAK_EVEN_METRICS,
+                opex=opex,
                 cost_structure=charts['network_cost_structure'],
                 pnl_table=PNL_ROWS
             )
