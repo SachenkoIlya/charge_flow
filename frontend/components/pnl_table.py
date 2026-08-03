@@ -70,9 +70,12 @@ from nicegui import ui
 #                             ui.label(row[key]).style(
 #                                 f'width: {width}px'
 #                             ).classes(cls)
+
+
 def render_pnl_table(
     rows: list[dict],
-    height: int = 420,
+    visible_rows: int = 5,
+    row_height: int = 52,
 ):
     columns = [
         ('Станция', 'station', 300),
@@ -86,6 +89,9 @@ def render_pnl_table(
         ('Маржа', 'margin', 110),
     ]
 
+    has_vertical_scroll = len(rows) > visible_rows
+    body_height = min(len(rows), visible_rows) * row_height
+
     with ui.card().classes(
         '''
         w-full
@@ -98,7 +104,6 @@ def render_pnl_table(
         overflow-hidden
         '''
     ):
-        # Горизонтальный скролл всей таблицы
         with ui.element('div').classes(
             'w-full overflow-x-auto'
         ):
@@ -106,7 +111,7 @@ def render_pnl_table(
                 'min-w-[1500px]'
             ):
 
-                # Шапка остаётся сверху
+                # Заголовок
                 with ui.row().classes(
                     '''
                     w-full
@@ -117,7 +122,6 @@ def render_pnl_table(
                     pb-3
                     flex-nowrap
                     items-center
-                    bg-[#101923]
                     '''
                 ):
                     for label, _, width in columns:
@@ -127,21 +131,22 @@ def render_pnl_table(
                             'shrink-0 truncate whitespace-nowrap'
                         )
 
-                # Прокручивается только тело таблицы
+                body_classes = (
+                    'w-full overflow-y-auto overflow-x-hidden'
+                    if has_vertical_scroll
+                    else 'w-full overflow-hidden'
+                )
+
                 with ui.element('div').style(
-                    f'max-height: {height}px;'
-                ).classes(
-                    '''
-                    w-full
-                    overflow-y-auto
-                    overflow-x-hidden
-                    '''
-                ):
+                    f'height: {body_height}px;'
+                ).classes(body_classes):
+
                     for row in rows:
-                        with ui.row().classes(
+                        with ui.row().style(
+                            f'height: {row_height}px;'
+                        ).classes(
                             '''
                             w-full
-                            min-h-[52px]
                             text-sm
                             text-gray-200
                             border-b
@@ -153,7 +158,7 @@ def render_pnl_table(
                             '''
                         ):
                             for _, key, width in columns:
-                                value = row.get(key, '-')
+                                value = row.get(key, '—')
 
                                 cls = (
                                     'shrink-0 truncate whitespace-nowrap'
@@ -179,13 +184,9 @@ def render_pnl_table(
                                     'net_profit',
                                     'margin',
                                 }:
-                                    cls += (
-                                        ' text-green-400 font-semibold'
-                                    )
+                                    cls += ' text-green-400 font-semibold'
 
-                                cell = ui.label(
-                                    str(value)
-                                ).style(
+                                cell = ui.label(str(value)).style(
                                     f'width: {width}px;'
                                 ).classes(cls)
 
