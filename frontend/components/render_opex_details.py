@@ -273,7 +273,7 @@ def render_opex_details(data: dict) -> None:
         '''
     ):
         ui.label('Детализация OPEX').classes(
-            'text-sm font-bold mb-1'
+            'text-sm font-bold mb-0'
         )
 
         # Заголовок
@@ -298,7 +298,7 @@ def render_opex_details(data: dict) -> None:
             with ui.element('div').style(grid_style).classes(
                 '''
                 w-full
-                min-h-[10px]
+                min-h-[7px]
                 text-sm
                 border-b
                 border-[#141c28]
