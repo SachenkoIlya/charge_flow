@@ -1,7 +1,14 @@
 from nicegui import ui
 
 
-def render_opex_details(data: dict) -> None:
+def render_opex_details(
+    data: dict,
+    visible_rows:int=3,
+    row_height:int=3
+
+) -> None:
+    has_vertical_scroll = len(rows) > visible_rows
+    body_height = min(len(rows), visible_rows) * row_height
     labels = {
         'electricity_compensation': 'Электроэнергия',
         'rent_payment': 'Аренда',
@@ -53,38 +60,47 @@ def render_opex_details(data: dict) -> None:
             ui.label('Сумма').classes('text-right')
             ui.label('Доля').classes('text-right')
 
-        for row in rows:
-            share = (
-                row['value'] / total * 100
-                if total
-                else 0
-            )
+        body_classes = (
+            'w-full overflow-y-auto overflow-x-hidden'
+            if has_vertical_scroll
+            else 'w-full overflow-hidden'
+        )
+        with ui.element('div').style(
+            f'height: {body_height}px;'
+        ).classes(body_classes):
 
-            with ui.grid(columns=3).classes(
-                '''
-                w-full
-                items-center
-                py-3
-                text-sm
-                border-b
-                border-[#141c28]
-                '''
-            ):
-                ui.label(row['label']).classes(
-                    'truncate whitespace-nowrap'
+            for row in rows:
+                share = (
+                    row['value'] / total * 100
+                    if total
+                    else 0
                 )
 
-                ui.label(
-                    f"{row['value']:,.0f} ₽".replace(',', ' ')
-                ).classes(
-                    'text-right font-semibold'
-                )
+                with ui.grid(columns=3).classes(
+                    '''
+                    w-full
+                    items-center
+                    py-3
+                    text-sm
+                    border-b
+                    border-[#141c28]
+                    '''
+                ):
+                    ui.label(row['label']).classes(
+                        'truncate whitespace-nowrap'
+                    )
 
-                ui.label(
-                    f'{share:.1f}%'
-                ).classes(
-                    'text-right text-gray-300'
-                )
+                    ui.label(
+                        f"{row['value']:,.0f} ₽".replace(',', ' ')
+                    ).classes(
+                        'text-right font-semibold'
+                    )
+
+                    ui.label(
+                        f'{share:.1f}%'
+                    ).classes(
+                        'text-right text-gray-300'
+                    )
 
         # with ui.grid(columns=3).classes(
         #     'w-full items-center pt-3'
