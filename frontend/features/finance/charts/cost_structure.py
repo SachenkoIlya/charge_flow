@@ -61,8 +61,8 @@ def prepar_charts(cost_structure: dict):
                 'name': 'OPEX расходы',
                 'type': 'pie',
 
-                'radius': ['60%', '90%'],
-                'center': ['30%', '50%'],
+                'radius': ['90%', '90%'],
+                'center': ['50%', '50%'],
 
                 # подписи скрыты
                 'label': {
