@@ -106,7 +106,7 @@ from nicegui import ui
 
 def render_opex_details(
     data: dict,
-    visible_rows: int = 5,
+    visible_rows: int = 4,
     row_height: int = 54,
 ) -> None:
 
