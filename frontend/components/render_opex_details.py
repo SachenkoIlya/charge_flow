@@ -4,7 +4,7 @@ from nicegui import ui
 def render_opex_details(
     data: dict,
     visible_rows:int=3,
-    row_height:int=3
+    row_height: int = 52,
 
 ) -> None:
    
