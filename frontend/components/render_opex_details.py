@@ -36,7 +36,7 @@ def render_opex_details(data: dict) -> None:
         '''
     ):
         ui.label('Детализация OPEX').classes(
-            'text-base font-bold mb-3'
+            'text-sm font-bold mb-2'
         )
 
         with ui.grid(columns=3).classes(
@@ -86,19 +86,19 @@ def render_opex_details(data: dict) -> None:
                     'text-right text-gray-300'
                 )
 
-        with ui.grid(columns=3).classes(
-            'w-full items-center pt-4'
-        ):
-            ui.label('Итого OPEX').classes(
-                'font-bold'
-            )
+        # with ui.grid(columns=3).classes(
+        #     'w-full items-center pt-3'
+        # ):
+        #     ui.label('Итого OPEX').classes(
+        #         'font-bold'
+        #     )
 
-            ui.label(
-                f'{total:,.0f} ₽'.replace(',', ' ')
-            ).classes(
-                'text-right text-base font-bold'
-            )
+        #     ui.label(
+        #         f'{total:,.0f} ₽'.replace(',', ' ')
+        #     ).classes(
+        #         'text-right text-base font-bold'
+        #     )
 
-            ui.label('100%').classes(
-                'text-right font-semibold text-green-400'
-            )
+        #     ui.label('100%').classes(
+        #         'text-right font-semibold text-green-400'
+        #     )
