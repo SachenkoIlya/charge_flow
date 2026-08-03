@@ -79,13 +79,13 @@ def render_pnl_table(
 ):
     columns = [
         ('Станция', 'station', 300),
-        ('Выручка', 'revenue', 150),
-        ('Электроэнергия', 'energy_cost', 160),
-        ('Валовая прибыль', 'gross_profit', 170),
-        ('OPEX', 'opex', 140),
-        ('EBITDA', 'ebitda', 140),
+        ('Выручка', 'revenue', 130),
+        ('Электроэнергия', 'energy_cost', 130),
+        ('Валовая прибыль', 'gross_profit', 130),
+        ('OPEX', 'opex', 130),
+        ('EBITDA', 'ebitda', 130),
         ('Налоги', 'taxes', 130),
-        ('Чистая прибыль', 'net_profit', 170),
+        ('Чистая прибыль', 'net_profit', 130),
         ('Маржа', 'margin', 110),
     ]
 
