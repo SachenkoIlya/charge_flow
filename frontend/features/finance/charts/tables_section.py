@@ -69,6 +69,28 @@ PNL_ROWS = [
         'net_profit': '198 743',
         'margin': '22.8%',
     },
+    {
+        'station': 'ЭЗС-021 Аэропорт Шереметьево 2',
+        'revenue': '872 340',
+        'energy_cost': '212 890',
+        'gross_profit': '659 450',
+        'opex': '363 230',
+        'ebitda': '296 220',
+        'taxes': '97 477',
+        'net_profit': '198 743',
+        'margin': '22.8%',
+    },
+    {
+        'station': 'ЭЗС-021 Аэропорт Шереметьево 3',
+        'revenue': '872 340',
+        'energy_cost': '212 890',
+        'gross_profit': '659 450',
+        'opex': '363 230',
+        'ebitda': '296 220',
+        'taxes': '97 477',
+        'net_profit': '198 743',
+        'margin': '22.8%',
+    },
 ]
 
 PLAN_FACT_ROWS = [
