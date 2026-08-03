@@ -79,14 +79,14 @@ def render_pnl_table(
 ):
     columns = [
         ('Станция', 'station', 300),
-        ('Выручка', 'revenue', 130),
-        ('Электроэнергия', 'energy_cost', 130),
-        ('Валовая прибыль', 'gross_profit', 130),
-        ('OPEX', 'opex', 130),
-        ('EBITDA', 'ebitda', 130),
-        ('Налоги', 'taxes', 130),
-        ('Чистая прибыль', 'net_profit', 130),
-        ('Маржа', 'margin', 110),
+        ('Выручка', 'revenue', 140),
+        ('Электроэнергия', 'energy_cost', 140),
+        ('Валовая прибыль', 'gross_profit', 140),
+        ('OPEX', 'opex', 140),
+        ('EBITDA', 'ebitda', 140),
+        ('Налоги', 'taxes', 140),
+        ('Чистая прибыль', 'net_profit', 140),
+        ('Маржа', 'margin', 140),
     ]
 
     has_vertical_scroll = len(rows) > visible_rows
