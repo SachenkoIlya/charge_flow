@@ -22,7 +22,7 @@ def render_tables_section(rows: list[dict], plan_rows: list[dict], height:int=47
 PNL_ROWS = [
     {
         'station': 'ЭЗС-106 Рига Молл',
-        'revenue_month': '1 245 780',
+        'revenue': '1 245 780',
         'revenue_total': '12 457 800',
         'energy_cost': '302 450',
         'kwh': '78 540',
