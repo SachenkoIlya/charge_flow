@@ -75,6 +75,8 @@ def render_finance_charts(
                     'lg:col-span-2 min-w-0 h-full'
                 ):
                     render_opex_details(opex)
+
+                    
             if cash_flow_history is not None:
                 with ui.element('div').classes('lg:col-span-2 min-w-0 h-full'):
                     render_cashflow_chart(cash_flow_history)
