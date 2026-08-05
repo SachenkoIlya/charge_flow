@@ -1,19 +1,4 @@
-
-#   'icon': 'ev_station',
-#         'key': 'stations',
-#         'icon_bg': 'bg-blue-600',
-#         'title': 'ЭЭС в сети',
-#         'subtitle': 'активных / в работе',
-#         'value': '246 / 231',
-#         'delta': '+12',
-
-#    'icon': 'ev_station',
-#         'key': 'stations',
-#         'icon_bg': 'bg-blue-600',
-#         'title': 'ЭЭС в сети',
-#         'subtitle': 'активных / в работе',
-#         'value': '246 / 231',
-#         'delta': '+12',
+from core.logger.logger import logger
 
 FINANCE_METRICS = [
     {
@@ -85,7 +70,8 @@ def get_metrics_value(key:str, data:dict)->str:
     total_capex = sum(
         capex[m] for m in capex
     )
-    
+
+    logger.warning(metrics)
     k = {
         'total_revenue':  f"{metrics['total_revenue']:,.0f} ₽".replace(",", " "),
         'ebitda': f"{metrics['ebitda']:,.0f} ₽".replace(",", " "),
