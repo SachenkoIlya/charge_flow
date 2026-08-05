@@ -23,7 +23,7 @@ from dataclasses import dataclass
 from fastapi import Request
 from nicegui import ui, app
 
-
+from datetime import datetime
 
 
 @dataclass
@@ -33,16 +33,38 @@ class Panel(BasePanel):
     endpoints_name: str = 'finance'
     page_key = 'finance'
 
+    @staticmethod
+    def format_date(
+        dates:str,
+        date_str: str="%d.%m.%Y",
+        date_time_str:str="%Y-%m-%d %H:%M:%S"
+    ):
+        return datetime.strptime(
+            dates, date_time_str
+        ).strftime(date_str)
+
+        
     async def render_content(self):
         widgets = self.data['widgets']
         opex  = self.data['investment']['opex']
 
+        date_range = self.data['date_range']
+
+        date_from = self.format_date(date_range['date_from'])
+        date_to = self.format_date(date_range['date_to'])
+
         station_financials = widgets['station_financials']
 
+        current_period = (
+            f"Период: "
+            f"{date_from} — {date_to}"
+        )
+        
         with ui.column().classes('w-full max-w-[1600px] mx-auto gap-2'):
             await render_title(
                 label='Финансы и прибыльность',
                 # label_aggre='Finance & Profitability',
+                current_period=current_period,
                 stations=self.stations,
                 page_key=self.page_key,
                 on_date_change=self.on_date_change 

@@ -71,7 +71,6 @@ def get_metrics_value(key:str, data:dict)->str:
         capex[m] for m in capex
     )
 
-    logger.warning(metrics)
     k = {
         'total_revenue':  f"{metrics['total_revenue']:,.0f} ₽".replace(",", " "),
         'ebitda': f"{metrics['ebitda']:,.0f} ₽".replace(",", " "),
