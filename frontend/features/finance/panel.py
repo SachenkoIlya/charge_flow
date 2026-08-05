@@ -37,7 +37,7 @@ class Panel(BasePanel):
     def format_date(
         dates:str,
         date_str: str="%d.%m.%Y",
-        date_time_str:str="%Y-%m-%d %H:%M:%S"
+        date_time_str: str="%Y-%m-%d %H:%M:%S"
     ):
         return datetime.strptime(
             dates, date_time_str
@@ -50,10 +50,8 @@ class Panel(BasePanel):
 
         date_range = self.data['date_range']
 
-        date_from = self.format_date(date_range['date_from'])
-        date_to = self.format_date(date_range['date_to'])
-
-        station_financials = widgets['station_financials']
+        date_from = self.format_date(date_range['date_from'], date_time_str="%Y-%m-%dT%H:%M:%S")
+        date_to = self.format_date(date_range['date_to'], date_time_str="%Y-%m-%dT%H:%M:%S")
 
         current_period = (
             f"Период: "
@@ -81,7 +79,7 @@ class Panel(BasePanel):
                 # cash_flow_history=charts['cash_flow_history'],
                 # break_even=BREAK_EVEN_METRICS,
                 opex=opex,
-                station_financials=station_financials
+                station_financials=widgets['station_financials']
             )
             
             # render_tables_section(
