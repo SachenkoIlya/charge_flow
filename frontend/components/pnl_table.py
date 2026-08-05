@@ -124,15 +124,16 @@ def render_pnl_table(
                                 }:
                                     cls += ' text-green-400 font-semibold'
 
-                                if key not in {'station_name', 'net_margin'}:
-                                    cell = ui.label(money(value)).style(
-                                        f'width: {width}px;'
-                                    ).classes(cls)
-                                    
-                                if key == 'net_margin':
-                                    cell = ui.label(percent(value)).style(
-                                        f'width: {width}px;'
-                                    ).classes(cls)
+                                if key == 'station_name':
+                                    display_value = str(value)
+                                elif key == 'net_margin':
+                                    display_value = percent(value)
+                                else:
+                                    display_value = money(value)
+
+                                cell = ui.label(display_value).style(
+                                    f'width: {width}px;'
+                                ).classes(cls)
 
                                 if key == 'station_name':
                                     cell.tooltip(str(value))
