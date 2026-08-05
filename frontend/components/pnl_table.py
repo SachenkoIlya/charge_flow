@@ -1,6 +1,12 @@
 from nicegui import ui
 from core.logger.logger import logger
 
+def money(value: float) -> str:
+    return f'{value:,.0f} ₽'.replace(',', ' ')
+
+def percent(value: float) -> str:
+    return f'{value:.1f}%'
+
 
 def render_pnl_table(
     rows: list[dict],
@@ -8,7 +14,6 @@ def render_pnl_table(
     row_height: int = 52,
 ):
 
-    logger.debug(rows)
 
     columns = [
         ('Станция', 'station_name', 300),
@@ -119,9 +124,15 @@ def render_pnl_table(
                                 }:
                                     cls += ' text-green-400 font-semibold'
 
-                                cell = ui.label(str(value)).style(
-                                    f'width: {width}px;'
-                                ).classes(cls)
+                                if key not in {'station_name', 'net_margin'}:
+                                    cell = ui.label(money(value)).style(
+                                        f'width: {width}px;'
+                                    ).classes(cls)
+                                    
+                                if key == 'net_margin':
+                                    cell = ui.label(percent(value)).style(
+                                        f'width: {width}px;'
+                                    ).classes(cls)
 
-                                if key == 'station':
+                                if key == 'station_name':
                                     cell.tooltip(str(value))
