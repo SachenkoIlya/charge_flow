@@ -1,7 +1,7 @@
 from backend.api.routers.dashboard.finance.db import FinanceDB
 from backend.api.routers.dashboard.finance.service.conext import PeriodContext
 from datetime import datetime
-
+from core.logger.logger import logger
 
 class FinanceMetricsService:
     """
@@ -33,6 +33,11 @@ class FinanceMetricsService:
     ) ->float:
         payback_period = None
 
+        logger.warning(f"net_profit: {net_profit}")
+        logger.warning(f"capex_total_amount: {capex_total_amount}")
+        logger.warning(f"date_from: {date_from}")
+        logger.warning(f"date_to: {date_to}")
+        
         if (
             net_profit > 0
             and capex_total_amount > 0

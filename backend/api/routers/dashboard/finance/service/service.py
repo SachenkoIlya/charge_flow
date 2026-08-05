@@ -3,7 +3,7 @@ from backend.api.routers.dashboard.finance.schemas.response import FinanceRespon
 from backend.api.routers.dashboard.finance.schemas.request import FinanceRequestModel
 from backend.api.routers.dashboard.finance.service.charts.widget import  FinanceWidget
 from backend.api.routers.dashboard.finance.service.conext import PeriodContext
-from backend.api.routers.dashboard.finance.service.normalize import FinanceMetricsService
+from backend.api.routers.dashboard.finance.service.metrics import FinanceMetricsService
 from core.base_db import Base
 from backend.utils.gather_named import gather_named
 from backend.utils.period_date import get_date_range_from_period
@@ -85,6 +85,7 @@ class MetricFinance:
             date_to = datetime.strptime(date_to, mask) if date_from else None
 
             financial_indicators, capex_total_amount = self.metrics.calculate_financial_indicators(prepare_result)
+            
             payback_period = self.metrics.calculate_payback_period(
                 net_profit=financial_indicators.get('net_profit'),
                 capex_total_amount=capex_total_amount,

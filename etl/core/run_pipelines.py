@@ -47,7 +47,13 @@ class RunPipelines:
             sem=sem
         )
     
-    async def run_pipelines(self, run_contexts: list["RunContext"], ctx:"Ctx", sem:asyncio.Semaphore):
+    async def run_pipelines(
+        self, 
+        run_contexts: list["RunContext"], 
+        ctx:"Ctx", 
+        sem:asyncio.Semaphore
+    ):
+
         # report = MAP_CLS[ctx.operator].registry[ctx.type_method]
         cls_registry = get_registry_report(ctx.operator)
         method = cls_registry.registry.get(ctx.type_method)

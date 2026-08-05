@@ -71,12 +71,32 @@ class FinanceDB:
 
                 FROM finance_operations f
                 WHERE user_id = $1
-                    AND ($2::timestamp IS NULL or f.expense_date >= $2)
-                    AND ($3::timestamp IS NULL or f.expense_date < $3)
-                    AND  (
-                        cardinality($4::int[]) = 0
-                        OR f.station_id = ANY($4::int[])
+                AND (
+                    (
+                        f.mode = 'capex'
+                        AND (
+                            $3::timestamp IS NULL
+                            OR f.expense_date < $3
+                        )
                     )
+                    OR
+                    (
+                        f.mode = 'opex'
+                        AND (
+                            $2::timestamp IS NULL
+                            OR f.expense_date >= $2
+                        )
+                        AND (
+                            $3::timestamp IS NULL
+                            OR f.expense_date < $3
+                        )
+                    )
+                )
+                AND (
+                    cardinality($4::int[]) = 0
+                    OR f.station_id = ANY($4::int[])
+                )
+
                 GROUP BY 
                     f.mode, f.amount_type
             ),
