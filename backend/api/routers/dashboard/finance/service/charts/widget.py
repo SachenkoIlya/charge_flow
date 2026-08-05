@@ -29,8 +29,8 @@ class FinanceWidget:
         # self.cash_flow_history = CashFlowHistory(db)
         self.station_financials = StationFinancials(db)
         self.tasks = [
-            self.network_cost_structure, 
-            self.cash_flow_history, 
+            # self.network_cost_structure, 
+            # self.cash_flow_history, 
             self.station_financials
         ]
 
