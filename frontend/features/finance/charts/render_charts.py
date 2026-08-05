@@ -52,16 +52,15 @@ from frontend.features.finance.charts.cost_structure import render_opex_structur
 def render_finance_charts(
     cash_flow_history: list[dict] = None,
     break_even: dict = None,
-    cost_structure: dict = None,
     opex:dict=None,
-    pnl_table: list[dict] = None,
+    station_financials: list[dict] = None,
 ):
     with ui.column().classes('w-full gap-4 mt-2'):
 
         # 1 ряд — P&L на всю ширину
-        if pnl_table is not None:
+        if station_financials is not None:
             with ui.element('div').classes('w-full min-w-0'):
-                render_pnl_table(pnl_table)
+                render_pnl_table(station_financials)
 
         # 2 ряд — остальные графики
         with ui.grid().classes(

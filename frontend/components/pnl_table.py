@@ -1,10 +1,15 @@
 from nicegui import ui
+from core.logger.logger import logger
+
 
 def render_pnl_table(
     rows: list[dict],
     visible_rows: int = 5,
     row_height: int = 52,
 ):
+
+    logger.debug(rows)
+    
     columns = [
         ('Станция', 'station', 300),
         ('Выручка', 'revenue', 140),
