@@ -9,17 +9,17 @@ def render_pnl_table(
 ):
 
     logger.debug(rows)
-    
+
     columns = [
-        ('Станция', 'station', 300),
+        ('Станция', 'station_name', 300),
         ('Выручка', 'revenue', 140),
-        ('Электроэнергия', 'energy_cost', 140),
+        ('Электроэнергия', 'electricity_cost', 140),
         ('Валовая прибыль', 'gross_profit', 140),
         ('OPEX', 'opex', 140),
         ('EBITDA', 'ebitda', 140),
         ('Налоги', 'taxes', 140),
         ('Чистая прибыль', 'net_profit', 140),
-        ('Маржа', 'margin', 140),
+        ('Маржа', 'net_margin', 140),
     ]
 
     has_vertical_scroll = len(rows) > visible_rows
@@ -97,11 +97,11 @@ def render_pnl_table(
                                     'shrink-0 truncate whitespace-nowrap'
                                 )
 
-                                if key == 'station':
+                                if key == 'station_name':
                                     cls += ' font-medium text-white'
 
                                 elif key in {
-                                    'energy_cost',
+                                    'electricity_cost',
                                     'opex',
                                     'taxes',
                                 }:
@@ -115,7 +115,7 @@ def render_pnl_table(
 
                                 elif key in {
                                     'net_profit',
-                                    'margin',
+                                    'net_margin',
                                 }:
                                     cls += ' text-green-400 font-semibold'
 
