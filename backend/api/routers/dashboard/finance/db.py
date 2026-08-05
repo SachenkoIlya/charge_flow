@@ -60,24 +60,58 @@ class FinanceDB:
         station_ids: list[int]=None
     ) ->list[Record]:
         q = """
-            SELECT
-                f.mode
-                , f.amount_type
-                , COALESCE(
-                    SUM(f.amount)
-                    , 0
-                ) AS amount
+            WITH finance_agg AS (
+                SELECT
+                    f.mode
+                    , f.amount_type
+                    , COALESCE(
+                        SUM(f.amount)
+                        , 0
+                    ) AS amount
 
-            FROM finance_operations f
-            WHERE user_id = $1
-                AND ($2::timestamp IS NULL or f.expense_date >= $2)
-                AND ($3::timestamp IS NULL or f.expense_date < $3)
-                AND  (
-                    cardinality($4::int[]) = 0
-                    OR f.station_id = ANY($4::int[])
-                )
-            GROUP BY 
-                f.mode, f.amount_type
+                FROM finance_operations f
+                WHERE user_id = $1
+                    AND ($2::timestamp IS NULL or f.expense_date >= $2)
+                    AND ($3::timestamp IS NULL or f.expense_date < $3)
+                    AND  (
+                        cardinality($4::int[]) = 0
+                        OR f.station_id = ANY($4::int[])
+                    )
+                GROUP BY 
+                    f.mode, f.amount_type
+            ),
+            commission_agg AS (
+                SELECT
+                    COALESCE(SUM(cs.gross_revenue - cs.partner_revenue), 0) as operator_commission
+                            
+                FROM charging_sessions_fact cs
+                            
+                WHERE cs.user_id = $1
+                    AND ($2::timestamp IS NULL OR cs.start_ts >= $2)
+                    AND ($3::timestamp IS NULL OR cs.start_ts < $3)
+                    AND  (
+                        cardinality($4::int[]) = 0
+                        OR cs.station_id = ANY($4::int[])
+                    )
+            )
+            SELECT 
+                fa.mode,
+                fa.amount_type,
+                fa.amount
+            FROM finance_agg fa
+
+            UNION ALL
+
+            SELECT 
+                'opex' AS mode,
+                'operator_commission' AS amount_type,
+                ca.operator_commission AS amount
+            FROM commission_agg ca
+
+            ORDER BY 
+                mode,
+                amount_type
+
             """
         async with self.db.get_conn() as conn:
             return await conn.fetch(
@@ -231,7 +265,7 @@ class FinanceDB:
             ),
             commission_agg AS (
                 SELECT
-                    COALESCE(SUM(gross_revenue - partner_revenue), 0) as operator_commission
+                    COALESCE(SUM(cs.gross_revenue - cs.partner_revenue), 0) as operator_commission
                 
                 FROM charging_sessions_fact cs
                 
@@ -315,3 +349,98 @@ class FinanceDB:
             """
         async with self.db.get_conn() as conn:
             return await conn.fetch(q, user_id)
+
+    async def get_station_financials(
+        self, 
+        user_id: int,
+        date_from: datetime | None = None,
+        date_to: datetime | None = None,
+        mode: str = 'opex'
+    ) -> list[Record]:
+        q = """
+            WITH sessions_agg AS (
+                SELECT
+                    cs.station_id
+                    ,
+                    st.location_name
+                    ,
+                    COALESCE(SUM(cs.gross_revenue), 0 ) AS total_revenue
+                    ,
+                    COALESCE(SUM(cs.partner_revenue), 0) as owner_revenue
+                    ,
+                    COALESCE(SUM(cs.gross_revenue - cs.partner_revenue), 0) as operator_commission
+                    
+                FROM charging_sessions_fact cs
+                    LEFT JOIN info_station st
+                    ON st.id = cs.station_id
+                    AND st.user_id = cs.user_id
+                
+                WHERE cs.user_id = $1
+                    AND ($2::timestamp IS NULL OR cs.start_ts >= $2)
+                    AND ($3::timestamp IS NULL OR cs.start_ts < $3)
+                
+                GROUP BY cs.station_id, st.location_name
+            ),
+            finance_agg AS (
+                SELECT
+                    f.station_id
+                    ,
+                    COALESCE(SUM(f.amount) FILTER (WHERE f.amount_type = 'electricity_compensation'), 0) as electricity_compensation
+                    ,
+                    COALESCE(SUM(f.amount) FILTER (WHERE f.amount_type = 'rent_payment'), 0) as rent_payment
+                    ,
+                    COALESCE(SUM(f.amount) FILTER (WHERE f.amount_type = 'service_maintenance'), 0) as service_maintenance
+                    ,
+                    COALESCE(SUM(f.amount) FILTER (WHERE f.amount_type = 'internet_and_connection'), 0) as internet_and_connection
+                    ,
+                    COALESCE(SUM(f.amount) FILTER (WHERE f.amount_type = 'taxes'), 0) as taxes
+                    ,
+                    COALESCE(SUM(f.amount) FILTER (WHERE f.amount_type = 'insurance'), 0) as insurance
+                    ,
+                    COALESCE(SUM(f.amount) FILTER (WHERE f.amount_type = 'other_expenses'), 0) as other_expenses
+                FROM finance_operations f
+                
+                WHERE f.user_id = $1 
+                    AND ($2::timestamp IS NULL or f.expense_date >= $2)
+                    AND ($3::timestamp IS NULL or f.expense_date < $3)
+                    AND f.mode = $4
+                
+                GROUP BY station_id
+            )
+       
+            SELECT
+                s.station_id,
+                s.location_name,
+
+                s.total_revenue,
+                s.owner_revenue,
+                s.operator_commission,
+
+                COALESCE(f.electricity_compensation, 0)
+                    AS electricity_compensation,
+                COALESCE(f.rent_payment, 0)
+                    AS rent_payment,
+                COALESCE(f.service_maintenance, 0)
+                    AS service_maintenance,
+                COALESCE(f.internet_and_connection, 0)
+                    AS internet_and_connection,
+                COALESCE(f.insurance, 0)
+                    AS insurance,
+                COALESCE(f.other_expenses, 0)
+                    AS other_expenses,
+                COALESCE(f.taxes, 0)
+                    AS taxes
+
+            FROM sessions_agg s
+            LEFT JOIN finance_agg f
+                ON f.station_id = s.station_id
+            ORDER BY s.total_revenue DESC;
+            """
+        async with self.db.get_conn() as conn:
+            return await conn.fetch(
+                q,
+                user_id, 
+                date_from, 
+                date_to, 
+                mode
+            )

@@ -1,7 +1,7 @@
 from backend.api.routers.dashboard.finance.db import FinanceDB
 from backend.api.routers.dashboard.finance.schemas.response import FinanceResponseModel
 from backend.api.routers.dashboard.finance.schemas.request import FinanceRequestModel
-from backend.api.routers.dashboard.finance.service.charts.charts import  FinanceChartsService
+from backend.api.routers.dashboard.finance.service.charts.widget import  FinanceWidget
 from backend.api.routers.dashboard.finance.service.conext import PeriodContext
 from backend.api.routers.dashboard.finance.service.normalize import FinanceMetricsService
 from core.base_db import Base
@@ -34,12 +34,12 @@ class MetricFinance:
     def __init__(self, base_db: "Base"):
         self.fin_db = FinanceDB(base_db)
         self.metrics = FinanceMetricsService(self.fin_db)
-        self.charts = FinanceChartsService(self.fin_db)
+        self.widget = FinanceWidget(self.fin_db)
 
         self._handlers  = {
             'metrics': self.metrics.get_metrics,
             'investment': self.metrics.get_investment_metrics,
-            'charts': self.charts.build_charts,
+            'widgets': self.widget.build_sections,
             'date_range': self.metrics.get_date_range
         }
 

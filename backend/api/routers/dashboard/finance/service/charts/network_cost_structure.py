@@ -5,7 +5,8 @@ from datetime import datetime
 from core.logger.logger import   logger
 from backend.api.routers.dashboard.finance.service.conext import PeriodContext
 
-class NetworkCostStructureCharts:
+
+class NetworkCostStructure:
     def __init__(self, db: "FinanceDB"):
         self.db = db
         self.chart_name = 'network_cost_structure'

@@ -141,7 +141,8 @@ class FinanceMetricsService:
                 "internet_and_connection": 0,
                 "rent_payment": 0,
                 "other_expenses": 0,
-                "electricity_compensation": 0
+                "electricity_compensation": 0,
+                'operator_commission': 0
             }
         }
         records = await self.repository.get_investment_group(

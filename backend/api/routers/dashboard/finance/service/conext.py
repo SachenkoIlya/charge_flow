@@ -3,7 +3,8 @@ from typing import Optional
 from dataclasses import dataclass
 
 
-@dataclass(frozen=True)
+# @dataclass(frozen=True)
+@dataclass
 class PeriodContext:
     user_id: int
     date_from: Optional[datetime] = None
